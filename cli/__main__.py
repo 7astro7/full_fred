@@ -1,0 +1,4 @@
+
+import cli
+
+cli.main()
