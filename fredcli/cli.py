@@ -1,5 +1,5 @@
 """
-A CLI for Federal Reserve Economic Data (FRED) via fredapi.
+A command-line interface for Federal Reserve Economic Data (FRED) via fredapi.
 API Key Info: FRED_API_KEY environment variable is valid api key. 
 To get a free key use https://fred.stlouisfed.org/ -> My Account -> API Keys.
 
@@ -17,7 +17,7 @@ Usage:
     fred search <search-text>
     fred search [-i | --infile] <filename> 
     fred (sr | search-release) [--limit=<limit>] [--orderby=<column>] <release-id>
-    fred (sr | search-release) [--limit=<limit>] [--orderby=<column>] [--sort-order desc] [--filter seasonal-adjustment] <release-id>
+    fred (sr | search-release) [--limit=<limit>] [--orderby=<column>] [--sort-order desc] [--filter=<condition>] <release-id>
     fred (sr | search-release) [-i | --infile]
     fred (sc | search-category) [--limit=<limit>] [--orderby=<column>] <category-id>
     fred (sc | search-category) [-i | --infile] <filename>
@@ -28,19 +28,19 @@ Options:
     -start                 Specify desired start date of series
     -end                   Specify desired end date of series
     --plot                  Display matplotlib line plot of series
-    -o                      Save series data in a file
+    -o                      Save fetched data in a file
     -i, --infile            Read in command options from a file
     --key                   Specify an API key
     --asc                   Sort search results in ascending order
     --desc                  Sort search results in descending order
 
 Commands:
+    a, all              Fetch all series data including revisions
+    asof                Fetch series as of date
     i, info             Fetch series metadata such as frequency, units, etc.
     s, series           Fetch series. Default returns same as $ fred latest <series-id>
     f, first            Fetch first release of series
     l, latest           Fetch latest release of series
-    asof                Fetch series as of date
-    a, all              Fetch all series data including revisions
     search              Do a full-text search for a series
     sr, search-release  Search for series that belongs to a release id
     search-category     Search for series that belongs to a category id
@@ -63,12 +63,17 @@ Arguments:
 
 """
 
+# it may be prudent to ask for user configuration on first use 
+#   this can include whether to save series by default in cwd
 # order usage alphabetically by command
+# order commands alphabetically 
 # note defaults in __doc__
+# create option for **kwargs
 # help $ command for a specific command
 # add tests for each module
 # add to search params e.g. filter
 # logging
+# add clarity about api key in doc
 # browser command? to open default browser to fred site
 # add relevant options to doc
 # set up configuration: some may not want to set env. var for api key
@@ -107,24 +112,47 @@ def cli():
     args = docopt(__doc__, version = VERSION) # save version as a constant. reference Python versioning system
                                             # may make sense to base version on fredapi 
 
+    print(args)
+
     if args.get("a") or args.get("all"):
         if not args.get("series-id"):
             pass
 
-    elif args.get("-asof"):
-        if not args.get("series-id"):
-            pass
-
     elif args.get("f") or args.get("first"):
-        if not args.get("series-id"):
+        if not args.get("<series-id>"):
             pass
 
     elif args.get("i") or args.get("info"):
-        if not args.get("series-id"):
-            pass
+        if not args.get("<series-id>"):
+            print("No series_id passed")
+            sys.exit(1)
+        # try / except
+        series_id = args.get("<series-id>").upper()
+        series_info = Fred().get_series_info(series_id)
+        if args.get("-o"):
+            outfile = args.get("-o")
+            
+            # make into a function 
+            if os.path.exists(outfile):
+                while True:
+                    print("File %s already exists. Do you want to overwrite it?" % outfile)
+                    print("y for yes / n for no, or c to save with a different name")
+                    user_choice = input("Please enter your choice or press enter now to quit")
+                    if user_choice == "":
+                        print("Quitting")
+                    elif user_choice == "y":
+                        with open(outfile, 'w') as f:
+                            f.writelines()  # double-check this
+                    elif user_choice == "n":
+                        break
+                    elif user_choice == "c":
+                        # recursive call
+                        pass 
+
+        print(series_info)
 
     elif args.get("latest"):
-        if not args.get("series-id"):
+        if not args.get("<series-id>"):
             pass
 
     elif args.get("configure"):
@@ -135,7 +163,7 @@ def cli():
         pass
         #print_examples()
 
-    if args.get("series-id"):
+    if args.get("<series-id>"):
         try: 
             fred = Fred()
         except ValueError:
@@ -154,10 +182,13 @@ def cli():
         #       query fred for residual rows to update frame with
         # series has not been fetched at all yet: 
         #       fred.search() 
+        if args.get("-asof"):
+            if not args.get("<series-id>"):
+                pass
 
     elif args.get("search"):
         print('args.get(search) works')
-        if not args.get("series-id"):
+        if not args.get("<series-id>"):
             while True:
                 user_choice = input(
                 "No series_id passed. Specify one now or press q to quit."
