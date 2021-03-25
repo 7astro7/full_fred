@@ -37,7 +37,6 @@ class FredBase:
         base = "".join(url_base)
         file_type = "&file_type=json"
         if self.__api_key_env_var:
-            print(base + os.environ["FRED_API_KEY"] + file_type)
             return base + os.environ["FRED_API_KEY"] + file_type
         return base + self.__api_key + file_type
         
@@ -51,7 +50,6 @@ class FredBase:
             return
         return response.json()
             
-
 class Series(FredBase):
     
     def __init__(self, series_id: str = None):
@@ -110,7 +108,7 @@ class Category(FredBase):
 
 # utilize stacks
 
-fred_categories_map = {
+fred_category_map = {
         "get_a_category": "fred/category",
         "get_child_categories": "fred/category/children",
         "get_related_categories": "fred/category/related",
@@ -171,26 +169,118 @@ class Fred(FredBase):
         self.__category_stack = dict() # eh
         self.__series_stack = dict() # eh
 
-    def get_a_category(self, category_id: int):
+    # not finished
+    # may be redundant
+    def peek_last_category_query(self):
         """
-        Get a category of FRED data using its id
+        Returns the key (method called + category_id used) 
+        of the top of the category query stack
+        """
+        return self.__category_stack.keys() # fix this
+
+    def get_all_category_query_keys(self):
+        """
+        Returns the keys (key: str = method called + category_id used) 
+        of all queries in the category query stack
+        """
+        return list(self.__category_stack.keys())
+
+    # work on this
+    def get_category_query(self, key: str):
+        """
+        Returns the value for key from the category query stack 
+        (key: str = method called + category_id used) 
+        of all queries in the category query stack
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         try:
-            path_crux = "category?category_id=" + str(category_id)
-        except TypeError:
-            print("Unable to cast category_id %s to string" % \
-                    category_id)
+            query = self.__category_stack[key]
+        except KeyError:
+            print("Key %s " % key)
+        return self.__category_stack.keys() # fix this
+
+
+    # move to FredBase?
+    def _fetch_data(self, url_prefix: str, an_id: int) -> dict:
+        """
+        """
+        path_crux = self._make_path_crux(url_prefix, an_id)
         url = self._make_request_url(path_crux)
-        print(url)
         json_data = self._get_response(url)
         if json_data is None:
-            message = "Category data could not be retrieved using" \
-                    " category_id: %s" % category_id
+            message = "Data could not be retrieved using" \
+                    "id : %s" % an_id
             print(message)
             return
-        self.__category_stack[len(self.__category_stack)] = (
-                "get_a_category", category_id,)
         return json_data
+
+    # move to FredBase?
+    def _make_path_crux(self, 
+            path_crux_prefix: str, 
+            an_id: int
+            ): # think twice about int
+        """
+        Returns variable portion of url that can fetch the desired data
+        from FRED API. If an_id is not an int there's substantial probability
+        the url won't be constructed correctly even in absence of an exception
+        """
+        try:
+            path_crux = path_crux_prefix + str(an_id)
+        except TypeError:
+            print("Unable to cast id %s to string" % an_id)
+        return path_crux
+
+    def get_a_category(self, category_id: int) -> dict:
+        """
+        Get a category of FRED data using its id
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        """
+        url_prefix = "category?category_id=" 
+        json_data = self._fetch_data(url_prefix, category_id)
+        key = "get_a_category__category_id_" + str(category_id)
+        self.__category_stack[key] = json_data
+        return json_data
+
+    def get_child_categories(self, category_id: int) -> dict:
+        """
+        Get child categories (category_id, name, parent_id) 
+        of category associated with category_id
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        """
+        url_prefix = "category/children?category_id="
+        json_data = self._fetch_data(url_prefix, category_id)
+        key = "get_child_categories__category_id_" + str(category_id)
+        self.__category_stack[key] = json_data
+        return json_data
+
+    def get_related_categories(self, category_id: int):
+        url_prefix = "category/related?category_id="
+        pass
+    
+    def get_series_in_a_category(self, category_id: int): 
+        pass
+
+    def get_tags_for_a_category(self, category_id: int):
+        pass
+
+    def get_related_tags_for_a_category(self, category_id: int):
+        pass
 
     def get_a_series(self, series_id: int):
         pass

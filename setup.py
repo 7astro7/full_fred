@@ -2,7 +2,7 @@
 from setuptools import setup
 import os
 
-path = os.path.join('fredcli', 'constants.py')
+path = os.path.join('full_fred', 'constants.py')
 def get_version():
     version = None
     with open(path, 'r') as f:
@@ -11,11 +11,11 @@ def get_version():
 
 
 setup(
-        name = 'fredcli',
-        packages = ['fredcli',],
+        name = 'full_fred',
+        packages = ['full_fred',],
         entry_points = {
             'console_scripts': [
-                'fredcli = fredcli.cli:main'
+                'full_fred = full_fred.cli:main'
                 ],
             },
         version = get_version(),
@@ -26,7 +26,7 @@ setup(
         LICENSE = 'GPLv3',
         install_requires = ['docopt', 'fredapi',],
         python_requires = '>=3.8',
-        url = 'https://github.com/7astro7/fredcli',
+        url = 'https://github.com/7astro7/full_fred',
         test_suite = 'tests.test_cli',
         platforms = ['Any'],
         classifiers = [
