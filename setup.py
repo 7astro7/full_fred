@@ -2,7 +2,7 @@
 from setuptools import setup
 import os
 
-path = os.path.join('full_fred', 'constants.py')
+path = os.path.join('new_fred', 'constants.py')
 def get_version():
     version = None
     with open(path, 'r') as f:
@@ -12,22 +12,17 @@ def get_version():
 
 setup(
         name = 'full_fred',
-        packages = ['full_fred',],
-        entry_points = {
-            'console_scripts': [
-                'full_fred = full_fred.cli:main'
-                ],
-            },
+        packages = ['new_fred',],
         version = get_version(),
         author = 'Zachary A. Kraehling',
         author_email = 'zaknyy@protonmail.com',
-        description = 'Command-line interface to Federal Reserve Economic Data (FRED) via fredapi',
+        description = 'New, full interface to Federal Reserve Economic Data (FRED)',
         long_description = 'pass',
         LICENSE = 'GPLv3',
-        install_requires = ['docopt', 'fredapi',],
+        install_requires = [],
         python_requires = '>=3.8',
         url = 'https://github.com/7astro7/full_fred',
-        test_suite = 'tests.test_cli',
+        test_suite = 'tests.test_fred_class',
         platforms = ['Any'],
         classifiers = [
             'Development Status :: dev1',
