@@ -1,8 +1,8 @@
 
+from requests.exceptions import RequestException
+import pandas as pd
 import requests
 import os
-
-from requests.exceptions import RequestException
 
 # expand on current docstrings to explain with greater clarity
 # define tags, sources, series, categories, releases, etc.
@@ -68,14 +68,14 @@ class FredBase:
         rt_start = "&realtime_start="
         rt_end = "&realtime_end="
         if realtime_start is None:
-            rt_start += self._FredBase__realtime_start
+            rt_start += self.__realtime_start
         else:
             try:
                 realtime_start = str(realtime_start)
             except TypeError:
                 pass # this needs to be more effective
         if realtime_end is None:
-            rt_end += self._FredBase__realtime_end
+            rt_end += self.__realtime_end
         else:
             try:
                 realtime_end = str(realtime_end)
@@ -99,10 +99,11 @@ class FredSeries(FredBase):
     def __init__(self, series_id: str = None):
         super().__init__()
         self.series_id = series_id
-        self.__df = None # we'll call json dict self.__df for now
+        self.__metadata = None # change get_series to something akin to get_metadata
         self.observations = None
         self.release = None
         self.__categories = None
+        self.__df = None
 
 #    def __str__(self):
 #        return self.series_id
@@ -153,16 +154,16 @@ class FredSeries(FredBase):
         """
         if series_id is not None:
             self._check_series_id(series_id)
-        if self.__df is not None:
-            return self.__df
+        if self.__metadata is not None:
+            return self.__metadata
         url_prefix = "series?series_id=" + self.series_id
         realtime_period = self._get_realtime_date(
                 realtime_start, 
                 realtime_end
                 )
         url_prefix += realtime_period
-        self.__df = self._fetch_data(url_prefix)
-        return self.__df
+        self.__metadata = self._fetch_data(url_prefix)
+        return self.__metadata
 
     # a name attribute?
     def get_categories_of_series(
@@ -199,11 +200,33 @@ class FredSeries(FredBase):
         self.__categories = self._fetch_data(url_prefix)
         return self.__categories
 
-    def get_observations_of_series(self):
+
+    def get_series_df(
+            self, 
+            series_id: str,
+            realtime_start: str = None, 
+            realtime_end: str = None,
+            limit: int = 100_000,
+            offset: int = 0,
+            sort_order: str = 'asc',
+            observation_start: str = "1776-07-04",
+            observation_end: str = "9999-12-31",
+            ):
         """
-        Get the observations or data values for an economic data series
+        Get the observations for an series in a pandas DataFrame
         """
-        pass
+        if series_id is not None:
+            self._check_series_id(series_id)
+        if self.__categories is not None:
+            return self.__categories
+        url_prefix = "series/observations?series_id=" + self.series_id
+        realtime_period = self._get_realtime_date(
+                realtime_start, 
+                realtime_end
+                )
+        url_prefix += realtime_period
+        self.__df = self._fetch_data(url_prefix)
+        return self.__df
 
     def get_release_of_series(self):
         """
@@ -287,7 +310,12 @@ fred_tags_map = {
 # add parameter to return all requested data as dataframes
 # determine best method to create stack keys
 # create a stack that holds only the parameters of the *latest* request
+# must provide for case where new parameters are sent to already-used method and data has to be queried again
+# Can save metadata about last df query to check new request against
 class Fred(FredBase):
+    """
+    Clarify what series_map is
+    """
 
     # go ham on docstrings for methods
     """
@@ -299,6 +327,7 @@ class Fred(FredBase):
         super().__init__()
         self.__category_stack = dict() # eh
         self.series_map = dict() # eh
+        self.unit_info = dict() # put explanation of units options
 
     # not finished
     # may be redundant
@@ -435,9 +464,28 @@ class Fred(FredBase):
             realtime_end: str = None,
             ):
         """
-        Get an economic data series using key series_id
-        If the series hasn't been fetched it's added to 
-        Fred.series_map of all series that have been queried by series_id
+        Get an economic data series using series_id. If the 
+        series hasn't been fetched it's added to Fred.series_maps, 
+        a dictionary that stores FredSeries objects 
+        all parameters fred offers: y (need tags though)
+        FRED accepts upper case series_id: maybe integrate something to capitalize automatically
+        default realtime start and realtime end: first to last available
+        if series_id attribute is not set, FredSeries.series_id will be set to 
+        the series_id passed in this method
+        explain that not merely the requested data is retrieved and stored but rather
+        a FredSeries object is instantiated 
+
+        Parameters
+        ----------
+        series_id: int
+            the id of the series
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+
+        Returns
+        -------
         """
         if not series_id in self.series_map.keys():
             self.series_map[series_id] = FredSeries(series_id)
@@ -455,6 +503,28 @@ class Fred(FredBase):
             realtime_start: str = None, 
             realtime_end: str = None,
             ):
+        """
+        Get the categories that FRED uses to classify series associated with series_id
+        if series_id attribute is not set, FredSeries.series_id will be set to 
+        the series_id passed in this method
+        add examples
+        explain that not merely the requested data is retrieved and stored but rather
+        a FredSeries object is instantiated so the data need not be requested again: it's stored
+        (but deletable to minimize risk of bloat)
+        all parameters fred offers: y (need tags though)
+
+        Parameters
+        ----------
+        series_id: int
+            the id of the series
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+
+        Returns
+        -------
+        """
         if not series_id in self.series_map.keys():
             self.series_map[series_id] = FredSeries(series_id)
         params = dict(
@@ -464,6 +534,64 @@ class Fred(FredBase):
                 realtime_end = realtime_end,
                 )
         return self.series_map[series_id].get_categories_of_series(**params) 
+
+    def get_series_df(
+            self, 
+            series_id: str,
+            realtime_start: str = None, 
+            realtime_end: str = None,
+            limit: int = 100_000,
+            offset: int = 0,
+            sort_order: str = 'asc',
+            observation_start: str = "1776-07-04",
+            observation_end: str = "9999-12-31",
+            ):
+        """
+        Get the data values in (pandas) DataFrame form for series associated
+        with series_id
+        distinguish between observation_start and realtime_start, same for end
+
+        Parameters
+        ----------
+        series_id: int
+            the id of the series
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        limit: int, default 100_000
+            maximum number of observations / rows 
+            range [1, 100_000]
+        offset: int, default 0
+            n/a, 
+        sort_order: str, default 'asc' 
+            return rows in ascending or descending order of observation_date 
+            options are 'asc' and 'desc'
+        observation_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        observation_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        units: str, default "lin" (no data value transformation)
+            see unit_info for more information
+        frequency
+        aggregation_method: str, default "avg"
+        output_type
+        vintage_dates
+
+        Returns
+        -------
+
+        Notes
+        -----
+        """
+        if not series_id in self.series_map.keys():
+            self.series_map[series_id] = FredSeries(series_id)
+        params = dict(
+                series_id = series_id, # revisit: series_id given in constructor above
+                realtime_start = realtime_start,
+                realtime_end = realtime_end,
+                )
+        return self.series_map[series_id].get_series_df(**params) 
 
     def find_series_by_keyword(self, keywords: list):
         """
@@ -477,5 +605,4 @@ class Fred(FredBase):
         Get economic data series that match keywords
         """
         pass
-        
         
