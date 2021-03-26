@@ -95,6 +95,7 @@ class FredBase:
             
 class FredSeries(FredBase):
     
+    # return series name and metadata in __str__
     def __init__(self, series_id: str = None):
         super().__init__()
         self.series_id = series_id
@@ -102,6 +103,9 @@ class FredSeries(FredBase):
         self.observations = None
         self.release = None
         self.__categories = None
+
+#    def __str__(self):
+#        return self.series_id
 
     def _check_series_id(
             self, 
@@ -164,8 +168,8 @@ class FredSeries(FredBase):
     def get_categories_of_series(
             self, 
             series_id: str,
-            realtime_start: str,
-            realtime_end: str,
+            realtime_start: str = None,
+            realtime_end: str = None,
             ):
         """
         Get categories that FRED uses to classify series 
@@ -194,14 +198,6 @@ class FredSeries(FredBase):
         url_prefix += realtime_period
         self.__categories = self._fetch_data(url_prefix)
         return self.__categories
-
-    # remove _of_series for all ?
-    def get_categories_of_series(self):
-        """
-        Get the categories for an economic data series
-        """
-        pass
-
 
     def get_observations_of_series(self):
         """
@@ -340,8 +336,6 @@ class Fred(FredBase):
             print("Key %s " % key)
         return self.__category_stack.keys() # fix this
 
-
-
     def get_a_category(self, category_id: int) -> dict:
         """
         Get a category of FRED data using its id
@@ -447,7 +441,13 @@ class Fred(FredBase):
         """
         if not series_id in self.series_map.keys():
             self.series_map[series_id] = FredSeries(series_id)
-        return self.series_map[series_id].get_series() 
+        params = dict(
+                series_id = series_id, # revisit: series_id given in constructor above
+                                        # but above code may not be executed
+                realtime_start = realtime_start,
+                realtime_end = realtime_end,
+                )
+        return self.series_map[series_id].get_series(**params) 
 
     def get_categories_of_series(
             self,
@@ -457,7 +457,13 @@ class Fred(FredBase):
             ):
         if not series_id in self.series_map.keys():
             self.series_map[series_id] = FredSeries(series_id)
-        return self.series_map[series_id].get_categoryies_of_series() 
+        params = dict(
+                series_id = series_id, # revisit: series_id given in constructor above
+                                        # but above code may not be executed
+                realtime_start = realtime_start,
+                realtime_end = realtime_end,
+                )
+        return self.series_map[series_id].get_categories_of_series(**params) 
 
     def find_series_by_keyword(self, keywords: list):
         """

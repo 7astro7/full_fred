@@ -44,6 +44,10 @@ def test_get_category_id_125_returns_trade_balance(
     expected = expected_get_category_id_125 
     assert fred.get_a_category(125) == expected
 
+@pytest.fixture
+def expected_names_get_categories_of_series():
+    return ("Japan", "Monthly Rates",)
+
 @pytest.mark.skip("passed")
 def test_get_child_categories_id_13_returns_children_with_parentid_13(
         fred: Fred, 
@@ -81,6 +85,7 @@ def test_get_series_in_a_category_category_id_NO():
     """
     pass
 
+@pytest.mark.skip("passed")
 def test_get_series(
         fred: Fred,
         expected_get_series_id: str,
@@ -97,16 +102,29 @@ def test_get_series(
     returned_correctly = True
     assert returned_correctly == True
 
-
-@pytest.mark.skip("not yet")
+@pytest.mark.skip("passed")
 def test_get_categories_of_series(
         fred: Fred,
+        expected_names_get_categories_of_series: tuple,
         ):
     returned_correctly = False
     observed = fred.get_categories_of_series("EXJPUS")
-    if "id" in observed.keys():
-        if not observed["id"] == expected_get_series_id:
+    if not isinstance(observed, dict):
+        assert returned_correctly == True
+    if not "categories" in observed.keys():
+        assert returned_correctly == True
+    categories = observed["categories"] # categories is a list
+    expected_keys = ("id", "name", "parent_id")
+    for key in categories[0].keys():
+        if key not in expected_keys:
             assert returned_correctly == True
+    expected_names = expected_names_get_categories_of_series
+    for a_category in categories:
+        if expected_names[0] in a_category.values():
+            returned_correctly = True
+        if expected_names[1] in a_category.values():
+            returned_correctly = True
+    assert returned_correctly == True
 
 
 
