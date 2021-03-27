@@ -36,7 +36,7 @@ def expected_get_series_title():
     """
     return "Real Gross National Product"
 
-@pytest.mark.skip("passed")
+@pytest.mark.skip("passed v1")
 def test_get_category_id_125_returns_trade_balance(
         fred: Fred, 
         expected_get_category_id_125: dict,
@@ -48,7 +48,7 @@ def test_get_category_id_125_returns_trade_balance(
 def expected_names_get_categories_of_series():
     return ("Japan", "Monthly Rates",)
 
-@pytest.mark.skip("passed")
+@pytest.mark.skip("passed v1")
 def test_get_child_categories_id_13_returns_children_with_parentid_13(
         fred: Fred, 
         ):
@@ -87,7 +87,7 @@ def test_get_series_in_a_category_category_id_NO():
     """
     pass
 
-@pytest.mark.skip("passed")
+@pytest.mark.skip("passed v1")
 def test_get_series(
         fred: Fred,
         expected_get_series_id: str,
@@ -104,7 +104,7 @@ def test_get_series(
     returned_correctly = True
     assert returned_correctly == True
 
-@pytest.mark.skip("passed")
+@pytest.mark.skip("passed v1")
 def test_get_categories_of_series(
         fred: Fred,
         expected_names_get_categories_of_series: tuple,
@@ -132,7 +132,7 @@ def test_get_categories_of_series(
 def tags_for_get_series_matching_tags():
     return ("food", "slovenia",)
 
-@pytest.mark.skip("passed")
+@pytest.mark.skip("passed v1")
 def test_get_series_matching_tags(
         fred: Fred,
         tags_for_get_series_matching_tags: tuple,
@@ -180,7 +180,7 @@ def get_a_release_method_works() -> bool:
             return True
     return False
 
-@pytest.mark.skip("passed")
+@pytest.mark.skip("passed v1")
 def test_get_a_release(get_a_release_method_works: bool):
     assert get_a_release_method_works == True
 
@@ -204,8 +204,34 @@ def get_release_tables_method_works() -> bool:
                     return False
     return True
 
-@pytest.mark.skip("passed")
+@pytest.mark.skip("passed v1")
 def test_get_release_tables(get_release_tables_method_works: bool):
     assert get_release_tables_method_works == True
+
+@pytest.fixture
+def get_related_tags_for_a_tag_method_works():
+    params = dict(tag_names = ('monetary+aggregates', 'weekly'),
+            limit = 5)
+    observed = Fred().get_related_tags_for_a_tag(**params)
+#    breakpoint()
+    if not isinstance(observed, dict):
+        return False
+    if not "tags" in observed.keys():
+        return False
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_get_related_tags_for_a_tag(
+        get_related_tags_for_a_tag_method_works: bool,
+        ):
+    assert get_related_tags_for_a_tag_method_works == True
+
+
+
+
+
+
+
+
 
 

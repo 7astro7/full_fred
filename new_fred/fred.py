@@ -28,8 +28,46 @@ class FredBase:
 
     def api_key_found(self):
         return self.__api_key_env_var
+
+    def _add_optional_params(
+            self,
+            og_url_string: str,
+            optional_params: dict,
+            ) -> str:
+        """
+        Create a parameter string that adds any non-None parameters in optional_params to
+        og_url_string
+
+        Parameters
+        ----------
+        og_url_string: str
+            the string to append new, non-null parameter strings to
+
+        optional_params: dict
+            a dictionary mapping parameter strings to actual arguments passed by user
+            for example:
+                "&tag_group_id=": None 
+                "&limit=": 23
+            if the value is not None, "&limit=" + str(23) is added to og_url_string
+
+        Returns
+        -------
+
+        """
+        new_url_string = og_url_string
+        for k in optional_params.keys():
+            if optional_params[k] is not None:
+                try:
+                    a_parameter_string = k + str(optional_params[k])
+                    new_url_string += a_parameter_string
+                except TypeError:
+                    print(k + " " + optional_params[k] + "cannot be cast to str")
+        return new_url_string
     
-    def _make_request_url(self, var_url: str):
+    def _make_request_url(
+            self, 
+            var_url: str, 
+            ):
         """
         Return the url that can be used to retrieve the desired data for series_id
         need to integrate other parameters as well
@@ -38,12 +76,16 @@ class FredBase:
 
         var_url must include id irrespective of whether series_id, category_id, etc.
         """
-        url_base = [self.__url_base, var_url, "&api_key="]
+#        file_type = "&file_type=json"
+        url_base = [
+                self.__url_base, 
+                var_url, 
+                "&file_type=json&api_key=",
+                ]
         base = "".join(url_base)
-        file_type = "&file_type=json"
         if self.__api_key_env_var:
-            return base + os.environ["FRED_API_KEY"] + file_type
-        return base + self.__api_key + file_type
+            return base + os.environ["FRED_API_KEY"] #+ file_type
+        return base + self.__api_key #+ file_type
 
     def _fetch_data(self, url_prefix: str) -> dict:
         """
@@ -310,6 +352,7 @@ fred_tags_map = {
 class Fred(FredBase):
     """
     Clarify what series_map is
+    FRED tags are attributes assigned to series
     """
 
     # go ham on docstrings for methods
@@ -694,6 +737,82 @@ class Fred(FredBase):
         pass
 
     # fred/tags
+
+    # clarify intersection of tags and union of tags*********
+    def get_related_tags_for_a_tag(
+            self,
+            tag_names: list,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            exclude_tag_names: list = None,
+            tag_group_id: str = None,
+            search_text: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            ):
+        """
+        Get related FRED tags for one or more FRED tags
+
+        Parameters
+        ----------
+        tag_names: list
+            list of tags (str); each tag must be present in the tag of returned series
+
+        realtime_start: str default None
+
+        realtime_end: str default None
+
+        exclude_tag_names: list, default None (don't exclude any tags)
+            tags that returned series must not have
+
+        tag_group_id: str, default None
+            a tag group id to filter tags by type with
+            can be one of 'freq' for frequency, 'gen' for general or concept, 
+            'geo' for geography, 'geot' for geography type, 'rls' for release, 
+            'seas' for seasonal adjustment, 'src' for source
+
+        search_text: str, default None
+            the words to find matching tags with
+            if None, no filtering by search words
+
+        limit: int, default None (FRED will use limit = 1_000)
+            maximum number of results to return
+            range [1, 1_000]
+
+        offset: non-negative integer, default None (offset of 0)
+
+        order_by: str, default "series_count"
+            order results by values of the specified attribute
+            can be one of "series_count", "popularity", "created", "name", "group_id"
+
+        sort_order: str, default None (FRED will use "asc")
+            sort results in ascending or descending order for attribute values specified by order_by
+
+        Returns
+        -------
+        """
+        url_prefix = "related_tags?tag_names="
+        try:
+            url_prefix += ";".join(tag_names)
+        except TypeError:
+            print("tag_names must be list or tuple")
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&exclude_tag_names=": exclude_tag_names,
+                "&tag_group_id=": tag_group_id,
+                "&search_text=": search_text,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        key = "_".join(tag_names)
+        self.tag_stack[key] = self._fetch_data(url)
+        return self.tag_stack[key]
 
     def get_series_matching_tags(
             self, 
