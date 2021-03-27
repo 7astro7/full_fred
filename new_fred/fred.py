@@ -453,6 +453,7 @@ class Fred(FredBase):
         pass
 
     # fred/release 
+
     def get_a_release(
             self,
             release_id: int,
@@ -488,6 +489,58 @@ class Fred(FredBase):
         self.release_stack[release_id] = self._fetch_data(url_prefix)
         return self.release_stack[release_id]
 
+
+    def get_release_tables(
+            self,
+            release_id: int,
+            element_id: int = None,
+            include_observation_values: bool = None,
+            observation_date: str = None,
+            ):
+        """
+        Get a release of economic data
+        *add fred's description*
+        
+        Parameters
+        ----------
+        release_id: int
+            id for a release
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        include_observation_values: bool default False
+        observation_date: str, default None
+            the observation date to be included with the returned release table
+
+        Returns 
+        -------
+        """
+        url_prefix = "release?release_id="
+        try:
+            url_prefix += str(release_id)
+        except TypeError:
+            print("Unable to cast release_id %s to str" % release_id)
+        url_base = [self._FredBase__url_base, url_prefix, "&api_key=",]
+#        breakpoint()
+        base = "".join(url_base)
+        file_type = "&file_type=json"
+        if element_id is not None:
+            str_element_id = "&element_id=" + str(element_id)
+        if self._FredBase__api_key_env_var:
+            if element_id is None:
+                json_data = self._get_response(base + os.environ["FRED_API_KEY"] + file_type)
+            else:
+                json_data = self._get_response(base + os.environ["FRED_API_KEY"] + str_element_id + file_type)
+        else:
+            json_data = self._get_response(base + self.__api_key + file_type)
+        if json_data is None:
+            message = "Data could not be retrieved using" \
+                    "id : %s" % an_id
+            print(message)
+            return
+        self.release_stack[release_id] = self._fetch_data(url_prefix)
+        return self.release_stack[release_id] 
 
     # fred/series
 

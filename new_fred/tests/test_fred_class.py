@@ -72,6 +72,7 @@ def test_get_child_categories_id_13_returns_children_with_parentid_13(
             returned_correctly = True
     assert returned_correctly == True
 
+@pytest.mark.skip("not implemented")
 def test_get_related_categories():
     """
     Unclear at this point how to test
@@ -79,6 +80,7 @@ def test_get_related_categories():
     pass
 
 
+@pytest.mark.skip("not implemented")
 def test_get_series_in_a_category_category_id_NO():
     """
     Unclear at this point how to test
@@ -168,7 +170,7 @@ def test_get_series_matching_tags(
     assert returned_correctly == True
 
 @pytest.fixture
-def get_a_release_method_works():
+def get_a_release_method_works() -> bool:
     observed = Fred().get_a_release(53)
     if not "releases" in observed.keys():
         return False
@@ -178,12 +180,32 @@ def get_a_release_method_works():
             return True
     return False
 
-@pytest.fixture
+@pytest.mark.skip("passed")
 def test_get_a_release(get_a_release_method_works: bool):
     assert get_a_release_method_works == True
 
+@pytest.fixture
+def get_release_tables_method_works() -> bool:
+    observed = Fred().get_release_tables(53)
+    if not isinstance(observed, dict):
+        return False
+    observed_keys = tuple(observed.keys())
+    for i in range(len(observed_keys)):
+        if "release" in observed_keys[i]:
+            key = observed_keys[i]
+            break
+        if i == len(observed_keys) - 1:
+            return False
+    if isinstance(observed[key], list):
+        nested_dict = observed[key][0]
+        for k in nested_dict.keys():
+            if "id" in k:
+                if not str(nested_dict[k]) == "53":
+                    return False
+    return True
 
-
-
+@pytest.mark.skip("passed")
+def test_get_release_tables(get_release_tables_method_works: bool):
+    assert get_release_tables_method_works == True
 
 
