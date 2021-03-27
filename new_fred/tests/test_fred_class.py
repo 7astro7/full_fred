@@ -167,6 +167,21 @@ def test_get_series_matching_tags(
             returned_correctly = True
     assert returned_correctly == True
 
+@pytest.fixture
+def get_a_release_method_works():
+    observed = Fred().get_a_release(53)
+    if not "releases" in observed.keys():
+        return False
+    releases_list = observed["releases"] # list of dicts
+    if "id" in releases_list[0].keys():
+        if releases_list[0]["id"] == 53:
+            return True
+    return False
+
+@pytest.fixture
+def test_get_a_release(get_a_release_method_works: bool):
+    assert get_a_release_method_works == True
+
 
 
 

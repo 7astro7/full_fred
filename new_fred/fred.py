@@ -234,11 +234,6 @@ class FredSeries(FredBase):
         """
         pass
 
-    def get_release_of_series(self):
-        """
-        Get the release for an economic data series
-        """
-        pass
 
 class Category(FredBase):
 
@@ -304,6 +299,7 @@ fred_tags_map = {
         "get_series_matching_tags": "fred/series", 
         }
 
+# make keys for each stack the parameters that were passed, not only the id used
 # set default params to None, not fred web service params
 # add option to retrieve tag notes
 # heavily integrate pandas
@@ -328,6 +324,7 @@ class Fred(FredBase):
         self.series_map = dict() # eh
         self.unit_info = dict() # put explanation of units options
         self.tag_stack = dict()
+        self.release_stack = dict()
 
     # not finished
     # may be redundant
@@ -455,7 +452,44 @@ class Fred(FredBase):
         url_prefix = "category/related_tags?category_id="
         pass
 
-    # releases methods
+    # fred/release 
+    def get_a_release(
+            self,
+            release_id: int,
+            realtime_start: str = None, 
+            realtime_end: str = None,
+            ):
+        """
+        Get a release of economic data
+        
+        Parameters
+        ----------
+        release_id: int
+            id for a release
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+
+        Returns 
+        -------
+        """
+        url_prefix = "release?release_id="
+        try:
+            url_prefix += str(release_id)
+        except TypeError:
+            print("Unable to cast release_id %s to str" % release_id)
+        realtime_period = self._get_realtime_date(
+                realtime_start, 
+                realtime_end
+                )
+        url_prefix += realtime_period
+#        breakpoint()
+        self.release_stack[release_id] = self._fetch_data(url_prefix)
+        return self.release_stack[release_id]
+
+
+    # fred/series
 
     def get_series(
             self, 
@@ -646,6 +680,7 @@ class Fred(FredBase):
         Returns
         -------
         """
+        # perhaps check first to see if there's a matching query in self.tag_stack
         url_prefix = "tags/series?tag_names=" 
         try:
             url_prefix += ";".join(tag_names)
@@ -657,7 +692,6 @@ class Fred(FredBase):
                 realtime_end
                 )
         url_prefix += realtime_period
-        print(url_prefix)
 #        breakpoint()
         key = "_".join(tag_names)
         self.tag_stack[key] = self._fetch_data(url_prefix)
