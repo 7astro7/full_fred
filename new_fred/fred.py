@@ -304,11 +304,10 @@ fred_tags_map = {
         "get_series_matching_tags": "fred/series", 
         }
 
-# must integrate realtime_start and realtime_end options
+# set default params to None, not fred web service params
 # add option to retrieve tag notes
 # heavily integrate pandas
 # add parameter to return all requested data as dataframes
-# determine best method to create stack keys
 # create a stack that holds only the parameters of the *latest* request
 # must provide for case where new parameters are sent to already-used method and data has to be queried again
 # Can save metadata about last df query to check new request against
@@ -328,6 +327,7 @@ class Fred(FredBase):
         self.__category_stack = dict() # eh
         self.series_map = dict() # eh
         self.unit_info = dict() # put explanation of units options
+        self.tag_stack = dict()
 
     # not finished
     # may be redundant
@@ -605,4 +605,63 @@ class Fred(FredBase):
         Get economic data series that match keywords
         """
         pass
+
+    # fred/tags
+
+    def get_series_matching_tags(
+            self, 
+            tag_names: list,
+            exclude_tag_names: list = None,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            limit: int = 100_000,
+            offset: int = 0,
+            order_by: str = "series_id",
+            sort_order: str = "asc",
+            ):
+        """
+        Get the metadata of series conditional on the series having ALL tags in tag_names 
+        and exclude any tags in exclude_tag_names
+        intersection of tag names, not union
+        tag_names[0] AND tag_names[1] AND ... tag_names[n - 1] must be in returned series' tags
+        double-check filtering mechanism (name or tag of series?)
+        all fred params:
+            
+        Parameters
+        ----------
+        tag_names: list
+            list of tags (str); each tag must be present in the tag of returned series
+
+        exclude_tag_names: list, default None
+            example: ['alcohol', 'quarterly',] to exclude series with either tag 'alcohol' or tag 'quarterly'
+
+        realtime_start: str default None
+
+        realtime_end: str default None
+
+        limit: int, default 1_000
+            maximum number of observations / rows 
+            range [1, 1_000]
+
+        Returns
+        -------
+        """
+        url_prefix = "tags/series?tag_names=" 
+        try:
+            url_prefix += ";".join(tag_names)
+        except TypeError:
+            print("tag_names must be list or tuple")
+        # make each returned series a FredSeries
+        realtime_period = self._get_realtime_date(
+                realtime_start, 
+                realtime_end
+                )
+        url_prefix += realtime_period
+        print(url_prefix)
+#        breakpoint()
+        key = "_".join(tag_names)
+        self.tag_stack[key] = self._fetch_data(url_prefix)
+        return self.tag_stack[key]
+
+
         

@@ -126,8 +126,46 @@ def test_get_categories_of_series(
             returned_correctly = True
     assert returned_correctly == True
 
+@pytest.fixture
+def tags_for_get_series_matching_tags():
+    return ("food", "slovenia",)
 
+@pytest.mark.skip("passed")
+def test_get_series_matching_tags(
+        fred: Fred,
+        tags_for_get_series_matching_tags: tuple,
+        ):
+    returned_correctly = False
+    tag_names = tags_for_get_series_matching_tags
+    observed = fred.get_series_matching_tags(tag_names)
+    if not isinstance(observed, dict):
+        assert returned_correctly == True
+    observed_keys = tuple(observed.keys())
+    for k in range(len(observed_keys)):
+        if "series" in observed_keys[k]:
+            key_name = observed_keys[k] # fred returns this key as 'seriess'
+            # key_name will be 'seriess' or 'series'
+            break
+        if k == len(observed_keys) - 1:
+            assert returned_correctly == True
 
+    # returned_series: list of dicts where each has metadata about a series
+    returned_series = observed[key_name] 
+    n = len(returned_series) 
+
+    for i in range(n):
+        a_series = returned_series[i]
+        # join to create 1 string to check: avoid nested loop
+        matching_series_keys = "".join(a_series.keys()).lower()
+        if "title" not in matching_series_keys:
+            break
+        food = tag_names[0] in a_series["title"].lower()
+        slovenia = tag_names[1] in a_series["title"].lower()
+        if not (food or slovenia): 
+            break
+        if i == n - 1:
+            returned_correctly = True
+    assert returned_correctly == True
 
 
 
