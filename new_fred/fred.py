@@ -363,7 +363,7 @@ class Fred(FredBase):
     
     def __init__(self):
         super().__init__()
-        self.__category_stack = dict() # eh
+        self.category_stack = dict() # eh
         self.series_map = dict() # eh
         self.unit_info = dict() # put explanation of units options
         self.tag_stack = dict()
@@ -376,14 +376,14 @@ class Fred(FredBase):
         Returns the key (method called + category_id used) 
         of the top of the category query stack
         """
-        return self.__category_stack.keys() # fix this
+        return self.category_stack.keys() # fix this
 
     def get_all_category_query_keys(self):
         """
         Returns the keys (key: str = method called + category_id used) 
         of all queries in the category query stack
         """
-        return list(self.__category_stack.keys())
+        return list(self.category_stack.keys())
 
     # work on this
     def get_category_query(self, key: str):
@@ -400,10 +400,12 @@ class Fred(FredBase):
 
         """
         try:
-            query = self.__category_stack[key]
+            query = self.category_stack[key]
         except KeyError:
             print("Key %s " % key)
-        return self.__category_stack.keys() # fix this
+        return self.category_stack.keys() # fix this
+
+    # fred/category
 
     def get_a_category(self, category_id: int) -> dict:
         """
@@ -421,7 +423,7 @@ class Fred(FredBase):
             print("Cannot cast category_id %s to str" % category_id)
         json_data = self._fetch_data(url_prefix)
         key = "get_a_category__category_id_" + str(category_id)
-        self.__category_stack[key] = json_data
+        self.category_stack[key] = json_data
         return json_data
 
     def get_child_categories(
@@ -452,20 +454,45 @@ class Fred(FredBase):
         url_prefix += realtime_period
         json_data = self._fetch_data(url_prefix)
         key = "get_child_categories__category_id_" + str(category_id)
-        self.__category_stack[key] = json_data
+        self.category_stack[key] = json_data
         return json_data
 
-    def get_related_categories(self, category_id: int):
+    # add option for tag notes
+    def get_related_categories(
+            self, 
+            category_id: int,
+            realtime_start: str = None, 
+            realtime_end: str = None,
+            ):
         """
+        Get the related categories for a category. 
         add all parameters fred offers
         unclear how to test rn
         count parameter***
+
+        Parameters
+        ----------
+        category_id: int
+            the id of the category
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
         """
         url_prefix = "category/related?category_id="
-        json_data = self._fetch_data(url_prefix, category_id)
-        key = "get_related_categories__category_id_" + str(category_id) 
+        try:
+            url_prefix += str(category_id)
+        except TypeError:
+            print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
         # add realtime params to key if they're passed (later)
-        self.__category_stack[key] = json_data
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.category_stack[category_id] = self._fetch_data(url)
+        return self.category_stack[category_id]
+
     
     # add parameter to remove discontinued series
     def get_series_in_a_category(self, category_id: int): 

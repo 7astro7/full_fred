@@ -72,12 +72,6 @@ def test_get_child_categories_id_13_returns_children_with_parentid_13(
             returned_correctly = True
     assert returned_correctly == True
 
-@pytest.mark.skip("not implemented")
-def test_get_related_categories():
-    """
-    Unclear at this point how to test
-    """
-    pass
 
 
 @pytest.mark.skip("not implemented")
@@ -226,6 +220,26 @@ def test_get_related_tags_for_a_tag(
         ):
     assert get_related_tags_for_a_tag_method_works == True
 
+@pytest.fixture
+def get_related_categories_method_works():
+    observed = Fred().get_related_categories(32073)
+    if not isinstance(observed, dict):
+        return False
+    if not "categories" in observed.keys():
+        return False
+    list_of_categories_maps = observed["categories"]
+    for a_series_map in list_of_categories_maps:
+        if not "parent_id" in a_series_map.keys():
+            break
+        if a_series_map["parent_id"] == 27281:
+            return True
+    return False
+
+#@pytest.mark.skip("not implemented")
+def test_get_related_categories(
+        get_related_categories_method_works: bool,
+        ):
+    assert get_related_categories_method_works == True
 
 
 
