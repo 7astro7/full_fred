@@ -560,14 +560,46 @@ class Fred(FredBase):
         self.category_stack[category_id] = self._fetch_data(url)
         return self.category_stack[category_id]
 
-    def get_tags_for_a_category(self, category_id: int):
+    def get_tags_for_a_category(
+            self, 
+            category_id: int,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            tag_names: list = None,
+            tag_group_id: str = None,
+            search_text: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            ):
         """
+        Get the FRED tags for a category.
         add all parameters fred offers
         unclear how to test rn
         count parameter***
         """
         url_prefix = "category/tags?category_id="
-        pass
+        try:
+            url_prefix += str(category_id)
+        except TypeError:
+            print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
+        # add realtime params to key if they're passed (later)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&tag_names=": tag_names,
+                "&tag_group_id=": tag_group_id,
+                "&search_text=": search_text,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.category_stack[category_id] = self._fetch_data(url)
+        return self.category_stack[category_id]
+
 
     def get_related_tags_for_a_category(self, category_id: int):
         """
