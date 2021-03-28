@@ -351,7 +351,7 @@ fred_tags_map = {
 # Can save metadata about last df query to check new request against
 class Fred(FredBase):
     """
-    Clarify what series_map is
+    Clarify what series_stack is
     FRED tags are attributes assigned to series
     """
 
@@ -364,7 +364,7 @@ class Fred(FredBase):
     def __init__(self):
         super().__init__()
         self.category_stack = dict() # eh
-        self.series_map = dict() # eh
+        self.series_stack = dict() # eh
         self.unit_info = dict() # put explanation of units options
         self.tag_stack = dict()
         self.release_stack = dict()
@@ -722,6 +722,51 @@ class Fred(FredBase):
         self.release_stack[release_id] = self._fetch_data(url_prefix)
         return self.release_stack[release_id]
 
+    def get_release_dates(
+            self,
+            release_id: int,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            limit: int = None,
+            offset: int = None,
+            sort_order: str = None,
+            include_release_dates_with_no_data: bool = None,
+            ) -> dict:
+        """
+        Get release dates for a release of economic data.
+
+        Parameters
+        ----------
+        release_id: int
+            id for a release
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        include_release_dates_with_no_data: bool default False
+            if None, FRED excudes release dates that don't have data, 
+            notably future dates that are already in FRED's calendar
+
+        Returns 
+        -------
+        """
+        url_prefix = "release/dates?release_id="
+        try:
+            url_prefix += str(release_id)
+        except TypeError:
+            print("Unable to cast release_id %s to str" % release_id)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&sort_order=": sort_order,
+                "&include_release_dates_with_no_data=": 
+                include_release_dates_with_no_data,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.release_stack[release_id] = self._fetch_data(url)
+        return self.release_stack[release_id]
 
     def get_release_tables(
             self,
@@ -785,7 +830,7 @@ class Fred(FredBase):
             ):
         """
         Get an economic data series using series_id. If the 
-        series hasn't been fetched it's added to Fred.series_maps, 
+        series hasn't been fetched it's added to Fred.series_stack, 
         a dictionary that stores FredSeries objects 
         all parameters fred offers: y (need tags though)
         FRED accepts upper case series_id: maybe integrate something to capitalize automatically
@@ -807,15 +852,15 @@ class Fred(FredBase):
         Returns
         -------
         """
-        if not series_id in self.series_map.keys():
-            self.series_map[series_id] = FredSeries(series_id)
+        if not series_id in self.series_stack.keys():
+            self.series_stack[series_id] = FredSeries(series_id)
         params = dict(
                 series_id = series_id, # revisit: series_id given in constructor above
                                         # but above code may not be executed
                 realtime_start = realtime_start,
                 realtime_end = realtime_end,
                 )
-        return self.series_map[series_id].get_series(**params) 
+        return self.series_stack[series_id].get_series(**params) 
 
     def get_categories_of_series(
             self,
@@ -845,15 +890,15 @@ class Fred(FredBase):
         Returns
         -------
         """
-        if not series_id in self.series_map.keys():
-            self.series_map[series_id] = FredSeries(series_id)
+        if not series_id in self.series_stack.keys():
+            self.series_stack[series_id] = FredSeries(series_id)
         params = dict(
                 series_id = series_id, # revisit: series_id given in constructor above
                                         # but above code may not be executed
                 realtime_start = realtime_start,
                 realtime_end = realtime_end,
                 )
-        return self.series_map[series_id].get_categories_of_series(**params) 
+        return self.series_stack[series_id].get_categories_of_series(**params) 
 
     def get_series_df(
             self, 
@@ -904,14 +949,14 @@ class Fred(FredBase):
         Notes
         -----
         """
-        if not series_id in self.series_map.keys():
-            self.series_map[series_id] = FredSeries(series_id)
+        if not series_id in self.series_stack.keys():
+            self.series_stack[series_id] = FredSeries(series_id)
         params = dict(
                 series_id = series_id, # revisit: series_id given in constructor above
                 realtime_start = realtime_start,
                 realtime_end = realtime_end,
                 )
-        return self.series_map[series_id].get_series_df(**params) 
+        return self.series_stack[series_id].get_series_df(**params) 
 
     def find_series_by_keyword(self, keywords: list):
         """

@@ -309,7 +309,36 @@ def test_get_related_tags_for_a_category(
         ):
     assert get_related_tags_for_a_category_method_works == True
 
+@pytest.fixture
+def get_release_dates_of_release_works() -> bool:
+    params = {
+            'release_id': 82,
+            'limit': 3,
+            }
+    observed = Fred().get_release_dates(**params)
+#    breakpoint()
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if not observed['limit'] == params['limit']:
+        return False
+    if not "release_dates" in observed.keys():
+        return False
+    release_dates_map = observed["release_dates"]
+    for dated_release_map in release_dates_map:
+        if not isinstance(dated_release_map, dict):
+            return False
+        if not "release_id" in dated_release_map.keys():
+            return False
+        if not dated_release_map["release_id"] == params["release_id"]:
+            return False
+    return True
 
-
+@pytest.mark.skip("passed v1")
+def test_get_release_dates_of_release(
+        get_release_dates_of_release_works: bool,
+        ):
+    assert get_release_dates_of_release_works == True
 
 
