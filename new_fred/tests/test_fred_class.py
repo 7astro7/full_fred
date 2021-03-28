@@ -341,4 +341,28 @@ def test_get_release_dates_of_release(
         ):
     assert get_release_dates_of_release_works == True
 
+@pytest.fixture
+def get_a_source_method_works() -> bool:
+    params = {
+            'source_id': 1,
+            }
+    observed = Fred().get_a_source(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "sources" in observed.keys():
+        return False
+    list_of_source_maps = observed['sources']
+#    breakpoint()
+    for a_source_map in list_of_source_maps:
+        if not "id" in a_source_map.keys():
+            return False
+        if a_source_map["id"] != params["source_id"]:
+            return False
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_get_a_source(
+        get_a_source_method_works: bool,
+        ):
+    assert get_a_source_method_works == True
 

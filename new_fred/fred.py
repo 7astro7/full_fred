@@ -363,11 +363,12 @@ class Fred(FredBase):
     
     def __init__(self):
         super().__init__()
+        self.unit_info = dict() # put explanation of units options<- no, explain in method doc
         self.category_stack = dict() # eh
-        self.series_stack = dict() # eh
-        self.unit_info = dict() # put explanation of units options
-        self.tag_stack = dict()
         self.release_stack = dict()
+        self.series_stack = dict() # eh
+        self.source_stack = dict()
+        self.tag_stack = dict()
 
     # not finished
     # may be redundant
@@ -970,6 +971,46 @@ class Fred(FredBase):
         Get economic data series that match keywords
         """
         pass
+
+
+    # fred/sources          make into class
+
+    def get_a_source(
+            self,
+            source_id: int,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            ):
+        """
+        Get a source of economic data.
+
+        Parameters
+        ----------
+        series_id: int
+            the id of the series
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+
+        Returns
+        -------
+
+        Notes
+        -----
+        """
+        url_prefix = "source?source_id="
+        try:
+            url_prefix += str(source_id)
+        except TypeError:
+            print("Unable to cast source_id %s to str" % source_id)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.source_stack[source_id] = self._fetch_data(url)
+        return self.source_stack[source_id]
 
     # fred/tags
 
