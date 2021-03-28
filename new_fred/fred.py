@@ -478,6 +478,9 @@ class Fred(FredBase):
             YYY-MM-DD as per fred
         realtime_end: str, default "9999-12-31" (last available) 
             YYY-MM-DD as per fred
+
+        Returns 
+        -------
         """
         url_prefix = "category/related?category_id="
         try:
@@ -493,16 +496,69 @@ class Fred(FredBase):
         self.category_stack[category_id] = self._fetch_data(url)
         return self.category_stack[category_id]
 
-    
     # add parameter to remove discontinued series
-    def get_series_in_a_category(self, category_id: int): 
+    def get_series_in_a_category(
+            self, 
+            category_id: int,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            filter_variable: str = None,
+            filter_value:str = None,
+            tag_names: list = None,
+            exclude_tag_names: list = None,
+            ): 
         """
+        Get the series that belong to a category (metadata, not dataframes for each series). 
         add all parameters fred offers
         unclear how to test rn
         count parameter***
+
+        Parameters
+        ----------
+        category_id: int
+            the id of the category
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        limit: int default None
+        offset: int default None
+        order_by: str default None
+        sort_order: str default None
+        filter_variable: str default None
+        filter_value: str default None
+        tag_names: list default None
+        exclude_tag_names: list default None
+
+        Returns 
+        -------
+
         """
         url_prefix = "category/series?category_id="
-        pass
+        try:
+            url_prefix += str(category_id)
+        except TypeError:
+            print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
+        # add realtime params to key if they're passed (later)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+                "&filter_variable=": filter_variable,
+                "&filter_value=": filter_value,
+                "&tag_names=": tag_names,
+                "&exclude_tag_names=": exclude_tag_names,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.category_stack[category_id] = self._fetch_data(url)
+        return self.category_stack[category_id]
 
     def get_tags_for_a_category(self, category_id: int):
         """

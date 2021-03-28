@@ -2,6 +2,7 @@
 import pytest
 from new_fred.fred import Fred
 
+# I can use the returned METAdata to test success of a method
 # ensure method coverage
 # test different realtime dates
 
@@ -72,14 +73,6 @@ def test_get_child_categories_id_13_returns_children_with_parentid_13(
             returned_correctly = True
     assert returned_correctly == True
 
-
-
-@pytest.mark.skip("not implemented")
-def test_get_series_in_a_category_category_id_NO():
-    """
-    Unclear at this point how to test
-    """
-    pass
 
 @pytest.mark.skip("passed v1")
 def test_get_series(
@@ -235,14 +228,37 @@ def get_related_categories_method_works():
             return True
     return False
 
-#@pytest.mark.skip("not implemented")
+@pytest.mark.skip("passed v1")
 def test_get_related_categories(
         get_related_categories_method_works: bool,
         ):
     assert get_related_categories_method_works == True
 
+@pytest.fixture
+def get_series_in_a_category_method_works():
+    params = {
+            'category_id': 125,
+            'limit': 3,
+            }
+    observed = Fred().get_series_in_a_category(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if not observed['limit'] == params['limit']:
+        return False
+    for k in observed.keys():
+        if 'series' in k:
+            return True
+    return False
 
-
+@pytest.mark.skip("passed v1")
+def test_get_series_in_a_category(
+    get_series_in_a_category_method_works: bool,
+    ):
+    assert get_series_in_a_category_method_works == True
 
 
 
