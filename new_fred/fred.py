@@ -769,6 +769,81 @@ class Fred(FredBase):
         self.release_stack[release_id] = self._fetch_data(url)
         return self.release_stack[release_id]
 
+    def get_tags_for_a_release(
+            self,
+            release_id: int,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            tag_names: list = None,
+            tag_group_id: str = None,
+            search_text: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            ) -> dict:
+        """
+        Get the FRED tags for a release
+
+        Parameters
+        ----------
+        release_id: int
+            id for a release
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        tag_names: list
+            list of tags (str); each tag must be present in the tag of returned series
+            example: ['defense', 'investment']
+        tag_group_id: str, default None
+            a tag group id to filter tags by type with
+            can be one of 'freq' for frequency, 'gen' for general or concept, 
+            'geo' for geography, 'geot' for geography type, 'rls' for release, 
+            'seas' for seasonal adjustment, 'src' for source
+        search_text: str, default None
+            the words to find matching tags with
+            if None, no filtering by search words
+        limit: int, default None (FRED will use limit = 1_000)
+            maximum number of results to return
+            range [1, 1_000]
+        offset: non-negative integer, default None (offset of 0)
+        order_by: str, default "series_count"
+            order results by values of the specified attribute
+            can be one of "series_count", "popularity", "created", "name", "group_id"
+        sort_order: str, default None (FRED will use "asc")
+            sort results in ascending or descending order for attribute values specified by order_by
+
+        Returns 
+        -------
+        dict
+
+        Examples
+        -----
+
+        Notes
+        -----
+        """
+        url_prefix = "release/tags?release_id="
+        try:
+            url_prefix += str(release_id)
+        except TypeError:
+            print("Unable to cast release_id %s to str" % release_id)
+        # method to try to join string by join_string for "&tag_names="
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&tag_group_id=": tag_group_id,
+                "&search_text=": search_text,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.release_stack[release_id] = self._fetch_data(url)
+        return self.release_stack[release_id]
+
     def get_related_tags_for_release(
             self,
             release_id: int,

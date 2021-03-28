@@ -410,6 +410,29 @@ def test_get_related_tags_for_release(
         ):
     assert get_related_tags_for_release_method_works == True
 
+@pytest.fixture
+def get_tags_for_a_release_method_works() -> bool:
+    params = {
+            'release_id': 86,
+            'limit': 3,
+            }
+    observed = Fred().get_tags_for_a_release(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "tags" in observed.keys():
+        return False
+    if not "limit" in observed.keys():
+        return False
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_get_tags_for_a_release(
+        get_tags_for_a_release_method_works: bool,
+        ):
+    assert get_tags_for_a_release_method_works == True
+
+
+
 
 
 
