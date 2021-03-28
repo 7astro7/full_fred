@@ -366,3 +366,26 @@ def test_get_a_source(
         ):
     assert get_a_source_method_works == True
 
+@pytest.fixture
+def get_releases_for_a_source_method_works() -> bool:
+    params = {
+            'source_id': 1,
+            'limit': 3,
+            }
+    observed = Fred().get_releases_for_a_source(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "releases" in observed.keys():
+        return False
+    if not "limit" in observed.keys():
+        return False
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_get_releases_for_a_source(
+        get_releases_for_a_source_method_works: bool,
+        ):
+    assert get_releases_for_a_source_method_works == True
+
+
+
