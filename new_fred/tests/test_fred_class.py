@@ -277,10 +277,39 @@ def get_tags_for_a_category_method_works() -> bool:
             return True
     return False
 
+@pytest.mark.skip("passed v1")
 def test_get_tags_for_a_category(
         get_tags_for_a_category_method_works: bool,
         ):
     assert get_tags_for_a_category_method_works == True
+
+@pytest.fixture
+def get_related_tags_for_a_category_method_works() -> bool:
+    params = {
+            'category_id': 125,
+            'tag_names': ('services', 'quarterly'),
+            'limit': 3,
+            }
+    observed = Fred().get_related_tags_for_a_category(**params)
+#    breakpoint()
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if not observed['limit'] == params['limit']:
+        return False
+    for k in observed.keys():
+        if 'tags' in k:
+            return True
+    return False
+
+@pytest.mark.skip("passed v1")
+def test_get_related_tags_for_a_category(
+        get_related_tags_for_a_category_method_works: bool,
+        ):
+    assert get_related_tags_for_a_category_method_works == True
+
+
 
 
 
