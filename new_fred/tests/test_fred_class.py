@@ -170,14 +170,51 @@ def get_tags_for_a_series_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_tags_for_a_series(
         get_tags_for_a_series_method_works: bool,
         ):
     assert get_tags_for_a_series_method_works == True
 
+@pytest.fixture
+def get_related_tags_for_a_series_method_works() -> bool:
+    params = {
+            }
+    observed = Fred().get_related_tags_for_a_series(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "tags" in observed.keys():
+        return False
+    return True
 
+@pytest.mark.skip("not implemented yet")
+def test_get_related_tags_for_a_series(
+        get_related_tags_for_a_series_method_works: bool,
+        ):
+    assert get_related_tags_for_a_series_method_works == True
 
+@pytest.fixture
+def get_series_vintage_dates_method_works() -> bool:
+    params = {
+            'series_id': 'GNPCA',
+            'limit': 3,
+            }
+    observed = Fred().get_series_vintage_dates(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if observed["limit"] != params["limit"]:
+        return False
+    if not "vintage_dates" in observed.keys():
+        return False
+    return True
+
+#@pytest.mark.skip("passed v1")
+def test_get_series_vintage_dates(
+        get_series_vintage_dates_method_works: bool,
+        ):
+    assert get_series_vintage_dates_method_works == True
 
 
 
