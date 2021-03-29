@@ -210,11 +210,35 @@ def get_series_vintage_dates_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_series_vintage_dates(
         get_series_vintage_dates_method_works: bool,
         ):
     assert get_series_vintage_dates_method_works == True
+
+@pytest.fixture
+def get_series_by_update_method_works():
+    params = {
+            'limit': 3,
+            }
+    observed = Fred().get_series_by_update(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if observed["limit"] != params["limit"]:
+        return False
+    if not "series" in observed.keys():
+        if not "seriess" in observed.keys():
+            return False
+    return True
+
+#@pytest.mark.skip("passed v1")
+def test_get_series_by_update(
+        get_series_by_update_method_works: bool,
+        ):
+    assert get_series_by_update_method_works == True
+
 
 
 

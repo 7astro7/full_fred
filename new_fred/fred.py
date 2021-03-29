@@ -52,6 +52,7 @@ class FredBase:
 
         Returns
         -------
+        str
 
         """
         new_url_string = og_url_string
@@ -1492,6 +1493,63 @@ class Fred(FredBase):
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack[series_id] = self._fetch_data(url)
         return self.series_stack[series_id]
+
+    def get_series_by_update(
+            self,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            limit: int = None,
+            offset: int = None,
+            filter_value: str = None,
+            start_time: str = None,
+            end_time: str = None,
+            ):
+        """
+        Get economic data series sorted by when observations were updated on the FRED server. 
+        Results are limited to series updated within the last two weeks.
+
+        fred/series/updates
+
+        Parameters
+        ----------
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        limit: int, default None (FRED will use limit = 1_000)
+            maximum number of results to return
+            range [1, 1_000]
+        offset: non-negative integer, default None (offset of 0)
+        filter_value: str default None
+        start_time: str, default None
+            lower bound for a time range
+            can be precise to the minute
+        end_time: str, default None
+            upper bound for a time range
+            can be precise to the minute
+
+        Returns
+        -------
+        dict
+
+        Notes
+        -----
+        """
+        url_prefix = "series/updates?"
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&filter_value=": filter_value,
+                "&start_time=": start_time,
+                "&end_time=": end_time,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+
+        # change key used here to something more detailed for clarity
+        self.series_stack['updates'] = self._fetch_data(url) 
+        return self.series_stack['updates']
 
     def get_series_vintage_dates(
             self,
