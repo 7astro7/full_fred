@@ -1400,6 +1400,51 @@ class Fred(FredBase):
         """
         pass
 
+    def get_tags_for_a_series(
+            self,
+            series_id: str,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            order_by: str = None,
+            sort_order: str = None,
+            ) -> dict:
+        """
+        Get the FRED tags for a series.
+
+        Parameters
+        ----------
+        series_id: int
+            the id of the series
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        order_by: str, default "source_count"
+            order results by values of the specified attribute
+            can be one of "source_count", "popularity", "created", "name", "group_id"
+        sort_order: str, default None (FRED will use "asc")
+            sort results in ascending or descending order for attribute values specified by order_by
+        Returns
+        -------
+        dict
+
+        Notes
+        -----
+        """
+        url_prefix_params = dict(
+                a_url_prefix = "series/tags?series_id=",
+                a_str_id = series_id)
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.series_stack[series_id] = self._fetch_data(url)
+        return self.series_stack[series_id]
+
 
     # fred/sources          make into class
 
