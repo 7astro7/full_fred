@@ -134,6 +134,39 @@ def test_get_release_for_a_series(
         ):
     assert get_release_for_a_series_method_works == True
 
+
+@pytest.fixture
+def search_for_a_series_method_works() -> bool:
+    params = {
+            'search_text': ('monetary', 'service', 'index',),
+            'limit': 3,
+            }
+    observed = Fred().search_for_a_series(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if not "series" in observed.keys():
+        if not "seriess" in observed.keys():
+            return False
+    # for v2 can look at each title to see if search text words are
+    # present
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_search_for_a_series(
+        search_for_a_series_method_works: bool,
+        ):
+    assert search_for_a_series_method_works == True
+
+
+
+
+
+
+
+
+
 @pytest.fixture
 def tags_for_get_series_matching_tags():
     return ("food", "slovenia",)
@@ -492,7 +525,7 @@ def get_series_on_a_release_method_works() -> bool:
             return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_series_on_a_release(
         get_series_on_a_release_method_works: bool,
         ):

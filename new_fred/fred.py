@@ -157,7 +157,24 @@ class FredBase:
         except TypeError:
             print("Unable to cast id to str, cannot append to url string")
         return new_url_str
+
+    def _join_strings_by(
+            self,
+            strings: list,
+            use_str: str,
+            ) -> str:
+        """
+        Join an iterable of strings using use_str and return the fused string.
+        """
+        if strings is None or use_str is None:
+            raise TypeError("strings and use_str are both required")
+        try:
+            fused_str = use_str.join(strings)
+        except TypeError:
+            print("Unable to join strings using %s" % use_str)
+        return fused_str
             
+
 class FredSeries(FredBase):
     
     # return series name and metadata in __str__
@@ -364,6 +381,7 @@ fred_tags_map = {
         "get_series_matching_tags": "fred/series", 
         }
 
+# go heavy on examples
 # make keys for each stack the parameters that were passed, not only the id used
 # set default params to None, not fred web service params
 # add option to retrieve tag notes
@@ -1294,11 +1312,86 @@ class Fred(FredBase):
         self.series_stack[series_id] = self._fetch_data(url)
         return self.series_stack[series_id]
 
-    def search_for_series(self, keywords: list):
+    # case senstivity 
+    def search_for_a_series(
+            self, 
+            search_text: list,
+            search_type: str = None,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            filter_variable: str = None,
+            filter_value:str = None,
+            tag_names: list = None,
+            exclude_tag_names: list = None,
+            ) -> dict:
         """
-        Get economic data series that match keywords
+        Get economic data series that match search_text.
+        **** add fred url to each method for user reference
+
+        Parameters
+        ----------
+        search_text: list
+            list or tuple or words to match against economic data series
+        search_type: str
+            one of: 'full_text', 'series_id'
+            *** explain with reference to fred web service
+            determines the type of search to perform
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        limit: int, default None (FRED will use limit = 1_000)
+            maximum number of results to return
+            range [1, 1_000]
+        offset: non-negative integer, default None (offset of 0)
+        order_by: str, default "source_count"
+            order results by values of the specified attribute
+            can be one of "source_count", "popularity", "created", "name", "group_id"
+        sort_order: str, default None (FRED will use "asc")
+            sort results in ascending or descending order for attribute values specified by order_by
+        filter_variable: str default None
+            the attribute to filter results by
+        filter_value: str default None
+            the value of the filter_variable attribute to filter results by
+        tag_names: list
+            list of tags (str); each tag must be present in the tag of returned series
+        exclude_tag_names: list, default None (don't exclude any tags)
+            tags that returned series must not have
+
+        Returns
+        -------
+        dict
+
+        Notes
+        -----
+        https://fred.stlouisfed.org/docs/api/fred/series_search.html
         """
-        pass
+        fused_search_text = self._join_strings_by(search_text, '+')
+        url_prefix_params = dict(
+                a_url_prefix = "series/search?search_text=",
+                a_str_id = fused_search_text,
+                )
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args = {
+                "&search_type=": search_type,
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+                "&filter_variable=": filter_variable,
+                "&filter_value=": filter_value,
+                "&tag_names=": tag_names,
+                "&exclude_tag_names=": exclude_tag_names,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.series_stack[fused_search_text] = self._fetch_data(url)
+        return self.series_stack[fused_search_text]
 
     def get_search_tags(self, keywords: list):
         """
