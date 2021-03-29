@@ -134,6 +134,27 @@ class FredBase:
         except RequestException:
             return
         return response.json()
+
+    def _append_id_to_url(
+            self, 
+            a_url_prefix: str,
+            an_int_id: int = None,
+            a_str_id: str = None,
+            ) -> str:
+        """
+        Return a_url_prefix with either an_int_id or a_str_id appended to it. 
+        """
+        if an_int_id is None and a_str_id is None:
+            raise ValueError("No id argument given, cannot append to url")
+        passed_id = an_int_id
+        new_url_str = a_url_prefix
+        if passed_id is None:
+            passed_id = a_str_id
+        try:
+            new_url_str += str(passed_id)
+        except TypeError:
+            print("Unable to cast id to str, cannot append to url string")
+        return new_url_str
             
 class FredSeries(FredBase):
     
@@ -765,6 +786,46 @@ class Fred(FredBase):
                 "&include_release_dates_with_no_data=": 
                 include_release_dates_with_no_data,
             }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.release_stack[release_id] = self._fetch_data(url)
+        return self.release_stack[release_id]
+
+    def get_sources_for_a_release(
+            self,
+            release_id: int,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            ) -> dict:
+        """
+        Get the sources for a release of economic data.
+
+        Parameters
+        ----------
+        release_id: int
+            id for a release
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+
+        Returns 
+        -------
+        dict
+
+        Examples
+        -----
+
+        Notes
+        -----
+        """
+        url_prefix_params = dict(
+                a_url_prefix = "release/sources?release_id=",
+                an_int_id = release_id)
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                }
         url = self._add_optional_params(url_prefix, optional_args)
         self.release_stack[release_id] = self._fetch_data(url)
         return self.release_stack[release_id]
