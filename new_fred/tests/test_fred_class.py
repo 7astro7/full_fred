@@ -443,11 +443,36 @@ def get_sources_for_a_release_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_sources_for_a_release(
         get_sources_for_a_release_method_works: bool,
         ):
     assert get_sources_for_a_release_method_works == True
+
+@pytest.fixture
+def get_series_on_a_release_method_works() -> bool:
+    params = {
+            'release_id': 51,
+            'limit': 3,
+            }
+    observed = Fred().get_series_on_a_release(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if observed["limit"] != params["limit"]:
+        return False
+    if not "series" in observed.keys():
+        if not "seriess" in observed.keys():
+            return False
+    return True
+
+#@pytest.mark.skip("passed v1")
+def test_get_series_on_a_release(
+        get_series_on_a_release_method_works: bool,
+        ):
+    assert get_series_on_a_release_method_works == True
+
 
 
 
