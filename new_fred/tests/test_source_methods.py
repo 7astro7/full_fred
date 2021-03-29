@@ -6,8 +6,28 @@ from new_fred.fred import Fred
 # ensure method coverage
 # test different realtime dates
 
+@pytest.fixture
+def get_all_sources_method_works():
+    # fred/sources
+    params = {
+            'limit': 2,
+            }
+    observed = Fred().get_all_sources(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if observed["limit"] != params["limit"]:
+        return False
+    if not "sources" in observed.keys():
+        return False
+    return True
 
-# add test get all sources
+#@pytest.mark.skip("passed v1")
+def test_get_all_sources(
+        get_all_sources_method_works: bool,
+        ):
+    assert get_all_sources_method_works == True
 
 @pytest.fixture
 def get_a_source_method_works() -> bool:

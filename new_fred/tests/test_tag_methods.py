@@ -6,6 +6,7 @@ from new_fred.fred import Fred
 # ensure method coverage
 # test different realtime dates
 
+# v1 tests COMPLETE
 
 @pytest.fixture
 def get_tags_method_works() -> bool:
@@ -24,12 +25,30 @@ def get_tags_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_tags(
         get_tags_method_works: bool,
         ):
     # fred/tags
     assert get_tags_method_works == True
+
+@pytest.fixture
+def get_related_tags_for_a_tag_method_works():
+    params = dict(tag_names = ('monetary+aggregates', 'weekly'),
+            limit = 5)
+    observed = Fred().get_related_tags_for_a_tag(**params)
+#    breakpoint()
+    if not isinstance(observed, dict):
+        return False
+    if not "tags" in observed.keys():
+        return False
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_get_related_tags_for_a_tag(
+        get_related_tags_for_a_tag_method_works: bool,
+        ):
+    assert get_related_tags_for_a_tag_method_works == True
 
 @pytest.fixture
 def tags_for_get_series_matching_tags():
@@ -71,23 +90,5 @@ def test_get_series_matching_tags(
         if i == n - 1:
             returned_correctly = True
     assert returned_correctly == True
-
-@pytest.fixture
-def get_related_tags_for_a_tag_method_works():
-    params = dict(tag_names = ('monetary+aggregates', 'weekly'),
-            limit = 5)
-    observed = Fred().get_related_tags_for_a_tag(**params)
-#    breakpoint()
-    if not isinstance(observed, dict):
-        return False
-    if not "tags" in observed.keys():
-        return False
-    return True
-
-@pytest.mark.skip("passed v1")
-def test_get_related_tags_for_a_tag(
-        get_related_tags_for_a_tag_method_works: bool,
-        ):
-    assert get_related_tags_for_a_tag_method_works == True
 
 
