@@ -459,6 +459,10 @@ class Fred(FredBase):
 
         Returns
         -------
+
+        Notes
+        -----
+        fred/category
         """
         try:
             url_prefix = "category?category_id=" + str(category_id)
@@ -484,6 +488,10 @@ class Fred(FredBase):
 
         Returns
         -------
+
+        Notes
+        -----
+        fred/category/children
         """
         url_prefix = "category/children?category_id=" 
         try:
@@ -524,6 +532,10 @@ class Fred(FredBase):
 
         Returns 
         -------
+
+        Notes
+        -----
+        fred/category/related
         """
         url_prefix = "category/related?category_id="
         try:
@@ -580,6 +592,9 @@ class Fred(FredBase):
         Returns 
         -------
 
+        Notes
+        -----
+        fred/category/series
         """
         url_prefix = "category/series?category_id="
         try:
@@ -639,6 +654,10 @@ class Fred(FredBase):
 
         Returns 
         -------
+
+        Notes
+        -----
+        fred/category/tags
         """
         url_prefix = "category/tags?category_id="
         try:
@@ -701,6 +720,10 @@ class Fred(FredBase):
 
         Returns 
         -------
+
+        Notes
+        -----
+        fred/category/related_tags
         """
         url_prefix = "category/related_tags?category_id="
         try:
@@ -750,6 +773,10 @@ class Fred(FredBase):
 
         Returns 
         -------
+
+        Notes
+        -----
+        fred/release
         """
         url_prefix = "release?release_id="
         try:
@@ -792,6 +819,10 @@ class Fred(FredBase):
 
         Returns 
         -------
+
+        Notes
+        -----
+        fred/release/dates
         """
         url_prefix = "release/dates?release_id="
         try:
@@ -861,6 +892,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/release/series
         """
         url_prefix_params = dict(
                 a_url_prefix = "release/series?release_id=",
@@ -909,6 +941,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/release/sources
         """
         url_prefix_params = dict(
                 a_url_prefix = "release/sources?release_id=",
@@ -976,6 +1009,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/release/tags
         """
         url_prefix = "release/tags?release_id="
         try:
@@ -1054,6 +1088,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/release/related_tags
         """
         url_prefix = "release/related_tags?release_id="
         try:
@@ -1108,6 +1143,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/release/tables
         """
         url_prefix = "release?release_id="
         try:
@@ -1169,6 +1205,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/series
         """
         if not series_id in self.series_stack.keys():
             self.series_stack[series_id] = FredSeries(series_id)
@@ -1207,6 +1244,10 @@ class Fred(FredBase):
 
         Returns
         -------
+
+        Notes
+        -----
+        fred/series/categories
         """
         if not series_id in self.series_stack.keys():
             self.series_stack[series_id] = FredSeries(series_id)
@@ -1266,6 +1307,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/series/observations
         """
         if not series_id in self.series_stack.keys():
             self.series_stack[series_id] = FredSeries(series_id)
@@ -1300,6 +1342,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/series/release
         """
         url_prefix_params = dict(
                 a_url_prefix = "series/release?series_id=",
@@ -1369,6 +1412,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/series/search
         https://fred.stlouisfed.org/docs/api/fred/series_search.html
         """
         fused_search_text = self._join_strings_by(search_text, '+')
@@ -1408,7 +1452,6 @@ class Fred(FredBase):
             sort_order: str = None,
             ) -> dict:
         """
-        /series/search/tags
         Get the FRED tags for a series search. 
 
         Parameters
@@ -1448,6 +1491,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/series/search/tags
         """
         search_text = self._join_strings_by(series_search_text, '+')
         url_prefix_params = dict(
@@ -1485,7 +1529,6 @@ class Fred(FredBase):
             sort_order: str = None,
             ) -> dict:
         """
-        /series/search/related_tags
         Get the related FRED tags for a series search. 
 
         Parameters
@@ -1523,6 +1566,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/series/search/related_tags
         """
         search_text = self._join_strings_by(series_search_text, '+')
         fused_tag_names = self._join_strings_by(tag_names, ';')
@@ -1571,12 +1615,14 @@ class Fred(FredBase):
             can be one of "source_count", "popularity", "created", "name", "group_id"
         sort_order: str, default None (FRED will use "asc")
             sort results in ascending or descending order for attribute values specified by order_by
+
         Returns
         -------
         dict
 
         Notes
         -----
+        fred/series/tags
         """
         url_prefix_params = dict(
                 a_url_prefix = "series/tags?series_id=",
@@ -1677,12 +1723,14 @@ class Fred(FredBase):
         offset: non-negative integer, default None (offset of 0)
         sort_order: str, default None (FRED will use "asc")
             sort results in ascending or descending order for attribute values specified by order_by
+
         Returns
         -------
         dict
 
         Notes
         -----
+        fred/series/vintagedates
         """
         url_prefix_params = dict(
                 a_url_prefix = "series/vintagedates?series_id=",
@@ -1698,11 +1746,6 @@ class Fred(FredBase):
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack[series_id] = self._fetch_data(url)
         return self.series_stack[series_id]
-
-
-
-
-
 
     # fred/sources          make into class
 
@@ -1729,6 +1772,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/source
         """
         url_prefix = "source?source_id="
         try:
@@ -1783,6 +1827,7 @@ class Fred(FredBase):
 
         Notes
         -----
+        fred/source/releases
         """
         url_prefix = "source/releases?source_id="
         try:
@@ -1802,6 +1847,69 @@ class Fred(FredBase):
         return self.source_stack[source_id]
 
     # fred/tags
+
+    def get_tags(
+            self,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            tag_names: list = None,
+            tag_group_id: str = None,
+            search_text: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            ) -> dict:
+        """
+        Get FRED tags.
+
+        Parameters
+        ----------
+        realtime_start: str default None
+        realtime_end: str default None
+        tag_names: list
+            list of tags (str); each tag must be present in the tag of returned series
+        tag_group_id: str, default None
+            a tag group id to filter tags by type with
+            can be one of 'freq' for frequency, 'gen' for general or concept, 
+            'geo' for geography, 'geot' for geography type, 'rls' for release, 
+            'seas' for seasonal adjustment, 'src' for source
+        search_text: str, default None
+            the words to find matching tags with
+            if None, no filtering by search words
+        limit: int, default None (FRED will use limit = 1_000)
+            maximum number of results to return
+            range [1, 1_000]
+        offset: non-negative integer, default None (offset of 0)
+        order_by: str, default "source_count"
+            order results by values of the specified attribute
+            can be one of "source_count", "popularity", "created", "name", "group_id"
+        sort_order: str, default None (FRED will use "asc")
+            sort results in ascending or descending order for attribute values specified by order_by
+
+        Returns
+        -------
+
+        Notes
+        -----
+        fred/tags
+        """
+        url_prefix = "tags?"
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&tag_names=": tag_names,
+                "&tag_group_id=": tag_group_id,
+                "&search_text=": search_text,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        url = url.replace("tags?&", "tags?")
+        self.tag_stack["tags"] = self._fetch_data(url) # make key better
+        return self.tag_stack["tags"] 
 
     # clarify intersection of tags and union of tags*********
     def get_related_tags_for_a_tag(
@@ -1857,6 +1965,10 @@ class Fred(FredBase):
 
         Returns
         -------
+
+        Notes
+        -----
+        fred/related_tags
         """
         url_prefix = "related_tags?tag_names="
         try:
@@ -1916,6 +2028,10 @@ class Fred(FredBase):
 
         Returns
         -------
+
+        Notes
+        -----
+        fred/tags/series
         """
         # perhaps check first to see if there's a matching query in self.tag_stack
         url_prefix = "tags/series?tag_names=" 
