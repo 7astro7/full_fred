@@ -1393,12 +1393,81 @@ class Fred(FredBase):
         self.series_stack[fused_search_text] = self._fetch_data(url)
         return self.series_stack[fused_search_text]
 
-    def get_search_tags(self, keywords: list):
+    def get_tags_for_a_series_search(
+            self, 
+            series_search_text: list,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            tag_names: list = None,
+            tag_group_id: str = None,
+            tag_search_text: list = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            ) -> dict:
         """
         /series/search/tags
-        Get economic data series that match keywords
+        Get the FRED tags for a series search. 
+
+        Parameters
+        ----------
+        series_search_text: list
+            list or tuple or words to match against economic data series
+        search_type: str
+            one of: 'full_text', 'series_id'
+            *** explain with reference to fred web service
+            determines the type of search to perform
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        tag_names: list
+            list of tags (str); each tag must be present in the tag of returned series
+        tag_group_id: str, default None
+            a tag group id to filter tags by type with
+            can be one of 'freq' for frequency, 'gen' for general or concept, 
+            'geo' for geography, 'geot' for geography type, 'rls' for release, 
+            'seas' for seasonal adjustment, 'src' for source
+        tag_search_text: list, default None (no filtering by tag group)
+            the words to find matching tags with
+        limit: int, default None (FRED will use limit = 1_000)
+            maximum number of results to return
+            range [1, 1_000]
+        offset: non-negative integer, default None (offset of 0)
+        order_by: str, default "source_count"
+            order results by values of the specified attribute
+            can be one of "source_count", "popularity", "created", "name", "group_id"
+        sort_order: str, default None (FRED will use "asc")
+            sort results in ascending or descending order for attribute values specified by order_by
+
+        Returns
+        -------
+        dict
+
+        Notes
+        -----
         """
-        pass
+        search_text = self._join_strings_by(series_search_text, '+')
+        url_prefix_params = dict(
+                a_url_prefix = "series/search/tags?series_search_text=",
+                a_str_id = search_text,
+                )
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&tag_names=": tag_names,
+                "&tag_group_id=": tag_group_id,
+                "&tag_search_text=": tag_search_text,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.series_stack[search_text] = self._fetch_data(url)
+        return self.series_stack[search_text]
 
     def get_tags_for_a_series(
             self,

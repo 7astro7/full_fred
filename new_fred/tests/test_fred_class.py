@@ -158,6 +158,8 @@ def test_search_for_a_series(
         ):
     assert search_for_a_series_method_works == True
 
+
+
 @pytest.fixture
 def get_tags_for_a_series_method_works() -> bool:
     params = {
@@ -175,6 +177,33 @@ def test_get_tags_for_a_series(
         get_tags_for_a_series_method_works: bool,
         ):
     assert get_tags_for_a_series_method_works == True
+
+@pytest.fixture
+def get_tags_for_a_series_search_method_works() -> bool:
+    params = {
+            'series_search_text': ('monetary', 'service', 'index',),
+            'limit': 3,
+            }
+    observed = Fred().get_tags_for_a_series_search(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "tags" in observed.keys():
+        return False
+    return True
+
+#@pytest.mark.skip("passed v1")
+def test_get_tags_for_a_series_search(
+        get_tags_for_a_series_search_method_works: bool,
+        ):
+    assert get_tags_for_a_series_search_method_works == True
+
+
+
+
+
+
+
+
 
 @pytest.fixture
 def get_related_tags_for_a_series_method_works() -> bool:
