@@ -191,36 +191,37 @@ def get_tags_for_a_series_search_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_tags_for_a_series_search(
         get_tags_for_a_series_search_method_works: bool,
         ):
     assert get_tags_for_a_series_search_method_works == True
 
-
-
-
-
-
-
-
-
 @pytest.fixture
-def get_related_tags_for_a_series_method_works() -> bool:
+def get_related_tags_for_a_series_search_method_works() -> bool:
     params = {
+            'series_search_text': ('mortgage', 'rate', 'index',),
+            'tag_names': ('30-year', 'frb',),
+            'limit': 3,
             }
-    observed = Fred().get_related_tags_for_a_series(**params)
+    observed = Fred().get_related_tags_for_a_series_search(**params)
+#    breakpoint()
     if not isinstance(observed, dict):
+        return False
+    if not "limit" in observed.keys():
+        return False
+    if params["limit"] != observed["limit"]:
         return False
     if not "tags" in observed.keys():
         return False
     return True
 
-@pytest.mark.skip("not implemented yet")
-def test_get_related_tags_for_a_series(
-        get_related_tags_for_a_series_method_works: bool,
+#@pytest.mark.skip("passed v1")
+def test_get_related_tags_for_a_series_search(
+        get_related_tags_for_a_series_search_method_works: bool,
         ):
-    assert get_related_tags_for_a_series_method_works == True
+    assert get_related_tags_for_a_series_search_method_works == True
+
 
 @pytest.fixture
 def get_series_vintage_dates_method_works() -> bool:
@@ -239,13 +240,11 @@ def get_series_vintage_dates_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_series_vintage_dates(
         get_series_vintage_dates_method_works: bool,
         ):
     assert get_series_vintage_dates_method_works == True
-
-
 
 @pytest.fixture
 def tags_for_get_series_matching_tags():
