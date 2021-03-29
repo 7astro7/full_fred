@@ -1749,6 +1749,55 @@ class Fred(FredBase):
 
     # fred/sources          make into class
 
+    def get_all_sources(
+            self,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            ) -> dict:
+        """
+        Get all sources of economic data.
+
+        Parameters
+        ----------
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        limit: int, default None (FRED will use limit = 1_000)
+            maximum number of results to return
+            range [1, 1_000]
+        offset: non-negative integer, default None (offset of 0)
+        order_by: str, default "source_count"
+            order results by values of the specified attribute
+            can be one of "source_count", "popularity", "created", "name", "group_id"
+        sort_order: str, default None (FRED will use "asc")
+            sort results in ascending or descending order for attribute values specified by order_by
+
+        Returns
+        -------
+        dict
+
+        Notes
+        -----
+        fred/sources
+        """
+        url_prefix = "sources?"
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.series_stack["sources"] = self._fetch_data(url) # improve this key
+        return self.series_stack["sources"]
+
     def get_a_source(
             self,
             source_id: int,
@@ -1907,7 +1956,7 @@ class Fred(FredBase):
                 "&sort_order=": sort_order,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        url = url.replace("tags?&", "tags?")
+#        url = url.replace("tags?&", "tags?")
         self.tag_stack["tags"] = self._fetch_data(url) # make key better
         return self.tag_stack["tags"] 
 
