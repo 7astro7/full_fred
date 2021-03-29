@@ -73,6 +73,7 @@ def test_get_child_categories_id_13_returns_children_with_parentid_13(
             returned_correctly = True
     assert returned_correctly == True
 
+###### begin series tests #######
 
 @pytest.mark.skip("passed v1")
 def test_get_series(
@@ -116,6 +117,24 @@ def test_get_categories_of_series(
     assert returned_correctly == True
 
 @pytest.fixture
+def get_release_for_a_series_method_works() -> bool:
+    params = {
+            'series_id': 'IRA',
+            }
+    observed = Fred().get_release_for_a_series(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not "releases" in observed.keys():
+        return False
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_get_release_for_a_series(
+        get_release_for_a_series_method_works: bool,
+        ):
+    assert get_release_for_a_series_method_works == True
+
+@pytest.fixture
 def tags_for_get_series_matching_tags():
     return ("food", "slovenia",)
 
@@ -156,6 +175,10 @@ def test_get_series_matching_tags(
             returned_correctly = True
     assert returned_correctly == True
 
+###### end series tests #######
+
+###### begin release tests #######
+
 @pytest.fixture
 def get_a_release_method_works() -> bool:
     observed = Fred().get_a_release(53)
@@ -194,6 +217,8 @@ def get_release_tables_method_works() -> bool:
 @pytest.mark.skip("passed v1")
 def test_get_release_tables(get_release_tables_method_works: bool):
     assert get_release_tables_method_works == True
+
+###### begin release tests #######
 
 @pytest.fixture
 def get_related_tags_for_a_tag_method_works():
