@@ -298,18 +298,7 @@ class FredSeries(FredBase):
         """
         Get the observations for an series in a pandas DataFrame
         """
-        if series_id is not None:
-            self._check_series_id(series_id)
-        if self.__categories is not None:
-            return self.__categories
-        url_prefix = "series/observations?series_id=" + self.series_id
-        realtime_period = self._get_realtime_date(
-                realtime_start, 
-                realtime_end
-                )
-        url_prefix += realtime_period
-        self.__df = self._fetch_data(url_prefix)
-        return self.__df
+        pass
 
     def get_release_of_series(self):
         """
@@ -1366,6 +1355,11 @@ class Fred(FredBase):
             sort_order: str = 'asc',
             observation_start: str = "1776-07-04",
             observation_end: str = "9999-12-31",
+            units: str = None,
+            frequency: str = None,
+            aggregation_method: str = None,
+            output_type: int = None,
+            vintage_dates: str = None,
             ):
         """
         Get the data values in (pandas) DataFrame form for series associated
@@ -1396,7 +1390,11 @@ class Fred(FredBase):
             see unit_info for more information
         frequency
         aggregation_method: str, default "avg"
-        output_type
+        output_type: int default None (realtime period)
+            1: real
+            2: vintage date, all observations
+            3: vintage date, new and revised observations only
+            4: initial release only
         vintage_dates
 
         Returns
@@ -1406,14 +1404,27 @@ class Fred(FredBase):
         -----
         fred/series/observations
         """
-        if not series_id in self.series_stack.keys():
-            self.series_stack[series_id] = FredSeries(series_id)
-        params = dict(
-                series_id = series_id, # revisit: series_id given in constructor above
-                realtime_start = realtime_start,
-                realtime_end = realtime_end,
-                )
-        return self.series_stack[series_id].get_series_df(**params) 
+        url_prefix_params = dict(
+                a_url_prefix = "series/observations?series_id=",
+                a_str_id = series_id)
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&sort_order=": sort_order,
+                "&observation_start": observation_start,
+                "&observation_end": observation_end,
+                "&units": units,
+                "&frequency": frequency,
+                "&aggregation_method": aggregation_method,
+                "&output_type=": output_type,
+                "&vintage_dates=": vintage_dates,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.series_stack[series_id] = self._fetch_data(url)
+        return self.series_stack[series_id]
 
     def get_release_for_a_series(
             self,

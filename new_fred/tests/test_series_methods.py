@@ -76,6 +76,29 @@ def test_get_categories_of_series(
     assert returned_correctly == True
 
 @pytest.fixture
+def get_series_df_method_works() -> bool:
+    params = {
+            'series_id': 'GNPCA',
+            'limit': 10,
+            }
+    observed = Fred().get_series_df(**params)
+    if not isinstance(observed, dict):
+        return False
+    if not 'limit' in observed.keys():
+        return False
+    if observed["limit"] != params["limit"]:
+        return False
+    if not 'observations' in observed.keys():
+        return False
+    return True
+
+@pytest.mark.skip("passed v1")
+def test_get_series_df(
+        get_series_df_method_works: bool,
+        ):
+    assert get_series_df_method_works == True
+
+@pytest.fixture
 def get_release_for_a_series_method_works() -> bool:
     # fred/series/release
     params = {
