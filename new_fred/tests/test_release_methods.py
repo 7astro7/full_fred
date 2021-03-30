@@ -45,7 +45,7 @@ def get_release_dates_all_releases_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_release_dates_all_releases(
         get_release_dates_all_releases_method_works: bool,
         ):
