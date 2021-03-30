@@ -798,6 +798,58 @@ class Fred(FredBase):
         self.release_stack["releases"] = self._fetch_data(url)
         return self.release_stack["releases"]
 
+    def get_release_dates_all_releases(
+            self,
+            realtime_start: str = None, 
+            realtime_end: str = None,
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
+            include_release_dates_with_no_data: bool = None,
+            ) -> dict:
+        """
+        Get release dates for all releases of economic data.
+
+        Parameters
+        ----------
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+        limit: int default None
+        offset: int default None
+        order_by: str default None
+        sort_order: str default None
+        include_release_dates_with_no_data: bool, default None
+
+        Returns 
+        -------
+        dict
+
+        Notes
+        -----
+        fred/releases
+        """
+        url_prefix = "releases/dates?"
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+                "&include_release_dates_with_no_data":
+                include_release_dates_with_no_data,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.release_stack["dates_all_releases"] = self._fetch_data(url)
+        return self.release_stack["dates_all_releases"]
+
+
+
+
+
     def get_a_release(
             self,
             release_id: int,

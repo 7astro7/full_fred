@@ -25,10 +25,32 @@ def get_all_releases_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_all_releases(get_all_releases_method_works: bool):
     # fred/releases
     assert get_all_releases_method_works == True
+
+@pytest.fixture
+def get_release_dates_all_releases_method_works() -> bool:
+    # fred/releases
+    params = {
+            'limit': 2,
+            }
+    observed = Fred().get_release_dates_all_releases(**params)
+    if not "limit" in observed.keys():
+        return False
+    if observed["limit"] != params["limit"]:
+        return False
+    if not "release_dates" in observed.keys():
+        return False
+    return True
+
+#@pytest.mark.skip("passed v1")
+def test_get_release_dates_all_releases(
+        get_release_dates_all_releases_method_works: bool,
+        ):
+    # fred/releases/dates
+    assert get_release_dates_all_releases_method_works == True
 
 @pytest.fixture
 def get_a_release_method_works() -> bool:
