@@ -11,6 +11,26 @@ def fred():
     return Fred()
 
 @pytest.fixture
+def get_all_releases_method_works() -> bool:
+    # fred/releases
+    params = {
+            'limit': 2,
+            }
+    observed = Fred().get_all_releases(**params)
+    if not "limit" in observed.keys():
+        return False
+    if observed["limit"] != params["limit"]:
+        return False
+    if not "releases" in observed.keys():
+        return False
+    return True
+
+#@pytest.mark.skip("passed v1")
+def test_get_all_releases(get_all_releases_method_works: bool):
+    # fred/releases
+    assert get_all_releases_method_works == True
+
+@pytest.fixture
 def get_a_release_method_works() -> bool:
     # fred/release
     observed = Fred().get_a_release(53)
