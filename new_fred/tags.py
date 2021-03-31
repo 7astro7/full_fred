@@ -95,10 +95,10 @@ class Tags(Sources):
                 "&sort_order=": sort_order,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.tag_stack["tags"] = self._fetch_data(url) # make key better
-        return self.tag_stack["tags"] 
+        self.tag_stack["get_tags"] = self._fetch_data(url) # make key better
+        return self.tag_stack["get_tags"] 
 
-    # clarify intersection of tags and union of tags*********
+    # param docstrings are checked
     def get_related_tags_for_a_tag(
             self,
             tag_names: list,
@@ -113,43 +113,47 @@ class Tags(Sources):
             sort_order: str = None,
             ):
         """
-        Get related FRED tags for one or more FRED tags
+        Get related FRED tags for one or more FRED tags.
 
         Parameters
         ----------
         tag_names: list
-            list of tags (str); each tag must be present in the tag of returned series
-
-        realtime_start: str default None
-
-        realtime_end: str default None
-
-        exclude_tag_names: list, default None (don't exclude any tags)
-            tags that returned series must not have
-
+            list of tags that series match each one of. 
+            ; each tag must be present in the tag of returned series
+        realtime_start: str, default None
+            the start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            the start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        exclude_tag_names: list, default None 
+            A list of tag names that series match none of.
+            If None, no tag names are excluded.
         tag_group_id: str, default None
-            a tag group id to filter tags by type with
-            can be one of 'freq' for frequency, 'gen' for general or concept, 
+            A tag group id to filter tags by type with.
+            Can be one of 'freq' for frequency, 'gen' for general or concept, 
             'geo' for geography, 'geot' for geography type, 'rls' for release, 
-            'seas' for seasonal adjustment, 'src' for source
-
+            'seas' for seasonal adjustment, 'src' for source.
+            If None, no filtering by tag group is done.
         search_text: str, default None
-            the words to find matching tags with
-            if None, no filtering by search words
-
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-
-        offset: non-negative integer, default None (offset of 0)
-
-        order_by: str, default "series_count"
-            order results by values of the specified attribute
-            can be one of "series_count", "popularity", "created", "name", "group_id"
-
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
-
+            The words to find matching tags with.
+            If None, no filtering by search words is done.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_000.
+        offset: int, default None 
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "series_count", "popularity", "created", "name", "group_id".
+            If None, "series_count" is used.
+        sort_order: str, default None 
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
         Returns
         -------
         dict
@@ -164,6 +168,8 @@ class Tags(Sources):
 
         Examples
         --------
+        f = Fred()
+        f.get_related_tags_for_a_tag(exclude_tag_names = ("discontinued",))
         """
         url_prefix = "related_tags?tag_names="
         try:
@@ -182,20 +188,20 @@ class Tags(Sources):
                 "&sort_order=": sort_order,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        key = "_".join(tag_names)
-        self.tag_stack[key] = self._fetch_data(url)
-        return self.tag_stack[key]
+        self.tag_stack["get_related_tags_for_a_tag"] = self._fetch_data(url)
+        return self.tag_stack["get_related_tags_for_a_tag"]
 
+    # make v2
     def get_series_matching_tags(
             self, 
             tag_names: list,
             exclude_tag_names: list = None,
             realtime_start: str = None,
             realtime_end: str = None,
-            limit: int = 100_000,
-            offset: int = 0,
-            order_by: str = "series_id",
-            sort_order: str = "asc",
+            limit: int = None,
+            offset: int = None,
+            order_by: str = None,
+            sort_order: str = None,
             ) -> dict:
         """
         Get the metadata of series conditional on the series having ALL tags in tag_names 
@@ -225,23 +231,39 @@ class Tags(Sources):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
         FRED web service endpoint: fred/tags/series
+
+        Examples
+        --------
         """
-        # perhaps check first to see if there's a matching query in self.tag_stack
         url_prefix = "tags/series?tag_names=" 
         try:
             url_prefix += ";".join(tag_names)
         except TypeError:
             print("tag_names must be list or tuple")
-        # make each returned series a FredSeries
         realtime_period = self._get_realtime_date(
                 realtime_start, 
                 realtime_end
                 )
         url_prefix += realtime_period
-#        breakpoint()
-        key = "_".join(tag_names)
-        self.tag_stack[key] = self._fetch_data(url_prefix)
-        return self.tag_stack[key]
+        self.tag_stack["get_series_matching_tags"] = self._fetch_data(url_prefix)
+        return self.tag_stack["get_series_matching_tags"]
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                "&exclude_tag_names=": exclude_tag_names,
+                "&tag_group_id=": tag_group_id,
+                "&search_text=": search_text,
+                "&limit=": limit,
+                "&offset=": offset,
+                "&order_by=": order_by,
+                "&sort_order=": sort_order,
+            }
+        url = self._add_optional_params(url_prefix, optional_args)
+
+

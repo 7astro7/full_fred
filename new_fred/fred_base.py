@@ -54,6 +54,12 @@ class FredBase:
         -------
         str
 
+        Notes
+        -----
+        if tag_names is a parameter in optional_params, whitespace is
+        replaced with "+" so the request URL encodes the whitespace 
+        in a standard way. There's more on this at
+        https://fred.stlouisfed.org/docs/api/fred/related_tags.html
         """
         new_url_string = og_url_string
         for k in optional_params.keys():
@@ -63,6 +69,7 @@ class FredBase:
                     tag_names = optional_params[k] 
                     try:
                         str_names = self._join_strings_by(tag_names, ";")
+                        str_names = str_names.strip().replace(" ", "+")
                         optional_params[k] = str_names
                     except TypeError:
                         e = "Cannot add tag_names to FRED query url"

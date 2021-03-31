@@ -21,6 +21,13 @@ from .tags import Tags
 # Can save metadata about last df query to check new request against
 class Fred(Tags):
     """
+    When a request to FRED's servers is made, the returned data is
+    available in a stack (a dict): series_stack for series requests, 
+    category_stack for categories requests, tag_stack for tags requests, 
+    etc. Keys are the name of the method used to retrieve the data.
+    For example, after calling f.get_tags() f.tag_stack["get_tags"] will 
+    return the data that FRED responded with, until a new get_tags method
+    invocation is made. 
     Clarify what series_stack is
     # go ham on docstrings for methods
     Use api_key_found() to determine if an api key is found as 
