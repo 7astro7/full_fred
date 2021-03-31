@@ -41,6 +41,7 @@ class Tags(Sources):
             If default isn't set by user, "9999-12-31" (last available) is used.
         tag_names: list, default None
             list of tags [str] to include in returned data, excluding any tag not in tag_names.
+            Each tag must be present in the tag of returned series
             If None, no filtering by tag names is done.
         tag_group_id: str, default None
             a tag group id to filter tags by type with.
@@ -118,8 +119,8 @@ class Tags(Sources):
         Parameters
         ----------
         tag_names: list
-            list of tags that series match each one of. 
-            ; each tag must be present in the tag of returned series
+            list of tags that series match all of. 
+            Each tag must be present in the tag of returned series.
         realtime_start: str, default None
             the start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -204,28 +205,42 @@ class Tags(Sources):
             sort_order: str = None,
             ) -> dict:
         """
-        Get the metadata of series conditional on the series having ALL tags in tag_names 
-        and exclude any tags in exclude_tag_names
-        intersection of tag names, not union
-        tag_names[0] AND tag_names[1] AND ... tag_names[n - 1] must be in returned series' tags
-        double-check filtering mechanism (name or tag of series?)
-        all fred params:
+        Get the series matching all tags in tag_names parameter and 
+        no tags in the exclude_tag_names parameter.
             
         Parameters
         ----------
         tag_names: list
-            list of tags (str); each tag must be present in the tag of returned series
-
-        exclude_tag_names: list, default None
-            example: ['alcohol', 'quarterly',] to exclude series with either tag 'alcohol' or tag 'quarterly'
-
-        realtime_start: str default None
-
-        realtime_end: str default None
-
-        limit: int, default 1_000
-            maximum number of observations / rows 
-            range [1, 1_000]
+            list of tags that series match all of. 
+            Each tag must be present in the tag of returned series.
+        exclude_tag_names: list, default None 
+            A list of tag names that series match none of.
+            If None, no tag names are excluded.
+        realtime_start: str, default None
+            the start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            the start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_000.
+        offset: int, default None 
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "series_id", "title", "units", "frequency", 
+            "seasonal_adjustment", "realtime_start", "realtime_end",
+            "last_updated", "observation_start", "observation_end",
+            "popularity", "group_popularity".
+            If None, "series_id" is used.
+        sort_order: str, default None 
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns
         -------
@@ -246,24 +261,17 @@ class Tags(Sources):
             url_prefix += ";".join(tag_names)
         except TypeError:
             print("tag_names must be list or tuple")
-        realtime_period = self._get_realtime_date(
-                realtime_start, 
-                realtime_end
-                )
-        url_prefix += realtime_period
-        self.tag_stack["get_series_matching_tags"] = self._fetch_data(url_prefix)
-        return self.tag_stack["get_series_matching_tags"]
         optional_args = {
+                "&exclude_tag_names=": exclude_tag_names,
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
-                "&exclude_tag_names=": exclude_tag_names,
-                "&tag_group_id=": tag_group_id,
-                "&search_text=": search_text,
                 "&limit=": limit,
                 "&offset=": offset,
                 "&order_by=": order_by,
                 "&sort_order=": sort_order,
             }
         url = self._add_optional_params(url_prefix, optional_args)
+        self.tag_stack["get_series_matching_tags"] = self._fetch_data(url)
+        return self.tag_stack["get_series_matching_tags"]
 
 
