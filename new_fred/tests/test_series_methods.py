@@ -24,41 +24,29 @@ def get_a_series_method_works() -> bool:
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_series(
         get_a_series_method_works: bool,
         ):
     assert get_a_series_method_works == True
 
 @pytest.fixture
-def expected_names_get_categories_of_series():
-    # fred/series/categories
-    return ("Japan", "Monthly Rates",)
-
-@pytest.mark.skip("passed v1")
-def test_get_categories_of_series(
-        fred: Fred,
-        expected_names_get_categories_of_series: tuple,
-        ):
-    # fred/series/categories
-    returned_correctly = False
-    observed = fred.get_categories_of_series("EXJPUS")
+def get_categories_of_series_method_works():
+    params = {
+            'series_id': 'EXJPUS',
+            }
+    observed = Fred().get_categories_of_series("EXJPUS")
     if not isinstance(observed, dict):
-        assert returned_correctly == True
+        return False
     if not "categories" in observed.keys():
-        assert returned_correctly == True
-    categories = observed["categories"] # categories is a list
-    expected_keys = ("id", "name", "parent_id")
-    for key in categories[0].keys():
-        if key not in expected_keys:
-            assert returned_correctly == True
-    expected_names = expected_names_get_categories_of_series
-    for a_category in categories:
-        if expected_names[0] in a_category.values():
-            returned_correctly = True
-        if expected_names[1] in a_category.values():
-            returned_correctly = True
-    assert returned_correctly == True
+        return False
+    return True
+
+#@pytest.mark.skip("passed v1")
+def test_get_categories_of_series(
+        get_categories_of_series_method_works: bool,
+        ):
+    assert get_categories_of_series_method_works == True
 
 @pytest.fixture
 def get_series_df_method_works() -> bool:

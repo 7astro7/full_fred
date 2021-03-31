@@ -33,29 +33,35 @@ class Tags(Sources):
         ----------
         realtime_start: str, default None
             the start of the real-time period formatted as "YYY-MM-DD".
-            If None, '1776-07-04' is used.
+            If None, "1776-07-04" (earliest) is used.
         realtime_end: str, default None
             the start of the real-time period formatted as "YYY-MM-DD".
-            If None, '9999-12-31' is used if None
+            If None, "9999-12-31" (last available) is used.
         tag_names: list, default None
             list of tags (of string type) to exclude from response.
+            If None,
         tag_group_id: str, default None
             a tag group id to filter tags by type with
             can be one of 'freq' for frequency, 'gen' for general or concept, 
             'geo' for geography, 'geot' for geography type, 'rls' for release, 
             'seas' for seasonal adjustment, 'src' for source
+            If None,
         search_text: str, default None
             the words to find matching tags with
             if None, no filtering by search words
         limit: int, default None (FRED will use limit = 1_000)
             maximum number of results to return
             range [1, 1_000]
+            If None,
         offset: non-negative integer, default None (offset of 0)
+            If None,
         order_by: str, default "source_count"
             order results by values of the specified attribute
             can be one of "source_count", "popularity", "created", "name", "group_id"
+            If None,
         sort_order: str, default None (FRED will use "asc")
             sort results in ascending or descending order for attribute values specified by order_by
+            If None,
 
         Returns
         -------
