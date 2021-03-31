@@ -1,11 +1,287 @@
 
-from .tags import Tags
+from requests.exceptions import RequestException
+import pandas as pd
+import requests
+import os
 
 # expand on current docstrings to explain with greater clarity
 # define tags, sources, series, categories, releases, etc.
 # define realtime_start and realtime_end
 # create a thing on how to set environment variables to enable broad use 
 # integrate ALFRED, GeoFRED
+
+class FredBase:
+    """
+    go heavy on getters and setters so data can be stored
+    store api key with salts
+    """
+    def __init__(self, 
+            api_key = None, 
+            api_key_file = None):
+        self.__realtime_start = "1776-07-04"
+        self.__realtime_end = "9999-12-31"
+        self.__url_base = "https://api.stlouisfed.org/fred/"
+        self.__api_key_env_var = False
+        if os.environ["FRED_API_KEY"] is not None:
+            self.__api_key_env_var = True
+        self.__api_key = api_key
+
+    def api_key_found(self):
+        return self.__api_key_env_var
+
+    def _add_optional_params(
+            self,
+            og_url_string: str,
+            optional_params: dict,
+            ) -> str:
+        """
+        Create a parameter string that adds any non-None parameters in optional_params to
+        og_url_string
+
+        Parameters
+        ----------
+        og_url_string: str
+            the string to append new, non-null parameter strings to
+
+        optional_params: dict
+            a dictionary mapping parameter strings to actual arguments passed by user
+            for example:
+                "&tag_group_id=": None 
+                "&limit=": 23
+            if the value is not None, "&limit=" + str(23) is added to og_url_string
+
+        Returns
+        -------
+        str
+
+        """
+        new_url_string = og_url_string
+        for k in optional_params.keys():
+            if optional_params[k] is not None:
+                try:
+                    a_parameter_string = k + str(optional_params[k])
+                    new_url_string += a_parameter_string
+                except TypeError:
+                    print(k + " " + optional_params[k] + " cannot be cast to str")
+        return new_url_string
+    
+    def _make_request_url(
+            self, 
+            var_url: str, 
+            ):
+        """
+        Return the url that can be used to retrieve the desired data for series_id
+        need to integrate other parameters as well
+        Maximizes security in allowing direct pass of environment variable FRED_API_KEY 
+        as api key sent to fred's web service
+
+        var_url must include id irrespective of whether series_id, category_id, etc.
+        """
+#        file_type = "&file_type=json"
+        url_base = [
+                self.__url_base, 
+                var_url, 
+                "&file_type=json&api_key=",
+                ]
+        base = "".join(url_base)
+        if self.__api_key_env_var:
+            return base + os.environ["FRED_API_KEY"] #+ file_type
+        return base + self.__api_key #+ file_type
+
+    # modify: never print api key in message
+    def _fetch_data(self, url_prefix: str) -> dict:
+        """
+        """
+        url = self._make_request_url(url_prefix)
+        json_data = self._get_response(url)
+        if json_data is None:
+            # modify here to never print api key in message
+            message = "Data could not be retrieved using " 
+            message += url_prefix 
+            print(message)
+            return
+        return json_data
+
+    def _get_realtime_date(self, 
+            realtime_start: str = None,
+            realtime_end: str = None,
+            ) -> str:
+        """
+        Takes a string as input and returns the YYY-MM-DD 
+        realtime date string to use for construction of a request url
+        """
+        rt_start = "&realtime_start="
+        rt_end = "&realtime_end="
+        if realtime_start is None:
+            rt_start += self.__realtime_start
+        else:
+            try:
+                realtime_start = str(realtime_start)
+            except TypeError:
+                pass # this needs to be more effective
+        if realtime_end is None:
+            rt_end += self.__realtime_end
+        else:
+            try:
+                realtime_end = str(realtime_end)
+            except TypeError:
+                pass # this needs to be more effective
+        return rt_start + rt_end
+        
+    def _get_response(self, a_url: str) -> dict:
+        """
+        Return a JSON dictionary response with data retrieved from a_url
+        """
+        try:
+            response = requests.get(a_url)
+        except RequestException:
+            return
+        return response.json()
+
+    def _append_id_to_url(
+            self, 
+            a_url_prefix: str,
+            an_int_id: int = None,
+            a_str_id: str = None,
+            ) -> str:
+        """
+        Return a_url_prefix with either an_int_id or a_str_id appended to it. 
+        """
+        if an_int_id is None and a_str_id is None:
+            raise ValueError("No id argument given, cannot append to url")
+        passed_id = an_int_id
+        new_url_str = a_url_prefix
+        if passed_id is None:
+            passed_id = a_str_id
+        try:
+            new_url_str += str(passed_id)
+        except TypeError:
+            print("Unable to cast id to str, cannot append to url string")
+        return new_url_str
+
+    def _join_strings_by(
+            self,
+            strings: list,
+            use_str: str,
+            ) -> str:
+        """
+        Join an iterable of strings using use_str and return the fused string.
+        """
+        if strings is None or use_str is None:
+            raise TypeError("strings and use_str are both required")
+        try:
+            fused_str = use_str.join(strings)
+        except TypeError:
+            print("Unable to join strings using %s" % use_str)
+        return fused_str
+            
+
+class FredSeries(FredBase):
+    
+    # return series name and metadata in __str__
+    def __init__(self, series_id: str = None):
+        super().__init__()
+        self.series_id = series_id
+        self.__metadata = None # change get_series to something akin to get_metadata
+        self.observations = None
+        self.release = None
+        self.__categories = None
+        self.__df = None
+
+#    def __str__(self):
+#        return self.series_id
+
+    def _check_series_id(
+            self, 
+            series_id: str,
+            ):
+        """
+        if self.series_id has not been set, this method sets it to series_id if
+        it is a string
+        checks that series_id is the same as self.series_id
+        """
+        # if self.series_id is already set and it's set to another id:
+        #   deal with this potential situation
+        if self.series_id is None: 
+            e = "series_id attribute has not been set"
+            raise AttributeError(e)
+        if not isinstance(series_id, str):
+            raise TypeError("series_id must be str")
+        self.series_id = series_id
+
+    def get_series(
+            self, 
+            series_id: str = None, 
+            realtime_start: str = None, 
+            realtime_end: str = None, 
+            ):
+        """
+        Get an economic data series
+        all parameters fred offers: y
+        FRED accepts upper case series_id
+        default realtime start and realtime end: first to last available
+        if series_id attribute is not set, FredSeries.series_id will be set to 
+        the series_id passed in this method
+
+        Parameters
+        ----------
+        series_id: int
+            the id of the series
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+
+        Returns
+        -------
+        """
+        if series_id is not None:
+            self._check_series_id(series_id)
+        if self.__metadata is not None:
+            return self.__metadata
+        url_prefix = "series?series_id=" + self.series_id
+        realtime_period = self._get_realtime_date(
+                realtime_start, 
+                realtime_end
+                )
+        url_prefix += realtime_period
+        self.__metadata = self._fetch_data(url_prefix)
+        return self.__metadata
+
+    # a name attribute?
+    def get_categories_of_series(
+            self, 
+            series_id: str,
+            realtime_start: str = None,
+            realtime_end: str = None,
+            ):
+        """
+        Get categories that FRED uses to classify series 
+
+        Parameters
+        ----------
+        series_id: int
+            the id of the series
+        realtime_start: str, default "1776-07-04" (earliest)
+            YYY-MM-DD as per fred
+        realtime_end: str, default "9999-12-31" (last available) 
+            YYY-MM-DD as per fred
+
+        Returns
+        -------
+        """
+        if series_id is not None:
+            self._check_series_id(series_id)
+        if self.__categories is not None:
+            return self.__categories
+        url_prefix = "series/categories?series_id=" + self.series_id
+        realtime_period = self._get_realtime_date(
+                realtime_start, 
+                realtime_end
+                )
+        url_prefix += realtime_period
+        self.__categories = self._fetch_data(url_prefix)
+        return self.__categories
 
 # go heavy on examples
 # make keys for each stack the parameters that were passed, not only the id used
@@ -16,7 +292,7 @@ from .tags import Tags
 # create a stack that holds only the parameters of the *latest* request
 # must provide for case where new parameters are sent to already-used method and data has to be queried again
 # Can save metadata about last df query to check new request against
-class Fred(Tags):
+class Fred(FredBase):
     """
     Clarify what series_stack is
     FRED tags are attributes assigned to series
@@ -31,11 +307,11 @@ class Fred(Tags):
     def __init__(self):
         super().__init__()
         self.unit_info = dict() # put explanation of units options<- no, explain in method doc
-#        self.category_stack = dict() # eh
-#        self.release_stack = dict()
-#        self.series_stack = dict() # eh
-#        self.source_stack = dict()
-#        self.tag_stack = dict()
+        self.category_stack = dict() # eh
+        self.release_stack = dict()
+        self.series_stack = dict() # eh
+        self.source_stack = dict()
+        self.tag_stack = dict()
 
     # not finished
     # may be redundant

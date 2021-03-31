@@ -22,7 +22,6 @@ def expected_get_category_id_125():
         }
     return expected
 
-
 @pytest.mark.skip("passed v1")
 def test_get_category_id_125_returns_trade_balance(
         fred: Fred, 
