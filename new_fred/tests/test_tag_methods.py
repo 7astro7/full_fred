@@ -11,6 +11,8 @@ from new_fred.fred import Fred
 @pytest.fixture
 def get_tags_method_works() -> bool:
     # fred/tags
+
+    # add params
     params = {
             'limit': 2,
             }

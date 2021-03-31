@@ -7,12 +7,12 @@ import os
 class Series(Releases):
 
     def __init__(self):
+        """
+        """
         super().__init__()
         self.series_stack = dict() 
 
-    # fred/series
-
-    def get_series(
+    def get_a_series(
             self, 
             series_id: str, 
             realtime_start: str = None, 
@@ -41,20 +41,31 @@ class Series(Releases):
 
         Returns
         -------
+        dict
+
+        See Also
+        --------
 
         Notes
         -----
-        fred/series
+        FRED web service endpoint: fred/series
+        https://fred.stlouisfed.org/docs/api/fred/series.html
+
+        Examples
+        --------
+
         """
-        if not series_id in self.series_stack.keys():
-            self.series_stack[series_id] = FredSeries(series_id)
-        params = dict(
-                series_id = series_id, # revisit: series_id given in constructor above
-                                        # but above code may not be executed
-                realtime_start = realtime_start,
-                realtime_end = realtime_end,
-                )
-        return self.series_stack[series_id].get_series(**params) 
+        url_prefix_params = dict(
+                a_url_prefix = "series?series_id=",
+                a_str_id = series_id)
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.series_stack[series_id] = self._fetch_data(url)
+        return self.series_stack[series_id]
 
     def get_categories_of_series(
             self,
@@ -84,9 +95,15 @@ class Series(Releases):
         Returns
         -------
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/categories
+        FRED web service endpoint: fred/series/categories
+
+        Examples
+        --------
         """
         if not series_id in self.series_stack.keys():
             self.series_stack[series_id] = FredSeries(series_id)
@@ -153,9 +170,15 @@ class Series(Releases):
         Returns
         -------
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/observations
+        FRED web service endpoint:/series/observations
+
+        Examples
+        --------
         """
         url_prefix_params = dict(
                 a_url_prefix = "series/observations?series_id=",
@@ -201,9 +224,15 @@ class Series(Releases):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/release
+        FRED web service endpoint:/series/release
+
+        Examples
+        --------
         """
         url_prefix_params = dict(
                 a_url_prefix = "series/release?series_id=",
@@ -271,10 +300,16 @@ class Series(Releases):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/search
+        FRED web service endpoint:/series/search
         https://fred.stlouisfed.org/docs/api/fred/series_search.html
+
+        Examples
+        --------
         """
         fused_search_text = self._join_strings_by(search_text, '+')
         url_prefix_params = dict(
@@ -350,9 +385,15 @@ class Series(Releases):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/search/tags
+        FRED web service endpoint:/series/search/tags
+
+        Examples
+        --------
         """
         search_text = self._join_strings_by(series_search_text, '+')
         url_prefix_params = dict(
@@ -425,9 +466,15 @@ class Series(Releases):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/search/related_tags
+        FRED web service endpoint:/series/search/related_tags
+
+        Examples
+        --------
         """
         search_text = self._join_strings_by(series_search_text, '+')
         fused_tag_names = self._join_strings_by(tag_names, ';')
@@ -481,9 +528,15 @@ class Series(Releases):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/tags
+        FRED web service endpoint:/series/tags
+
+        Examples
+        --------
         """
         url_prefix_params = dict(
                 a_url_prefix = "series/tags?series_id=",
@@ -513,7 +566,7 @@ class Series(Releases):
         Get economic data series sorted by when observations were updated on the FRED server. 
         Results are limited to series updated within the last two weeks.
 
-        fred/series/updates
+        FRED web service endpoint:/series/updates
 
         Parameters
         ----------
@@ -537,8 +590,14 @@ class Series(Releases):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
+
+        Examples
+        --------
         """
         url_prefix = "series/updates?"
         optional_args = {
@@ -589,9 +648,15 @@ class Series(Releases):
         -------
         dict
 
+        See Also
+        --------
+
         Notes
         -----
-        fred/series/vintagedates
+        FRED web service endpoint: fred/series/vintagedates
+
+        Examples
+        --------
         """
         url_prefix_params = dict(
                 a_url_prefix = "series/vintagedates?series_id=",

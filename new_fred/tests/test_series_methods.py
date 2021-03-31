@@ -7,43 +7,28 @@ from new_fred.fred import Fred
 # test different realtime dates
 
 @pytest.fixture
-def fred():
-    return Fred()
+def get_a_series_method_works() -> bool:
+    params = {
+            'series_id': 'GNPCA',
+            }
+    observed = Fred().get_a_series(**params)
+    if not isinstance(observed, dict):
+        assert returned_correctly == True
+    series_key = "seriess" if "seriess" in observed.keys() else "series"
+    if not series_key in observed.keys():
+        return False
+    metadata_map = observed[series_key][0] # get map at index 0
+    if not "id" in metadata_map.keys():
+        return False
+    if metadata_map["id"] != params["series_id"]:
+        return False
+    return True
 
-@pytest.fixture
-def expected_get_series_id():
-    # fred/series
-    """
-    The expected value associated with key 'id' in the map returned
-    by fred.get_series('GNPCA')
-    """
-    return "GNPCA"
-
-@pytest.fixture
-def expected_get_series_title():
-    """
-    The expected value associated with key 'title' in the map returned
-    by fred.get_series('GNPCA')
-    """
-    return "Real Gross National Product"
-
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v1")
 def test_get_series(
-        fred: Fred,
-        expected_get_series_id: str,
-        expected_get_series_title: str,
+        get_a_series_method_works: bool,
         ):
-    # fred/series
-    returned_correctly = False
-    observed = fred.get_series("GNPCA")
-    if "id" in observed.keys():
-        if not observed["id"] == expected_get_series_id:
-            assert returned_correctly == True
-    if "title" in observed.keys():
-        if not observed["title"] == expected_get_series_title: 
-            assert returned_correctly == True
-    returned_correctly = True
-    assert returned_correctly == True
+    assert get_a_series_method_works == True
 
 @pytest.fixture
 def expected_names_get_categories_of_series():

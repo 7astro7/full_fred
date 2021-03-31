@@ -2,16 +2,17 @@
 from .sources import Sources
 
 class Tags(Sources):
-    """
-    FRED tags are attributes assigned to series
-    define further
-    """
 
     def __init__(self):
+        """
+        FRED tag = an attribute assigned to a series. 
+        Metadata for a tag includes name, group_id, notes, date of creation, popularity, series count. 
+        define further
+        FRED web service endpoint: fred/tags
+        https://fred.stlouisfed.org/docs/api/fred/
+        """
         super().__init__()
         self.tag_stack = dict()
-
-    # fred/tags
 
     def get_tags(
             self,
@@ -26,14 +27,18 @@ class Tags(Sources):
             sort_order: str = None,
             ) -> dict:
         """
-        Get FRED tags.
+        Get FRED tags. All parameters are optional.
 
         Parameters
         ----------
-        realtime_start: str default None
-        realtime_end: str default None
-        tag_names: list
-            list of tags (str); each tag must be present in the tag of returned series
+        realtime_start: str, default None
+            the start of the real-time period formatted as "YYY-MM-DD".
+            If None, '1776-07-04' is used.
+        realtime_end: str, default None
+            the start of the real-time period formatted as "YYY-MM-DD".
+            If None, '9999-12-31' is used if None
+        tag_names: list, default None
+            list of tags (of string type) to exclude from response.
         tag_group_id: str, default None
             a tag group id to filter tags by type with
             can be one of 'freq' for frequency, 'gen' for general or concept, 
@@ -54,10 +59,19 @@ class Tags(Sources):
 
         Returns
         -------
+        dict
+            Metadata of requested FRED tags
+
+        See Also
+        --------
+        get_related_tags_for_a_tag: get related tags
 
         Notes
         -----
-        fred/tags
+        FRED web service endpoint:fred/tags
+
+        Examples
+        --------
         """
         url_prefix = "tags?"
         optional_args = {
@@ -72,7 +86,6 @@ class Tags(Sources):
                 "&sort_order=": sort_order,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-#        url = url.replace("tags?&", "tags?")
         self.tag_stack["tags"] = self._fetch_data(url) # make key better
         return self.tag_stack["tags"] 
 
@@ -130,10 +143,18 @@ class Tags(Sources):
 
         Returns
         -------
+        dict
+
+        See Also
+        --------
+        get_tags: get all tags in use
 
         Notes
         -----
-        fred/related_tags
+        FRED web service endpoint: fred/related_tags
+
+        Examples
+        --------
         """
         url_prefix = "related_tags?tag_names="
         try:
@@ -166,7 +187,7 @@ class Tags(Sources):
             offset: int = 0,
             order_by: str = "series_id",
             sort_order: str = "asc",
-            ):
+            ) -> dict:
         """
         Get the metadata of series conditional on the series having ALL tags in tag_names 
         and exclude any tags in exclude_tag_names
@@ -193,10 +214,11 @@ class Tags(Sources):
 
         Returns
         -------
+        dict
 
         Notes
         -----
-        fred/tags/series
+        FRED web service endpoint: fred/tags/series
         """
         # perhaps check first to see if there's a matching query in self.tag_stack
         url_prefix = "tags/series?tag_names=" 
