@@ -32,11 +32,11 @@ class Tags(Sources):
         Parameters
         ----------
         realtime_start: str, default None
-            the start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest) is used.
         realtime_end: str, default None
-            the start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (last available) is used.
         tag_names: list, default None

@@ -2,28 +2,49 @@
 import pytest
 from new_fred.fred import Fred
 
-# I can use the returned METAdata to test success of a method
-# ensure method coverage
-# test different realtime dates
-
 @pytest.fixture
-def get_all_sources_method_works():
-    # fred/sources
-    params = {
-            'limit': 2,
-            }
-    observed = Fred().get_all_sources(**params)
+def fred() -> Fred:
+    return Fred()
+
+def returned_ok(
+        """
+        params:         arguments actually passed
+                        when invoking Fred() method
+                        that returned observed dict.
+        observed:       FRED web service response dict.
+        check_union:    iterable of keys, if none are 
+                        present in observed.keys(), 
+                        return False.
+        """
+        params: dict, 
+        observed: dict,
+        check_union: list = None,
+        ) -> bool:
     if not isinstance(observed, dict):
         return False
-    if not "limit" in observed.keys():
-        return False
-    if observed["limit"] != params["limit"]:
-        return False
-    if not "sources" in observed.keys():
-        return False
-    return True
+    for expected_key in params.keys():
+        if not expected_key in observed.keys():
+            return False
+        if params[expected_key] != observed[expected_key]:
+            return False
+    for key in check_union:
+        if key in observed.keys():
+            return True
+    return False
 
-@pytest.mark.skip("passed v1")
+@pytest.fixture
+def get_all_sources_method_works(fred: Fred):
+    params = {
+            'limit': 2,
+            'sort_order': 'desc',
+            'order_by': 'name',
+            }
+    fred.get_all_sources(**params)
+    observed = Fred().get_all_sources(**params)
+    check_union = ('sources',)
+    return returned_ok(params, observed, check_union)
+
+@pytest.mark.skip("passed v2")
 def test_get_all_sources(
         get_all_sources_method_works: bool,
         ):
@@ -31,7 +52,6 @@ def test_get_all_sources(
 
 @pytest.fixture
 def get_a_source_method_works() -> bool:
-    # fred/source
     params = {
             'source_id': 1,
             }

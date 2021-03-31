@@ -4,10 +4,10 @@ from .series import Series
 class Sources(Series):
 
     def __init__(self):
+        """
+        """
         super().__init__()
         self.source_stack = dict()
-
-    # fred/sources          make into class
 
     def get_all_sources(
             self,
@@ -23,27 +23,47 @@ class Sources(Series):
 
         Parameters
         ----------
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-        offset: non-negative integer, default None (offset of 0)
-        order_by: str, default "source_count"
-            order results by values of the specified attribute
-            can be one of "source_count", "popularity", "created", "name", "group_id"
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+               limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_000.
+       limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_000.
+        offset: int, default None 
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "source_id", "name", "realtime_start", "realtime_end".
+            If None, "source_id" is used.
+        sort_order: str, default None 
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns
         -------
         dict
+            Metadata of requested FRED sources.
+
+        See Also
+        --------
 
         Notes
         -----
         fred/sources
+
+        Examples
+        --------
         """
         url_prefix = "sources?"
         optional_args = {
@@ -55,8 +75,8 @@ class Sources(Series):
                 "&sort_order=": sort_order,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.source_stack["sources"] = self._fetch_data(url) # improve this key
-        return self.source_stack["sources"]
+        self.source_stack["get_all_sources"] = self._fetch_data(url) 
+        return self.source_stack["get_all_sources"]
 
     def get_a_source(
             self,
