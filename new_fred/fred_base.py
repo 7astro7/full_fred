@@ -58,6 +58,15 @@ class FredBase:
         new_url_string = og_url_string
         for k in optional_params.keys():
             if optional_params[k] is not None:
+                # if tag_names ... join string by ';'
+                if k == "&tag_names=":
+                    tag_names = optional_params[k] 
+                    try:
+                        str_names = self._join_strings_by(tag_names, ";")
+                        optional_params[k] = str_names
+                    except TypeError:
+                        e = "Cannot add tag_names to FRED query url"
+                        print(e)
                 try:
                     a_parameter_string = k + str(optional_params[k])
                     new_url_string += a_parameter_string

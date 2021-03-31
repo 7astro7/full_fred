@@ -6,15 +6,15 @@ from new_fred.fred import Fred
 # ensure method coverage
 # test different realtime dates
 
-# v1 tests COMPLETE
+# v2: limit, sort_order, tag_names
 
 @pytest.fixture
 def get_tags_method_works() -> bool:
-    # fred/tags
-
     # add params
     params = {
             'limit': 2,
+            'sort_order' : 'desc',
+            'tag_names': ('gdp', 'oecd',),
             }
     observed = Fred().get_tags(**params)
     if not isinstance(observed, dict):
@@ -25,13 +25,16 @@ def get_tags_method_works() -> bool:
         return False
     if not "tags" in observed.keys():
         return False
+    if not "sort_order" in observed.keys():
+        return False
+    if observed["sort_order"] != params["sort_order"]:
+        return False
     return True
 
-@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v2")
 def test_get_tags(
         get_tags_method_works: bool,
         ):
-    # fred/tags
     assert get_tags_method_works == True
 
 @pytest.fixture

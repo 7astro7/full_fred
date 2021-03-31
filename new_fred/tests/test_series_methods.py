@@ -42,7 +42,7 @@ def get_categories_of_series_method_works():
         return False
     return True
 
-#@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v1")
 def test_get_categories_of_series(
         get_categories_of_series_method_works: bool,
         ):

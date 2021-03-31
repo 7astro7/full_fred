@@ -7,13 +7,13 @@ class Tags(Sources):
         """
         FRED tag = an attribute assigned to a series. 
         Metadata for a tag includes name, group_id, notes, date of creation, popularity, series count. 
-        define further
         FRED web service endpoint: fred/tags
         https://fred.stlouisfed.org/docs/api/fred/
         """
         super().__init__()
         self.tag_stack = dict()
 
+    # param docstrings are checked
     def get_tags(
             self,
             realtime_start: str = None,
@@ -27,41 +27,44 @@ class Tags(Sources):
             sort_order: str = None,
             ) -> dict:
         """
-        Get FRED tags. All parameters are optional.
+        Get FRED tags, attributes that FRED assigns to series. All parameters are optional.
 
         Parameters
         ----------
         realtime_start: str, default None
             the start of the real-time period formatted as "YYY-MM-DD".
-            If None, "1776-07-04" (earliest) is used.
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
         realtime_end: str, default None
             the start of the real-time period formatted as "YYY-MM-DD".
-            If None, "9999-12-31" (last available) is used.
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
         tag_names: list, default None
-            list of tags (of string type) to exclude from response.
-            If None,
+            list of tags [str] to include in returned data, excluding any tag not in tag_names.
+            If None, no filtering by tag names is done.
         tag_group_id: str, default None
-            a tag group id to filter tags by type with
-            can be one of 'freq' for frequency, 'gen' for general or concept, 
+            a tag group id to filter tags by type with.
+            Can be one of 'freq' for frequency, 'gen' for general or concept, 
             'geo' for geography, 'geot' for geography type, 'rls' for release, 
-            'seas' for seasonal adjustment, 'src' for source
-            If None,
+            'seas' for seasonal adjustment, 'src' for source, 'cc' for copyright.
+            If None, no filtering by tag group is done.
         search_text: str, default None
-            the words to find matching tags with
-            if None, no filtering by search words
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-            If None,
-        offset: non-negative integer, default None (offset of 0)
-            If None,
-        order_by: str, default "source_count"
-            order results by values of the specified attribute
-            can be one of "source_count", "popularity", "created", "name", "group_id"
-            If None,
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
-            If None,
+            The words to find matching tags with.
+            If None, no filtering by search words.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_000.
+        offset: int, default None 
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "series_count", "popularity", "created", "name", "group_id".
+            If None, "series_count" is used.
+        sort_order: str, default None 
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns
         -------

@@ -145,12 +145,12 @@ class Series(Releases):
         ----------
         series_id: int
             the id of the series
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-            If None,
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-            If None,
+        realtime_start: str, default None 
+            The start of the real-time period formatted as "YYY-MM-DD"
+            If None, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The end of the real-time period formatted as "YYY-MM-DD"
+            If None, "9999-12-31" (last available) is used.
         limit: int, default 100_000
             maximum number of observations / rows 
             range [1, 100_000]

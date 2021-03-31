@@ -1,6 +1,8 @@
 
 from .tags import Tags
 
+# create getters and setters for default realtime variables
+
 # api key
 # expand on current docstrings to explain with greater clarity
 # define tags, sources, series, categories, releases, etc.
@@ -34,3 +36,30 @@ class Fred(Tags):
         super().__init__()
         self.unit_info = dict() # put explanation of units options<- no, explain in method doc
         self.return_type = dict
+
+    def get_realtime_start(self):
+        """
+        Returns default realtime_start
+        """
+        return self._FredBase_realtime_start
+
+    def set_realtime_start(self, new_rt_start: str):
+        """
+        Sets default realtime_start
+        """
+        self._FredBase_realtime_start = new_rt_start
+
+    def get_realtime_end(self):
+        """
+        Returns default realtime_end
+        """
+        return self._FredBase_realtime_end
+
+    def set_realtime_end(self, new_rt_end: str):
+        """
+        Sets default realtime_end
+        """
+        self._FredBase_realtime_end = new_rt_end
+
+
+
