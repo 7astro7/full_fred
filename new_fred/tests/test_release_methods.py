@@ -51,7 +51,7 @@ def get_release_dates_all_releases_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_release_dates_all_releases(
         get_release_dates_all_releases_method_works: bool,
         ):
@@ -59,19 +59,22 @@ def test_get_release_dates_all_releases(
 
 @pytest.fixture
 def get_a_release_method_works(fred: Fred) -> bool:
-    # fred/release
-    observed = fred.get_a_release(53)
-    if not "releases" in observed.keys():
-        return False
-    releases_list = observed["releases"] # list of dicts
-    if "id" in releases_list[0].keys():
-        if releases_list[0]["id"] == 53:
-            return True
-    return False
+    params = {
+            'release_id': 53,
+            }
+    fred.get_a_release(**params)
+    observed = fred.release_stack['get_a_release']
+    check_union = ('releases',)
+    returned_ok_params = {
+            'observed': observed,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
-def test_get_a_release(get_a_release_method_works: bool):
-    # fred/release
+#@pytest.mark.skip("passed v2")
+def test_get_a_release(
+        get_a_release_method_works: bool,
+        ):
     assert get_a_release_method_works == True
 
 @pytest.fixture

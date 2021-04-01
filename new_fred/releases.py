@@ -150,6 +150,8 @@ class Releases(Categories):
         self.release_stack["get_release_dates_all_releases"] = self._fetch_data(url)
         return self.release_stack["get_release_dates_all_releases"]
 
+    
+    # param docstrings are checked
     def get_a_release(
             self,
             release_id: int,
@@ -157,19 +159,26 @@ class Releases(Categories):
             realtime_end: str = None,
             ):
         """
-        Get a release of economic data
+        Get a release of economic data.
         
         Parameters
         ----------
         release_id: int
             id for a release
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
 
         Returns 
         -------
+        dict
+            Release name, id, realtime start and end, url to release,
+            whether the release is a press_release.
 
         See Also
         --------
@@ -177,20 +186,23 @@ class Releases(Categories):
         Notes
         -----
         fred/release
+        https://fred.stlouisfed.org/docs/api/fred/release.html
+
+        Examples
+        -----
         """
         url_prefix = "release?release_id="
         try:
             url_prefix += str(release_id)
         except TypeError:
-            print("Unable to cast release_id %s to str" % release_id)
-        realtime_period = self._get_realtime_date(
-                realtime_start, 
-                realtime_end
-                )
-        url_prefix += realtime_period
-#        breakpoint()
-        self.release_stack[release_id] = self._fetch_data(url_prefix)
-        return self.release_stack[release_id]
+            print("Unable to cast release_id %s to str" % release_id) # line contradicts itself
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                }
+        url = self._add_optional_params(url_prefix, optional_args)
+        self.release_stack["get_a_release"] = self._fetch_data(url)
+        return self.release_stack["get_a_release"]
 
     def get_release_dates(
             self,
