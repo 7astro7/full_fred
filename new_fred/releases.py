@@ -76,6 +76,7 @@ class Releases(Categories):
         self.release_stack["get_all_releases"] = self._fetch_data(url)
         return self.release_stack["get_all_releases"]
 
+    # param docstrings are checked
     def get_release_dates_all_releases(
             self,
             realtime_start: str = None, 
@@ -84,30 +85,55 @@ class Releases(Categories):
             offset: int = None,
             order_by: str = None,
             sort_order: str = None,
-            include_release_dates_with_no_data: bool = None,
+            include_empty: bool = None,
             ) -> dict:
         """
-        Get release dates for all releases of economic data.
+        Get release dates for all releases of economic data. 
+        FRED's data sources publish release dates: release 
+        dates may be published before the data in the release
+        is available on FRED's servers via this API.
 
         Parameters
         ----------
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        limit: int default None
-        offset: int default None
-        order_by: str default None
-        sort_order: str default None
-        include_release_dates_with_no_data: bool, default None
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "release_date", "release_id", "release_name", 
+            If None, "release_date" is used.
+        sort_order: str, default None
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
+        include_empty: bool, default None
+            Indicates whether to return release dates with no data.
+            If False, release dates without any data are excluded, namely future release dates.
+            If None, False is used.
 
         Returns 
         -------
         dict
+            release_id, release_name, date for all releases
+
+        See Also
+        --------
 
         Notes
         -----
         fred/releases
+        https://fred.stlouisfed.org/docs/api/fred/releases_dates.html
         """
         url_prefix = "releases/dates?"
         optional_args = {
@@ -118,11 +144,11 @@ class Releases(Categories):
                 "&order_by=": order_by,
                 "&sort_order=": sort_order,
                 "&include_release_dates_with_no_data":
-                include_release_dates_with_no_data,
+                include_empty,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.release_stack["dates_all_releases"] = self._fetch_data(url)
-        return self.release_stack["dates_all_releases"]
+        self.release_stack["get_release_dates_all_releases"] = self._fetch_data(url)
+        return self.release_stack["get_release_dates_all_releases"]
 
     def get_a_release(
             self,
@@ -144,6 +170,9 @@ class Releases(Categories):
 
         Returns 
         -------
+
+        See Also
+        --------
 
         Notes
         -----
@@ -171,7 +200,7 @@ class Releases(Categories):
             limit: int = None,
             offset: int = None,
             sort_order: str = None,
-            include_release_dates_with_no_data: bool = None,
+            include_empty: bool = None,
             ) -> dict:
         """
         Get release dates for a release of economic data.
@@ -184,12 +213,15 @@ class Releases(Categories):
             YYY-MM-DD as per fred
         realtime_end: str, default "9999-12-31" (last available) 
             YYY-MM-DD as per fred
-        include_release_dates_with_no_data: bool default False
+        include_empty: bool default False
             if None, FRED excudes release dates that don't have data, 
             notably future dates that are already in FRED's calendar
 
         Returns 
         -------
+
+        See Also
+        --------
 
         Notes
         -----
@@ -206,8 +238,7 @@ class Releases(Categories):
                 "&limit=": limit,
                 "&offset=": offset,
                 "&sort_order=": sort_order,
-                "&include_release_dates_with_no_data=": 
-                include_release_dates_with_no_data,
+                "&include_release_dates_with_no_data=": include_empty,
             }
         url = self._add_optional_params(url_prefix, optional_args)
         self.release_stack[release_id] = self._fetch_data(url)
@@ -258,12 +289,15 @@ class Releases(Categories):
         -------
         dict
 
-        Examples
-        -----
+        See Also
+        --------
 
         Notes
         -----
         fred/release/series
+
+        Examples
+        -----
         """
         url_prefix_params = dict(
                 a_url_prefix = "release/series?release_id=",
@@ -307,12 +341,19 @@ class Releases(Categories):
         -------
         dict
 
+        See Also
+        --------
+
         Examples
         -----
 
         Notes
         -----
         fred/release/sources
+        https://fred.stlouisfed.org/docs/api/fred/releases_dates.html
+
+        Examples
+        -----
         """
         url_prefix_params = dict(
                 a_url_prefix = "release/sources?release_id=",
@@ -454,6 +495,9 @@ class Releases(Categories):
         -------
         dict
 
+        See Also
+        --------
+
         Examples
         -----
 
@@ -511,6 +555,9 @@ class Releases(Categories):
 
         Returns 
         -------
+
+        See Also
+        --------
 
         Notes
         -----

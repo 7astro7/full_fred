@@ -25,36 +25,40 @@ def get_all_releases_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_all_releases(
         get_all_releases_method_works: bool,
         ):
     assert get_all_releases_method_works == True
 
 @pytest.fixture
-def get_release_dates_all_releases_method_works() -> bool:
-    # fred/releases
+def get_release_dates_all_releases_method_works(fred: Fred) -> bool:
     params = {
             'limit': 2,
+            'include_empty': True,
+            'offset': 1,
+            'sort_order': 'asc',
+            'order_by': 'release_name',
             }
-    observed = fred.get_release_dates_all_releases(**params)
-    if not "limit" in observed.keys():
-        return False
-    if observed["limit"] != params["limit"]:
-        return False
-    if not "release_dates" in observed.keys():
-        return False
-    return True
+    fred.get_release_dates_all_releases(**params)
+    observed = fred.release_stack['get_release_dates_all_releases']
+    check_union = ('release_dates',)
+    params.pop('include_empty')
+    returned_ok_params = {
+            'observed': observed,
+            'expected': params,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_release_dates_all_releases(
         get_release_dates_all_releases_method_works: bool,
         ):
-    # fred/releases/dates
     assert get_release_dates_all_releases_method_works == True
 
 @pytest.fixture
-def get_a_release_method_works() -> bool:
+def get_a_release_method_works(fred: Fred) -> bool:
     # fred/release
     observed = fred.get_a_release(53)
     if not "releases" in observed.keys():
@@ -71,7 +75,7 @@ def test_get_a_release(get_a_release_method_works: bool):
     assert get_a_release_method_works == True
 
 @pytest.fixture
-def get_release_tables_method_works() -> bool:
+def get_release_tables_method_works(fred: Fred) -> bool:
     # fred/release/tables
     observed = fred.get_release_tables(53)
     if not isinstance(observed, dict):
@@ -97,7 +101,7 @@ def test_get_release_tables(get_release_tables_method_works: bool):
     assert get_release_tables_method_works == True
 
 @pytest.fixture
-def get_release_dates_of_release_works() -> bool:
+def get_release_dates_of_release_works(fred: Fred) -> bool:
     # fred/release/dates
     params = {
             'release_id': 82,
@@ -131,7 +135,7 @@ def test_get_release_dates_of_release(
     assert get_release_dates_of_release_works == True
 
 @pytest.fixture
-def get_related_tags_for_release_method_works() -> bool:
+def get_related_tags_for_release_method_works(fred: Fred) -> bool:
     # fred/release/related_tags
     params = {
             'release_id': 1,
@@ -156,7 +160,7 @@ def test_get_related_tags_for_release(
     assert get_related_tags_for_release_method_works == True
 
 @pytest.fixture
-def get_tags_for_a_release_method_works() -> bool:
+def get_tags_for_a_release_method_works(fred: Fred) -> bool:
     # fred/release/tags
     params = {
             'release_id': 86,
@@ -179,7 +183,7 @@ def test_get_tags_for_a_release(
     assert get_tags_for_a_release_method_works == True
 
 @pytest.fixture
-def get_sources_for_a_release_method_works() -> bool:
+def get_sources_for_a_release_method_works(fred: Fred) -> bool:
     # fred/release/source
     params = {
             'release_id': 51,
@@ -199,7 +203,7 @@ def test_get_sources_for_a_release(
     assert get_sources_for_a_release_method_works == True
 
 @pytest.fixture
-def get_series_on_a_release_method_works() -> bool:
+def get_series_on_a_release_method_works(fred: Fred) -> bool:
     # fred/release/series
     params = {
             'release_id': 51,
