@@ -8,7 +8,7 @@ def fred() -> Fred:
     return Fred()
 
 @pytest.fixture
-def get_all_sources_method_works(fred: Fred):
+def get_all_sources_method_works(fred: Fred) -> bool:
     params = {
             'limit': 2,
             'sort_order': 'desc',

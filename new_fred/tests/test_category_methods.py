@@ -1,35 +1,27 @@
 
 import pytest
 from new_fred.fred import Fred
-
-# I can use the returned METAdata to test success of a method
-# ensure method coverage
-# test different realtime dates
+from .fred_test_utils import returned_ok
 
 @pytest.fixture
-def fred():
+def fred() -> Fred:
     return Fred()
 
 @pytest.fixture
-def expected_get_category_id_125():
-    # fred/category
-    expected = {
-        'categories': [
-            {'id': 125, 
-            'name': 'Trade Balance', 
-            'parent_id': 13}
-            ]
-        }
-    return expected
+def get_a_category_method_works(fred: Fred) -> bool:
+    params = {
+            'category_id': 125, 
+            }
+    fred.get_a_category(**params)
+    observed = fred.category_stack["get_a_category"]
+    check_union = ('categories',)
+    return returned_ok(observed = observed, check_union = check_union)
 
-@pytest.mark.skip("passed v1")
-def test_get_category_id_125_returns_trade_balance(
-        fred: Fred, 
-        expected_get_category_id_125: dict,
+#@pytest.mark.skip("passed v2")
+def test_get_a_category(
+        get_a_category_method_works: bool,
         ):
-    # fred/category
-    expected = expected_get_category_id_125 
-    assert fred.get_a_category(125) == expected
+    assert get_a_category_method_works == True
 
 @pytest.fixture
 def expected_names_get_categories_of_series():

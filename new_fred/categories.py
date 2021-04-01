@@ -1,41 +1,51 @@
 
 from .fred_base import FredBase
-from requests.exceptions import RequestException
-import requests
-import os
 
 class Categories(FredBase):
-    """
-    """
     
     def __init__(self):
-        super().__init__()
-        self.category_stack = dict() # eh
-
-    # fred/category
-
-    def get_a_category(self, category_id: int) -> dict:
         """
-        Get a category of FRED data using its id
+        """
+        super().__init__()
+        self.category_stack = dict() 
+
+    # param docstrings are checked
+    def get_a_category(
+            self, 
+            category_id: int = None,
+            ) -> dict:
+        """
+        Get a category of FRED data.
 
         Parameters
         ----------
+        category_id: int, default None
+            id for a category.
+            If None, root category_id of 0 is used.
 
         Returns
         -------
+        dict
+            Metadata of category: id, name, parent_id
+
+        See Also
+        --------
 
         Notes
         -----
         fred/category
+        https://fred.stlouisfed.org/docs/api/fred/category.html
+
+        Examples
+        --------
         """
+        url_prefix = "category?category_id=" 
         try:
-            url_prefix = "category?category_id=" + str(category_id)
+            url = url_prefix + str(category_id)
         except TypeError:
             print("Cannot cast category_id %s to str" % category_id)
-        json_data = self._fetch_data(url_prefix)
-        key = "get_a_category__category_id_" + str(category_id)
-        self.category_stack[key] = json_data
-        return json_data
+        self.category_stack["get_a_category"] = self._fetch_data(url)
+        return self.category_stack["get_a_category"] 
 
     def get_child_categories(
             self, 

@@ -96,7 +96,7 @@ class Tags(Sources):
                 "&sort_order=": sort_order,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.tag_stack["get_all_tags"] = self._fetch_data(url) # make key better
+        self.tag_stack["get_all_tags"] = self._fetch_data(url) 
         return self.tag_stack["get_all_tags"] 
 
     # param docstrings are checked
