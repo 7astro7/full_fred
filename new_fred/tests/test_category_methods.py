@@ -50,36 +50,39 @@ def get_related_categories_method_works(fred: Fred) -> bool:
     check_union = ('categories',)
     return returned_ok(observed = observed, check_union = check_union)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_related_categories(
         get_related_categories_method_works: bool,
         ):
     assert get_related_categories_method_works == True
 
 @pytest.fixture
-def get_series_in_a_category_method_works() -> bool:
-    # fred/category/series
+def get_series_in_a_category_method_works(fred: Fred) -> bool:
     params = {
             'category_id': 125,
             'limit': 3,
+            'filter_variable': 'units',
+            'order_by': 'units',
+            'sort_order': 'desc',
+            'offset': 1,
             }
-    observed = Fred().get_series_in_a_category(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if not observed['limit'] == params['limit']:
-        return False
-    for k in observed.keys():
-        if 'series' in k:
-            return True
-    return False
+    fred.get_series_in_a_category(**params)
+    observed = fred.category_stack["get_series_in_a_category"]
+    params.pop('category_id')
+    params.pop('filter_variable')
+    expected = params
+    check_union = ('series', 'seriess',)
+    returned_ok_params = {
+            'observed': observed, 
+            'expected': expected, 
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_series_in_a_category(
     get_series_in_a_category_method_works: bool,
     ):
-    # fred/category/series
     assert get_series_in_a_category_method_works == True
 
 @pytest.fixture

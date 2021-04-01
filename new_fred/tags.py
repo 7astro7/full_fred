@@ -40,8 +40,8 @@ class Tags(Sources):
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (last available) is used.
         tag_names: list, default None
-            list of tags [str] to include in returned data, excluding any tag not in tag_names.
-            Each tag must be present in the tag of returned series
+            list of tags [str] to include in returned data, excluding any tag not in tag_names;
+            each tag must be present in the tag of returned series.
             If None, no filtering by tag names is done.
         tag_group_id: str, default None
             a tag group id to filter tags by type with.

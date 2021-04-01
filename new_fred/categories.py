@@ -76,6 +76,9 @@ class Categories(FredBase):
         dict
             id, name, parent_id for each child category.
 
+        See Also
+        --------
+
         Notes
         -----
         fred/category/children
@@ -150,7 +153,7 @@ class Categories(FredBase):
         self.category_stack["get_related_categories"] = self._fetch_data(url)
         return self.category_stack["get_related_categories"] 
 
-    # add parameter to remove discontinued series
+    # param docstrings are checked
     def get_series_in_a_category(
             self, 
             category_id: int,
@@ -167,40 +170,71 @@ class Categories(FredBase):
             ): 
         """
         Get the series that belong to a category (metadata, not dataframes for each series). 
-        add all parameters fred offers
-        unclear how to test rn
-        count parameter***
 
         Parameters
         ----------
         category_id: int
             the id of the category
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        limit: int default None
-        offset: int default None
-        order_by: str default None
-        sort_order: str default None
-        filter_variable: str default None
-        filter_value: str default None
-        tag_names: list default None
-        exclude_tag_names: list default None
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "series_id", "title", "units", "frequency", 
+            "seasonal_adjustment", "reatime_start", "realtime_end",
+            "last_updated", "observation_start", "observation_end",
+            "popularity", "group_popularity"
+            If None, "series_id" is used.
+        sort_order: str, default None 
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
+        filter_variable: str, default None
+            The attribute to filter results by.
+            Can be one of "frequency", "units", "seasonal_adjustment".
+            If None, no filter variable is used.
+        filter_value: str, default None
+            The value of filter_variable to filter results by.
+        tag_names: list, default None
+            list of tags [str] to include in returned data, excluding any tag not in tag_names;
+            each tag must be present in the tag of returned series.
+            If None, no filtering by tag names is done.
+        exclude_tag_names: list, default None
+            list of tag names that series match none of.
+            If None, no filtering by tag names is done.
 
         Returns 
         -------
+        dict
+            Metadata of series that belong to category. 
+
+        See Also
+        --------
 
         Notes
         -----
         fred/category/series
+        https://fred.stlouisfed.org/docs/api/fred/category_series.html
+
+        Examples
+        --------
         """
         url_prefix = "category/series?category_id="
         try:
             url_prefix += str(category_id)
         except TypeError:
             print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
-        # add realtime params to key if they're passed (later)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -214,8 +248,8 @@ class Categories(FredBase):
                 "&exclude_tag_names=": exclude_tag_names,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.category_stack[category_id] = self._fetch_data(url)
-        return self.category_stack[category_id]
+        self.category_stack["get_series_in_a_category"] = self._fetch_data(url)
+        return self.category_stack["get_series_in_a_category"]
 
     def get_tags_for_a_category(
             self, 
@@ -253,6 +287,9 @@ class Categories(FredBase):
 
         Returns 
         -------
+
+        See Also
+        --------
 
         Notes
         -----
@@ -319,6 +356,9 @@ class Categories(FredBase):
 
         Returns 
         -------
+
+        See Also
+        --------
 
         Notes
         -----
