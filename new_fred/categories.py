@@ -82,13 +82,14 @@ class Categories(FredBase):
         """
         url_prefix = "category/children?category_id=" 
         try:
-            url = url_prefix + str(category_id)
+            url_prefix += str(category_id)
         except TypeError:
             print("Cannot cast category_id %s to str" % category_id)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
                 }
+        url = self._add_optional_params(url_prefix, optional_args)
         self.category_stack["get_child_categories"] = self._fetch_data(url)
         return self.category_stack["get_child_categories"] 
 
