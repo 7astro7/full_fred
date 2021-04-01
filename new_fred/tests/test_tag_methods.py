@@ -1,10 +1,7 @@
 
 import pytest
 from new_fred.fred import Fred
-
-# I can use the returned METAdata to test success of a method
-# ensure method coverage
-# test different realtime dates
+from .fred_test_utils import returned_ok
 
 # v2: 
 # don't assign returned data but rather assign 
