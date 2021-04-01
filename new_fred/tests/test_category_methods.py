@@ -7,6 +7,7 @@ from .fred_test_utils import returned_ok
 def fred() -> Fred:
     return Fred()
 
+# also test with no id
 @pytest.fixture
 def get_a_category_method_works(fred: Fred) -> bool:
     params = {
@@ -17,40 +18,27 @@ def get_a_category_method_works(fred: Fred) -> bool:
     check_union = ('categories',)
     return returned_ok(observed = observed, check_union = check_union)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_a_category(
         get_a_category_method_works: bool,
         ):
     assert get_a_category_method_works == True
 
 @pytest.fixture
-def expected_names_get_categories_of_series():
-    return ("Japan", "Monthly Rates",)
+def get_child_categories_method_works(fred: Fred) -> bool:
+    params = {
+            'category_id': 13, 
+            }
+    fred.get_child_categories(**params)
+    observed = fred.category_stack["get_child_categories"]
+    check_union = ('categories',)
+    return returned_ok(observed = observed, check_union = check_union)
 
-@pytest.mark.skip("passed v1")
-def test_get_child_categories_id_13_returns_children_with_parentid_13(
-        fred: Fred, 
+#@pytest.mark.skip("passed v2")
+def test_get_child_categories(
+        get_child_categories_method_works: bool,
         ):
-    # fred/category/children
-    """
-    New child categories may be added to the category subtree rooted 
-    at "U.S. Trade and Transactions" (category_id 13) and make this 
-    test fail despite fred.get_child_categories(13) returning the 
-    requested data. Instead of testing equivalence it makes more 
-    sense to test whether each category returned by the method call 
-    has parent_id of 13
-    """
-    returned_correctly = False
-    observed = fred.get_child_categories(13) 
-    for i in range(len(observed["categories"])):
-        a_category = observed["categories"][i]
-        if "parent_id" not in a_category.keys():
-            break
-        if a_category["parent_id"] != 13:
-            break
-        if i == len(observed["categories"]) - 1:
-            returned_correctly = True
-    assert returned_correctly == True
+    assert get_child_categories_method_works == True
 
 @pytest.fixture
 def get_related_categories_method_works():

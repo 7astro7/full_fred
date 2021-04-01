@@ -54,33 +54,43 @@ class Categories(FredBase):
             realtime_end: str = None,
             ) -> dict:
         """
-        Get child categories (category_id, name, parent_id) 
-        of category associated with category_id
+        Get child categories of a category.
 
         Parameters
         ----------
+        category_id: int, default None
+            id for a category.
+            If None, root category_id of 0 is used.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
 
         Returns
         -------
+        dict
+            id, name, parent_id for each child category.
 
         Notes
         -----
         fred/category/children
+        https://fred.stlouisfed.org/docs/api/fred/category_children.html
         """
         url_prefix = "category/children?category_id=" 
         try:
-            url_prefix += str(category_id)
+            url = url_prefix + str(category_id)
         except TypeError:
             print("Cannot cast category_id %s to str" % category_id)
-        realtime_period = self._get_realtime_date(
-                realtime_start, 
-                realtime_end
-                )
-        url_prefix += realtime_period
-        json_data = self._fetch_data(url_prefix)
-        key = "get_child_categories__category_id_" + str(category_id)
-        self.category_stack[key] = json_data
-        return json_data
+        optional_args = {
+                "&realtime_start=": realtime_start,
+                "&realtime_end=": realtime_end,
+                }
+        self.category_stack["get_child_categories"] = self._fetch_data(url)
+        return self.category_stack["get_child_categories"] 
 
     # add option for tag notes
     def get_related_categories(
