@@ -6,67 +6,52 @@ from .fred_test_utils import returned_ok
 # v2: 
 # don't assign returned data but rather assign 
 # the value from tag_stack
-# limit, sort_order, tag_names
+# maximize number of arguments
+# use returned_ok()
 
 @pytest.fixture
 def fred() -> Fred:
     return Fred()
 
 @pytest.fixture
-def get_tags_method_works(fred: Fred) -> bool:
+def get_all_tags_method_works(fred: Fred) -> bool:
     params = {
             'limit': 2,
             'sort_order' : 'desc',
             'tag_names': ('gdp', 'oecd',),
+            'order_by': "name",
             }
-    fred.get_tags(**params)
-    if not "get_tags" in fred.tag_stack.keys():
-        return False
-    observed = fred.tag_stack["get_tags"]
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if not observed["limit"] == params["limit"]:
-        return False
-    if not "tags" in observed.keys():
-        return False
-    if not "sort_order" in observed.keys():
-        return False
-    if observed["sort_order"] != params["sort_order"]:
-        return False
-    return True
+    fred.get_all_tags(**params)
+    observed = fred.tag_stack["get_all_tags"]
+    params.pop('tag_names')
+    expected = params
+    check_union = ('tags',)
+    return returned_ok(observed, expected, check_union)
 
 @pytest.mark.skip("passed v2")
-def test_get_tags(
-        get_tags_method_works: bool,
+def test_get_all_tags(
+        get_all_tags_method_works: bool,
         ):
-    assert get_tags_method_works == True
+    assert get_all_tags_method_works == True
 
 @pytest.fixture
 def get_related_tags_for_a_tag_method_works(fred: Fred) -> bool:
     params = {
             'tag_names': ('monetary aggregates', 'weekly'),
             'limit': 2,
+            'tag_group_id': 'geo',
+            'order_by': 'name',
             'sort_order': 'desc',
+            'search_text': ('beans', 'cabbage',),
             }
     fred.get_related_tags_for_a_tag(**params)
-    if not "get_related_tags_for_a_tag" in fred.tag_stack.keys():
-        return False
     observed = fred.tag_stack["get_related_tags_for_a_tag"]
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if not observed["limit"] == params["limit"]:
-        return False
-    if not "tags" in observed.keys():
-        return False
-    if not "sort_order" in observed.keys():
-        return False
-    if observed["sort_order"] != params["sort_order"]:
-        return False
-    return True
+    params.pop('tag_names')
+    params.pop('tag_group_id')
+    params.pop('search_text')
+    expected = params
+    check_union = ('tags',)
+    return returned_ok(observed, expected, check_union)
 
 @pytest.mark.skip("passed v2")
 def test_get_related_tags_for_a_tag(
@@ -74,34 +59,25 @@ def test_get_related_tags_for_a_tag(
         ):
     assert get_related_tags_for_a_tag_method_works == True
 
-
 @pytest.fixture
 def get_series_matching_tags_method_works(fred: Fred) -> bool:
     params = {
             'tag_names': ('slovenia', 'food', 'oecd',),
             'limit': 2,
+            'offset': 1,
+            'order_by': 'seasonal_adjustment',
             'sort_order': 'desc',
+            'realtime_start': '2000-01-01',
+            'realtime_end': '2003-01-01',
             }
     fred.get_series_matching_tags(**params)
-    if not "get_series_matching_tags" in fred.tag_stack.keys():
-        return False
     observed = fred.tag_stack["get_series_matching_tags"]
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if not observed["limit"] == params["limit"]:
-        return False
-    if not "seriess" in observed.keys():
-        if not "series" in observed.keys():
-            return False
-    if not "sort_order" in observed.keys():
-        return False
-    if observed["sort_order"] != params["sort_order"]:
-        return False
-    return True
+    params.pop('tag_names')
+    expected = params
+    check_union = ('series', 'seriess',)
+    return returned_ok(observed, expected, check_union)
 
-@pytest.mark.skip("passed v2")
+#@pytest.mark.skip("passed v2")
 def test_get_series_matching_tags(
         get_series_matching_tags_method_works: bool,
         ):

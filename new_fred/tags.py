@@ -14,7 +14,7 @@ class Tags(Sources):
         self.tag_stack = dict()
 
     # param docstrings are checked
-    def get_tags(
+    def get_all_tags(
             self,
             realtime_start: str = None,
             realtime_end: str = None,
@@ -27,7 +27,7 @@ class Tags(Sources):
             sort_order: str = None,
             ) -> dict:
         """
-        Get FRED tags, attributes that FRED assigns to series. All parameters are optional.
+        Get all FRED tags, search for FRED tags, get metadata for FRED tags.
 
         Parameters
         ----------
@@ -96,8 +96,8 @@ class Tags(Sources):
                 "&sort_order=": sort_order,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.tag_stack["get_tags"] = self._fetch_data(url) # make key better
-        return self.tag_stack["get_tags"] 
+        self.tag_stack["get_all_tags"] = self._fetch_data(url) # make key better
+        return self.tag_stack["get_all_tags"] 
 
     # param docstrings are checked
     def get_related_tags_for_a_tag(
@@ -155,13 +155,14 @@ class Tags(Sources):
             Sort results in ascending or descending order for attribute values specified by order_by.
             Can be "asc" or "desc".
             If None, "asc" is used.
+
         Returns
         -------
         dict
 
         See Also
         --------
-        get_tags: get all tags in use
+        get_all_tags: get all tags in use
 
         Notes
         -----
@@ -245,6 +246,7 @@ class Tags(Sources):
         Returns
         -------
         dict
+            Metadata of series with requested tags.
 
         See Also
         --------
