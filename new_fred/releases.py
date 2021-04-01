@@ -1,18 +1,15 @@
 
 from .categories import Categories
-import pandas as pd
-import requests
-import os
-
 
 class Releases(Categories):
 
     def __init__(self):
+        """
+        """
         super().__init__()
         self.release_stack = dict()
 
-    # fred/release 
-
+    # param docstrings are checked
     def get_all_releases(
             self,
             realtime_start: str = None, 
@@ -27,22 +24,44 @@ class Releases(Categories):
 
         Parameters
         ----------
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        limit: int default None
-        offset: int default None
-        order_by: str default None
-        sort_order: str default None
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "release_id", "name", "realtime_start", "realtime_end",
+            If None, "release_id" is used.
+        sort_order: str, default None
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns 
         -------
         dict
+            ID, name, url, other metadata for all FRED releases.
+
+        See Also
+        --------
 
         Notes
         -----
         fred/releases
+        https://fred.stlouisfed.org/docs/api/fred/releases.html
+
+        Examples
+        --------
         """
         url_prefix = "releases?"
         optional_args = {
@@ -52,11 +71,10 @@ class Releases(Categories):
                 "&offset=": offset,
                 "&order_by=": order_by,
                 "&sort_order=": sort_order,
-            }
+                }
         url = self._add_optional_params(url_prefix, optional_args)
-        # change key (first part of key) to all_releases?
-        self.release_stack["releases"] = self._fetch_data(url)
-        return self.release_stack["releases"]
+        self.release_stack["get_all_releases"] = self._fetch_data(url)
+        return self.release_stack["get_all_releases"]
 
     def get_release_dates_all_releases(
             self,

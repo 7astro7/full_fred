@@ -1,33 +1,34 @@
 
 import pytest
 from new_fred.fred import Fred
-
-# I can use the returned METAdata to test success of a method
-# ensure method coverage
-# test different realtime dates
+from .fred_test_utils import returned_ok
 
 @pytest.fixture
 def fred():
     return Fred()
 
 @pytest.fixture
-def get_all_releases_method_works() -> bool:
-    # fred/releases
+def get_all_releases_method_works(fred: Fred) -> bool:
     params = {
             'limit': 2,
+            'offset': 1,
+            'sort_order': 'desc',
+            'order_by': 'press_release',
             }
-    observed = Fred().get_all_releases(**params)
-    if not "limit" in observed.keys():
-        return False
-    if observed["limit"] != params["limit"]:
-        return False
-    if not "releases" in observed.keys():
-        return False
-    return True
+    fred.get_all_releases(**params)
+    observed = fred.release_stack['get_all_releases']
+    check_union = ('releases',)
+    returned_ok_params = {
+            'observed': observed,
+            'expected': params,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
-def test_get_all_releases(get_all_releases_method_works: bool):
-    # fred/releases
+#@pytest.mark.skip("passed v2")
+def test_get_all_releases(
+        get_all_releases_method_works: bool,
+        ):
     assert get_all_releases_method_works == True
 
 @pytest.fixture
@@ -36,7 +37,7 @@ def get_release_dates_all_releases_method_works() -> bool:
     params = {
             'limit': 2,
             }
-    observed = Fred().get_release_dates_all_releases(**params)
+    observed = fred.get_release_dates_all_releases(**params)
     if not "limit" in observed.keys():
         return False
     if observed["limit"] != params["limit"]:
@@ -55,7 +56,7 @@ def test_get_release_dates_all_releases(
 @pytest.fixture
 def get_a_release_method_works() -> bool:
     # fred/release
-    observed = Fred().get_a_release(53)
+    observed = fred.get_a_release(53)
     if not "releases" in observed.keys():
         return False
     releases_list = observed["releases"] # list of dicts
@@ -72,7 +73,7 @@ def test_get_a_release(get_a_release_method_works: bool):
 @pytest.fixture
 def get_release_tables_method_works() -> bool:
     # fred/release/tables
-    observed = Fred().get_release_tables(53)
+    observed = fred.get_release_tables(53)
     if not isinstance(observed, dict):
         return False
     observed_keys = tuple(observed.keys())
@@ -102,7 +103,7 @@ def get_release_dates_of_release_works() -> bool:
             'release_id': 82,
             'limit': 3,
             }
-    observed = Fred().get_release_dates(**params)
+    observed = fred.get_release_dates(**params)
 #    breakpoint()
     if not isinstance(observed, dict):
         return False
@@ -137,7 +138,7 @@ def get_related_tags_for_release_method_works() -> bool:
             'tag_names': ('sa', 'foreign',),
             'limit': 3,
             }
-    observed = Fred().get_related_tags_for_release(**params)
+    observed = fred.get_related_tags_for_release(**params)
 #    breakpoint()
     if not isinstance(observed, dict):
         return False
@@ -161,7 +162,7 @@ def get_tags_for_a_release_method_works() -> bool:
             'release_id': 86,
             'limit': 3,
             }
-    observed = Fred().get_tags_for_a_release(**params)
+    observed = fred.get_tags_for_a_release(**params)
     if not isinstance(observed, dict):
         return False
     if not "tags" in observed.keys():
@@ -183,7 +184,7 @@ def get_sources_for_a_release_method_works() -> bool:
     params = {
             'release_id': 51,
             }
-    observed = Fred().get_sources_for_a_release(**params)
+    observed = fred.get_sources_for_a_release(**params)
     if not isinstance(observed, dict):
         return False
     if not "sources" in observed.keys():
@@ -204,7 +205,7 @@ def get_series_on_a_release_method_works() -> bool:
             'release_id': 51,
             'limit': 3,
             }
-    observed = Fred().get_series_on_a_release(**params)
+    observed = fred.get_series_on_a_release(**params)
     if not isinstance(observed, dict):
         return False
     if not "limit" in observed.keys():

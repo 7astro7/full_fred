@@ -135,7 +135,7 @@ def get_related_tags_for_a_category_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_related_tags_for_a_category(
         get_related_tags_for_a_category_method_works: bool,
         ):
