@@ -346,6 +346,7 @@ class Categories(FredBase):
         self.category_stack["get_tags_for_a_category"] = self._fetch_data(url)
         return self.category_stack["get_tags_for_a_category"]
 
+    # param docstrings are checked
     def get_related_tags_for_a_category(
             self, 
             category_id: int,
@@ -362,30 +363,54 @@ class Categories(FredBase):
             ):
         """
         Get the related FRED tags for one or more FRED tags within a category.
-        add all parameters fred offers
-        unclear how to test rn
-        count parameter***
 
         Parameters
         ----------
         category_id: int
             the id of the category
-        tag_names: list 
-
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-
-        tag_group_id: list, default None
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        tag_names: list, default None
+            list of tags [str] to include in returned data, excluding any tag not in tag_names;
+            each tag must be present in the tag of returned series.
+            If None, no filtering by tag names is done.
+        exclude_tag_names: list, default None
+            list of tag names that series match none of.
+            If None, no filtering by tag names is done.
+        tag_group_id: str, default None
+            A tag group id to filter tags by type with.
+            Can be one of 'freq' for frequency, 'gen' for general or concept,
+            'geo' for geography, 'geot' for geography type, 'rls' for release,
+            'seas' for seasonal adjustment, 'src' for source.
+            If None, no filtering by tag group is done.
         search_text: str, default None
-        limit: int default None
-        offset: int default None
-        order_by: str default None
-        sort_order: str default None
+            The words to find matching tags with.
+            If None, no filtering by search words.
+        limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "series_count", "popularity", "created",
+            "name", "group_id".
+            If None, "series_count" is used.
+        sort_order: str, default None 
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns 
         -------
+        dict
 
         See Also
         --------
@@ -393,6 +418,7 @@ class Categories(FredBase):
         Notes
         -----
         fred/category/related_tags
+        https://fred.stlouisfed.org/docs/api/fred/category_related_tags.html
         """
         url_prefix = "category/related_tags?category_id="
         try:

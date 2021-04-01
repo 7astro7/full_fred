@@ -106,36 +106,39 @@ def get_tags_for_a_category_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_tags_for_a_category(
         get_tags_for_a_category_method_works: bool,
         ):
     assert get_tags_for_a_category_method_works == True
 
 @pytest.fixture
-def get_related_tags_for_a_category_method_works() -> bool:
-    # fred/category/related_tags
+def get_related_tags_for_a_category_method_works(fred: Fred) -> bool:
     params = {
             'category_id': 125,
             'tag_names': ('services', 'quarterly'),
             'limit': 3,
+            'order_by': 'created',
+            'sort_order': 'desc',
+            'offset': 1,
             }
-    observed = Fred().get_related_tags_for_a_category(**params)
-#    breakpoint()
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if not observed['limit'] == params['limit']:
-        return False
-    for k in observed.keys():
-        if 'tags' in k:
-            return True
-    return False
+    fred.get_related_tags_for_a_category(**params)
+    observed = fred.category_stack["get_related_tags_for_a_category"] 
+    params.pop('category_id')
+    params.pop('tag_names')
+    expected = params
+    check_union = ('tags',)
+    returned_ok_params = {
+            'observed': observed, 
+            'expected': expected, 
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_related_tags_for_a_category(
         get_related_tags_for_a_category_method_works: bool,
         ):
-    # fred/category/related_tags
     assert get_related_tags_for_a_category_method_works == True
+
+
