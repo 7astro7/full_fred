@@ -47,6 +47,7 @@ class Categories(FredBase):
         self.category_stack["get_a_category"] = self._fetch_data(url)
         return self.category_stack["get_a_category"] 
 
+    # param docstrings are checked
     def get_child_categories(
             self, 
             category_id: int,
@@ -93,7 +94,7 @@ class Categories(FredBase):
         self.category_stack["get_child_categories"] = self._fetch_data(url)
         return self.category_stack["get_child_categories"] 
 
-    # add option for tag notes
+    # param docstrings are checked
     def get_related_categories(
             self, 
             category_id: int,
@@ -101,40 +102,53 @@ class Categories(FredBase):
             realtime_end: str = None,
             ):
         """
-        Get the related categories for a category. 
-        add all parameters fred offers
-        unclear how to test rn
-        count parameter***
+        Get the related categories for a category. FRED web service 
+        defines a related category as a one-way relation between 2 
+        categories where neither of the 2 is the parent category of
+        the other. According to FRED web service most categories
+        don't have related categories.
 
         Parameters
         ----------
         category_id: int
             the id of the category
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
 
         Returns 
         -------
+        dict
+            id, name, parent_id of related categories.
+
+        See Also
+        --------
 
         Notes
         -----
         fred/category/related
+        https://fred.stlouisfed.org/docs/api/fred/category_related.html
+
+        Examples
+        --------
         """
         url_prefix = "category/related?category_id="
         try:
             url_prefix += str(category_id)
         except TypeError:
             print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
-        # add realtime params to key if they're passed (later)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.category_stack[category_id] = self._fetch_data(url)
-        return self.category_stack[category_id]
+        self.category_stack["get_related_categories"] = self._fetch_data(url)
+        return self.category_stack["get_related_categories"] 
 
     # add parameter to remove discontinued series
     def get_series_in_a_category(

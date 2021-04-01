@@ -34,33 +34,26 @@ def get_child_categories_method_works(fred: Fred) -> bool:
     check_union = ('categories',)
     return returned_ok(observed = observed, check_union = check_union)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_child_categories(
         get_child_categories_method_works: bool,
         ):
     assert get_child_categories_method_works == True
 
 @pytest.fixture
-def get_related_categories_method_works():
-    # fred/category/related
-    observed = Fred().get_related_categories(32073)
-    if not isinstance(observed, dict):
-        return False
-    if not "categories" in observed.keys():
-        return False
-    list_of_categories_maps = observed["categories"]
-    for a_series_map in list_of_categories_maps:
-        if not "parent_id" in a_series_map.keys():
-            break
-        if a_series_map["parent_id"] == 27281:
-            return True
-    return False
+def get_related_categories_method_works(fred: Fred) -> bool:
+    params = {
+            'category_id': 13, 
+            }
+    fred.get_related_categories(**params)
+    observed = fred.category_stack["get_related_categories"]
+    check_union = ('categories',)
+    return returned_ok(observed = observed, check_union = check_union)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_related_categories(
         get_related_categories_method_works: bool,
         ):
-    # fred/category/related
     assert get_related_categories_method_works == True
 
 @pytest.fixture
