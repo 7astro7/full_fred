@@ -15,6 +15,7 @@ class Series(Releases):
         super().__init__()
         self.series_stack = dict() 
 
+    # param docstrings are checked
     def get_a_series(
             self, 
             series_id: str, 
@@ -22,7 +23,7 @@ class Series(Releases):
             realtime_end: str = None,
             ):
         """
-        Get the metadata of a data series. 
+        Get the metadata of a FRED series. 
         FRED accepts upper case series_id: maybe integrate something to capitalize automatically
         default realtime start and realtime end: first to last available
         if series_id attribute is not set, FredSeries.series_id will be set to 
@@ -34,16 +35,20 @@ class Series(Releases):
         ----------
         series_id: int
             the id of the series
-        realtime_start: str, default None 
-            The start of the real-time period formatted as "YYY-MM-DD"
-            If None, "1776-07-04" (earliest) is used.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD"
-            If None, "9999-12-31" (last available) is used.
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
 
         Returns
         -------
         dict
+            Title, ID, units, frequency, notes, seasonal adjustment 
+            condition, and other metadata of the series.
 
         See Also
         --------
@@ -68,8 +73,8 @@ class Series(Releases):
                 "&realtime_end=": realtime_end,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[series_id] = self._fetch_data(url)
-        return self.series_stack[series_id]
+        self.series_stack["get_a_series"] = self._fetch_data(url)
+        return self.series_stack["get_a_series"]
 
     def get_categories_of_series(
             self,
