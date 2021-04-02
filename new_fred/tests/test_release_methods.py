@@ -71,15 +71,42 @@ def get_a_release_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_a_release(
         get_a_release_method_works: bool,
         ):
     assert get_a_release_method_works == True
 
 @pytest.fixture
+def get_release_dates_method_works(fred: Fred) -> bool:
+    params = {
+            'release_id': 82,
+            'limit': 3,
+            'include_empty': True,
+            'offset': 1,
+            'sort_order': 'desc',
+            }
+    fred.get_release_dates(**params)
+    observed = fred.release_stack['get_release_dates']
+    check_union = ('release_dates',)
+    params.pop('release_id')
+    params.pop('include_empty')
+    expected = params
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
+
+#@pytest.mark.skip("passed v2")
+def test_get_release_dates(
+        get_release_dates_method_works: bool,
+        ):
+    assert get_release_dates_method_works == True
+
+@pytest.fixture
 def get_release_tables_method_works(fred: Fred) -> bool:
-    # fred/release/tables
     observed = fred.get_release_tables(53)
     if not isinstance(observed, dict):
         return False
@@ -99,43 +126,12 @@ def get_release_tables_method_works(fred: Fred) -> bool:
     return True
 
 @pytest.mark.skip("passed v1")
-def test_get_release_tables(get_release_tables_method_works: bool):
-    # fred/release/tables
+def test_get_release_tables(
+        get_release_tables_method_works: bool,
+        ):
     assert get_release_tables_method_works == True
 
-@pytest.fixture
-def get_release_dates_of_release_works(fred: Fred) -> bool:
-    # fred/release/dates
-    params = {
-            'release_id': 82,
-            'limit': 3,
-            }
-    observed = fred.get_release_dates(**params)
-#    breakpoint()
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if not observed['limit'] == params['limit']:
-        return False
-    if not "release_dates" in observed.keys():
-        return False
-    release_dates_map = observed["release_dates"]
-    for dated_release_map in release_dates_map:
-        if not isinstance(dated_release_map, dict):
-            return False
-        if not "release_id" in dated_release_map.keys():
-            return False
-        if not dated_release_map["release_id"] == params["release_id"]:
-            return False
-    return True
 
-@pytest.mark.skip("passed v1")
-def test_get_release_dates_of_release(
-        get_release_dates_of_release_works: bool,
-        ):
-    # fred/release/dates
-    assert get_release_dates_of_release_works == True
 
 @pytest.fixture
 def get_related_tags_for_release_method_works(fred: Fred) -> bool:

@@ -216,28 +216,52 @@ class Releases(Categories):
             ) -> dict:
         """
         Get release dates for a release of economic data.
+        FRED's data sources publish release dates: release 
+        dates may be published before the data in the release
+        is available on FRED's servers via this API.
 
         Parameters
         ----------
         release_id: int
             id for a release
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        include_empty: bool default False
-            if None, FRED excudes release dates that don't have data, 
-            notably future dates that are already in FRED's calendar
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 10_001).
+            If None, FRED will use limit = 10_001.
+        offset: int, default None
+            If None, offset of 0 is used.
+        sort_order: str, default None
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
+        include_empty: bool, default None
+            Indicates whether to return release dates with no data.
+            If False, release dates without any data are excluded, namely future release dates.
+            If None, False is used.
 
         Returns 
         -------
+        dict
+            The release dates for each release of release_id.
 
         See Also
         --------
+        get_release_dates_all_releases
 
         Notes
         -----
         fred/release/dates
+
+        Examples
+        -----
         """
         url_prefix = "release/dates?release_id="
         try:
@@ -253,8 +277,8 @@ class Releases(Categories):
                 "&include_release_dates_with_no_data=": include_empty,
             }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.release_stack[release_id] = self._fetch_data(url)
-        return self.release_stack[release_id]
+        self.release_stack["get_release_dates"] = self._fetch_data(url)
+        return self.release_stack["get_release_dates"]
 
     def get_series_on_a_release(
             self,

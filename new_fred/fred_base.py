@@ -64,7 +64,14 @@ class FredBase:
         new_url_string = og_url_string
         for k in optional_params.keys():
             if optional_params[k] is not None:
-                # if tag_names ... join string by ';'
+                if k == "&include_release_dates_with_no_data=":
+                    try:
+                        optional_params[k] = str(optional_params[k]).lower()
+                    except TypeError:
+                        e = "Cannot cast include_empty to str, " \
+                                "cannot create request url to fetch" \
+                                " data"
+                        print(e)
                 if k == "&tag_names=":
                     tag_names = optional_params[k] 
                     try:
