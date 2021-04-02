@@ -26,7 +26,12 @@ def get_all_tags_method_works(fred: Fred) -> bool:
     params.pop('tag_names')
     expected = params
     check_union = ('tags',)
-    return returned_ok(observed, expected, check_union)
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
 @pytest.mark.skip("passed v2")
 def test_get_all_tags(
@@ -51,7 +56,12 @@ def get_related_tags_for_a_tag_method_works(fred: Fred) -> bool:
     params.pop('search_text')
     expected = params
     check_union = ('tags',)
-    return returned_ok(observed, expected, check_union)
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
 @pytest.mark.skip("passed v2")
 def test_get_related_tags_for_a_tag(
@@ -75,9 +85,14 @@ def get_series_matching_tags_method_works(fred: Fred) -> bool:
     params.pop('tag_names')
     expected = params
     check_union = ('series', 'seriess',)
-    return returned_ok(observed, expected, check_union)
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_series_matching_tags(
         get_series_matching_tags_method_works: bool,
         ):
