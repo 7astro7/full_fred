@@ -128,11 +128,31 @@ def get_series_on_a_release_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_series_on_a_release(
         get_series_on_a_release_method_works: bool,
         ):
     assert get_series_on_a_release_method_works == True
+
+@pytest.fixture
+def get_sources_for_a_release_method_works(fred: Fred) -> bool:
+    params = {
+            'release_id': 51,
+            }
+    fred.get_sources_for_a_release(**params)
+    observed = fred.release_stack['get_sources_for_a_release']
+    check_union = ('sources',)
+    returned_ok_params = {
+            'observed': observed,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
+
+#@pytest.mark.skip("passed v2")
+def test_get_sources_for_a_release(
+        get_sources_for_a_release_method_works: bool,
+        ):
+    assert get_sources_for_a_release_method_works == True
 
 @pytest.fixture
 def get_related_tags_for_release_method_works(fred: Fred) -> bool:
@@ -143,7 +163,6 @@ def get_related_tags_for_release_method_works(fred: Fred) -> bool:
             'limit': 3,
             }
     observed = fred.get_related_tags_for_release(**params)
-#    breakpoint()
     if not isinstance(observed, dict):
         return False
     if not "tags" in observed.keys():
@@ -181,38 +200,6 @@ def test_get_tags_for_a_release(
         ):
     # fred/release/tags
     assert get_tags_for_a_release_method_works == True
-
-@pytest.fixture
-def get_sources_for_a_release_method_works(fred: Fred) -> bool:
-    # fred/release/source
-    params = {
-            'release_id': 51,
-            }
-    observed = fred.get_sources_for_a_release(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "sources" in observed.keys():
-        return False
-    return True
-
-@pytest.mark.skip("passed v1")
-def test_get_sources_for_a_release(
-        get_sources_for_a_release_method_works: bool,
-        ):
-    # fred/release/source
-    assert get_sources_for_a_release_method_works == True
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

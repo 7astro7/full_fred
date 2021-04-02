@@ -281,6 +281,7 @@ class Releases(Categories):
         self.release_stack["get_release_dates"] = self._fetch_data(url)
         return self.release_stack["get_release_dates"]
 
+    # param docstrings are checked
     def get_series_on_a_release(
             self,
             release_id: int,
@@ -378,6 +379,7 @@ class Releases(Categories):
         self.release_stack["get_series_on_a_release"] = self._fetch_data(url)
         return self.release_stack["get_series_on_a_release"]
 
+    # param docstrings are checked
     def get_sources_for_a_release(
             self,
             release_id: int,
@@ -391,14 +393,20 @@ class Releases(Categories):
         ----------
         release_id: int
             id for a release
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
 
         Returns 
         -------
         dict
+            source_id, name, url, and other metadata about sources of
+            data found in the release.
 
         See Also
         --------
@@ -423,8 +431,8 @@ class Releases(Categories):
                 "&realtime_end=": realtime_end,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.release_stack[release_id] = self._fetch_data(url)
-        return self.release_stack[release_id]
+        self.release_stack["get_sources_for_a_release"] = self._fetch_data(url)
+        return self.release_stack["get_sources_for_a_release"]
 
     def get_tags_for_a_release(
             self,
