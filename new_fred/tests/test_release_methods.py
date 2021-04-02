@@ -206,7 +206,7 @@ def get_related_tags_for_release_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_related_tags_for_release(
         get_related_tags_for_release_method_works: bool,
         ):
@@ -214,11 +214,30 @@ def test_get_related_tags_for_release(
 
 @pytest.fixture
 def get_release_tables_method_works(fred: Fred) -> bool:
-    pass
+    params = {
+            'release_id': 53,
+            'element_id': 12886,
+            'include_observation_values': True,
+            }
+    fred.get_release_tables(**params)
+    observed = fred.release_stack['get_release_tables']
+    params.pop('include_observation_values')
+    expected = params
+    expected['release_id'] = str(expected['release_id'])
+    check_union = ('elements',)
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_release_tables(
         get_release_tables_method_works: bool,
         ):
     assert get_release_tables_method_works == True
+
+
+
 

@@ -164,7 +164,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id for a release
+            id of the release
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -224,7 +224,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id for a release
+            id of the release
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -302,7 +302,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id for a release
+            id of the release
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -393,7 +393,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id for a release
+            id of the release
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -455,7 +455,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id for a release
+            id of the release
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -546,7 +546,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id for a release
+            id of the release
         tag_names: list, default None
             list of tags [str] to include in returned data, excluding any tag not in tag_names;
         realtime_start: str, default None
@@ -621,6 +621,8 @@ class Releases(Categories):
         self.release_stack["get_related_tags_for_release"] = self._fetch_data(url)
         return self.release_stack["get_related_tags_for_release"]
 
+    # param docstrings are checked
+    # add further notes that FRED clarifies with
     def get_release_tables(
             self,
             release_id: int,
@@ -629,20 +631,32 @@ class Releases(Categories):
             observation_date: str = None,
             ):
         """
-        Get a release of economic data
-        *add fred's description*
+        Get release tables for a given release.
         
         Parameters
         ----------
         release_id: int
-            id for a release
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        include_observation_values: bool default False
+            id of the release
+        element_id: int, default None
+            The release table element id to retrieve
+            If None, root (most general) element_id for the release is used.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        include_observation_values: bool, default None
+            Indicates that observations need to be returned.
+            Observation value and date are only returned for a series
+            element type.
+            If None, observations are not returned.
         observation_date: str, default None
-            the observation date to be included with the returned release table
+            The observation date to be included with the returned release table.
+            String formatted as 'YYY-MM-DD' 
+            If None, '9999-12-31' is used.
 
         Returns 
         -------
@@ -653,30 +667,22 @@ class Releases(Categories):
         Notes
         -----
         fred/release/tables
+        https://fred.stlouisfed.org/docs/api/fred/release_tables.html
+
+        Examples
+        --------
         """
-        url_prefix = "release?release_id="
-        try:
-            url_prefix += str(release_id)
-        except TypeError:
-            print("Unable to cast release_id %s to str" % release_id)
-        url_base = [self._FredBase__url_base, url_prefix, "&api_key=",]
-#        breakpoint()
-        base = "".join(url_base)
-        file_type = "&file_type=json"
-        if element_id is not None:
-            str_element_id = "&element_id=" + str(element_id)
-        if self._FredBase__api_key_env_var:
-            if element_id is None:
-                json_data = self._get_response(base + os.environ["FRED_API_KEY"] + file_type)
-            else:
-                json_data = self._get_response(base + os.environ["FRED_API_KEY"] + str_element_id + file_type)
-        else:
-            json_data = self._get_response(base + self.__api_key + file_type)
-        if json_data is None:
-            message = "Data could not be retrieved using" \
-                    "id : %s" % an_id
-            print(message)
-            return
-        self.release_stack[release_id] = self._fetch_data(url_prefix)
-        return self.release_stack[release_id] 
+        url_prefix_params = {
+                "a_url_prefix": "release/tables?release_id=",
+                "an_int_id": release_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args_plus_tag_names = {
+                "&element_id=": element_id,
+                "&include_observation_values=": include_observation_values,
+                "&observation_date=": observation_date,
+                }
+        url = self._add_optional_params(url_prefix, optional_args_plus_tag_names)
+        self.release_stack["get_release_tables"] = self._fetch_data(url)
+        return self.release_stack["get_release_tables"]
 
