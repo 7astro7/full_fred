@@ -498,13 +498,13 @@ class Releases(Categories):
         See Also
         --------
 
-        Examples
-        -----
-
         Notes
         -----
         fred/release/tags
         https://fred.stlouisfed.org/docs/api/fred/release_tags.html
+
+        Examples
+        -----
         """
         url_prefix_params = {
                 "a_url_prefix": "release/tags?release_id=",
@@ -525,6 +525,7 @@ class Releases(Categories):
         self.release_stack["get_tags_for_a_release"] = self._fetch_data(url)
         return self.release_stack["get_tags_for_a_release"]
 
+    # param docstrings are checked
     def get_related_tags_for_release(
             self,
             release_id: int,
@@ -546,32 +547,42 @@ class Releases(Categories):
         ----------
         release_id: int
             id for a release
-        tag_names: list
-            list of tags (str); each tag must be present in the tag of returned series
-            example: ['defense', 'investment']
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        exclude_tag_names: list, default None (don't exclude any tags)
-            tags that returned series must not have
+        tag_names: list, default None
+            list of tags [str] to include in returned data, excluding any tag not in tag_names;
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        exclude_tag_names: list, default None
+            list of tag names that series match none of.
+            If None, no filtering by excluding tag names is done.
         tag_group_id: str, default None
-            a tag group id to filter tags by type with
+            A tag group id to filter tags by type with
             can be one of 'freq' for frequency, 'gen' for general or concept, 
             'geo' for geography, 'geot' for geography type, 'rls' for release, 
             'seas' for seasonal adjustment, 'src' for source
         search_text: str, default None
-            the words to find matching tags with
-            if None, no filtering by search words
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-        offset: non-negative integer, default None (offset of 0)
-        order_by: str, default "series_count"
-            order results by values of the specified attribute
-            can be one of "series_count", "popularity", "created", "name", "group_id"
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
+            The words to find matching tags with
+            If None, no filtering by search words
+        limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "series_count", "popularity", "created", 
+            "name", "group_id".
+            If None, "series_count" is used.
+        sort_order: str, default None
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns 
         -------
@@ -579,25 +590,23 @@ class Releases(Categories):
 
         See Also
         --------
-
-        Examples
-        -----
+        get_tags
 
         Notes
         -----
         fred/release/related_tags
+        https://fred.stlouisfed.org/docs/api/fred/release_related_tags.html
+
+        Examples
+        -----
         """
-        url_prefix = "release/related_tags?release_id="
-        try:
-            url_prefix += str(release_id)
-        except TypeError:
-            print("Unable to cast release_id %s to str" % release_id)
-        url_prefix += "&tag_names="
-        try:
-            url_prefix += ";".join(tag_names)
-        except TypeError:
-            print("tag_names must be list or tuple")
-        optional_args = {
+        url_prefix_params = {
+                "a_url_prefix": "release/related_tags?release_id=",
+                "an_int_id": release_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args_plus_tag_names = {
+                "&tag_names=": tag_names,
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
                 "&exclude_tag_names=": exclude_tag_names,
@@ -608,9 +617,9 @@ class Releases(Categories):
                 "&order_by=": order_by,
                 "&sort_order=": sort_order,
                 }
-        url = self._add_optional_params(url_prefix, optional_args)
-        self.release_stack[release_id] = self._fetch_data(url)
-        return self.release_stack[release_id]
+        url = self._add_optional_params(url_prefix, optional_args_plus_tag_names)
+        self.release_stack["get_related_tags_for_release"] = self._fetch_data(url)
+        return self.release_stack["get_related_tags_for_release"]
 
     def get_release_tables(
             self,

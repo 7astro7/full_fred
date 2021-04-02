@@ -177,7 +177,7 @@ def get_tags_for_a_release_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_tags_for_a_release(
         get_tags_for_a_release_method_works: bool,
         ):
@@ -186,38 +186,35 @@ def test_get_tags_for_a_release(
 @pytest.fixture
 def get_related_tags_for_release_method_works(fred: Fred) -> bool:
     params = {
-            'release_id': 1,
+            'release_id': 86,
             'tag_names': ('sa', 'foreign',),
             'limit': 3,
+            'offset': 3,
+            'sort_order': 'desc',
+            'order_by': 'created',
             }
-    observed = fred.get_related_tags_for_release(**params)
+    fred.get_related_tags_for_release(**params)
+    observed = fred.release_stack['get_related_tags_for_release']
+    check_union = ('tags',)
+    params.pop('release_id')
+    params.pop('tag_names')
+    expected = params
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_related_tags_for_release(
         get_related_tags_for_release_method_works: bool,
         ):
     assert get_related_tags_for_release_method_works == True
 
-
 @pytest.fixture
 def get_release_tables_method_works(fred: Fred) -> bool:
-    observed = fred.get_release_tables(53)
-    if not isinstance(observed, dict):
-        return False
-    observed_keys = tuple(observed.keys())
-    for i in range(len(observed_keys)):
-        if "release" in observed_keys[i]:
-            key = observed_keys[i]
-            break
-        if i == len(observed_keys) - 1:
-            return False
-    if isinstance(observed[key], list):
-        nested_dict = observed[key][0]
-        for k in nested_dict.keys():
-            if "id" in k:
-                if not str(nested_dict[k]) == "53":
-                    return False
-    return True
+    pass
 
 @pytest.mark.skip("passed v1")
 def test_get_release_tables(
