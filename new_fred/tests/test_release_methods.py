@@ -99,39 +99,40 @@ def get_release_dates_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_release_dates(
         get_release_dates_method_works: bool,
         ):
     assert get_release_dates_method_works == True
 
 @pytest.fixture
-def get_release_tables_method_works(fred: Fred) -> bool:
-    observed = fred.get_release_tables(53)
-    if not isinstance(observed, dict):
-        return False
-    observed_keys = tuple(observed.keys())
-    for i in range(len(observed_keys)):
-        if "release" in observed_keys[i]:
-            key = observed_keys[i]
-            break
-        if i == len(observed_keys) - 1:
-            return False
-    if isinstance(observed[key], list):
-        nested_dict = observed[key][0]
-        for k in nested_dict.keys():
-            if "id" in k:
-                if not str(nested_dict[k]) == "53":
-                    return False
-    return True
+def get_series_on_a_release_method_works(fred: Fred) -> bool:
+    params = {
+            'release_id': 51,
+            'limit': 3,
+            'order_by': 'last_updated',
+            'offset': 1,
+            'sort_order': 'desc',
+            'tag_names': ('japan',),
+            }
+    fred.get_series_on_a_release(**params)
+    observed = fred.release_stack['get_series_on_a_release']
+    check_union = ('seriess', 'series',)
+    params.pop('release_id')
+    params.pop('tag_names')
+    expected = params
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
-def test_get_release_tables(
-        get_release_tables_method_works: bool,
+#@pytest.mark.skip("passed v2")
+def test_get_series_on_a_release(
+        get_series_on_a_release_method_works: bool,
         ):
-    assert get_release_tables_method_works == True
-
-
+    assert get_series_on_a_release_method_works == True
 
 @pytest.fixture
 def get_related_tags_for_release_method_works(fred: Fred) -> bool:
@@ -201,28 +202,43 @@ def test_get_sources_for_a_release(
     # fred/release/source
     assert get_sources_for_a_release_method_works == True
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @pytest.fixture
-def get_series_on_a_release_method_works(fred: Fred) -> bool:
-    # fred/release/series
-    params = {
-            'release_id': 51,
-            'limit': 3,
-            }
-    observed = fred.get_series_on_a_release(**params)
+def get_release_tables_method_works(fred: Fred) -> bool:
+    observed = fred.get_release_tables(53)
     if not isinstance(observed, dict):
         return False
-    if not "limit" in observed.keys():
-        return False
-    if observed["limit"] != params["limit"]:
-        return False
-    if not "series" in observed.keys():
-        if not "seriess" in observed.keys():
+    observed_keys = tuple(observed.keys())
+    for i in range(len(observed_keys)):
+        if "release" in observed_keys[i]:
+            key = observed_keys[i]
+            break
+        if i == len(observed_keys) - 1:
             return False
+    if isinstance(observed[key], list):
+        nested_dict = observed[key][0]
+        for k in nested_dict.keys():
+            if "id" in k:
+                if not str(nested_dict[k]) == "53":
+                    return False
     return True
 
 @pytest.mark.skip("passed v1")
-def test_get_series_on_a_release(
-        get_series_on_a_release_method_works: bool,
+def test_get_release_tables(
+        get_release_tables_method_works: bool,
         ):
-    # fred/release/series
-    assert get_series_on_a_release_method_works == True
+    assert get_release_tables_method_works == True
+

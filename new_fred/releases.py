@@ -204,6 +204,7 @@ class Releases(Categories):
         self.release_stack["get_a_release"] = self._fetch_data(url)
         return self.release_stack["get_a_release"]
 
+    # param docstrings are checked
     def get_release_dates(
             self,
             release_id: int,
@@ -295,35 +296,55 @@ class Releases(Categories):
             exclude_tag_names: list = None,
             ) -> dict:
         """
-        Get release dates for a release of economic data.
+        Get series on a release of economic data.
 
         Parameters
         ----------
         release_id: int
             id for a release
-        realtime_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-        realtime_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-        offset: non-negative integer, default None (offset of 0)
-        order_by: str, default "series_count"
-            order results by values of the specified attribute
-            can be one of "series_count", "popularity", "created", "name", "group_id"
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
-        filter_variable: str = None,
-        filter_value:str = None,
-        tag_names: list
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
+        realtime_end: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
+        limit: int, default None
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "series_id", "title", "units", "frequency",
+            "seasonal_adjustment", "realtime_start", "realtime_end",
+            "last_updated", "observation_start", "observation_end",
+            "popularity", "group_popularity".
+            If None, "series_id" is used.
+        sort_order: str, default None
+            Sort results in ascending or descending order for attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
+        filter_variable: str, default None
+            The attribute to filter results by.
+            Can be one of "frequency", "units", "seasonal_adjustment".
+            If None, no filter is used.
+        filter_value: str, default None
+            The value of filter_variable to filter results by.
+            If None, no filter is used.
+        tag_names: list, default None
             list of tags (str); each tag must be present in the tag of returned series
-            example: ['defense', 'investment']
-        exclude_tag_names: list, default None (don't exclude any tags)
+        exclude_tag_names: list, default None
+            list of tag names that series match none of.
+            If None, no filtering by excluding tag names is done.
 
         Returns 
         -------
         dict
+            ID, title, units, and other metadata for each series included in 
+            the release.
 
         See Also
         --------
@@ -331,13 +352,15 @@ class Releases(Categories):
         Notes
         -----
         fred/release/series
+        https://fred.stlouisfed.org/docs/api/fred/release_series.html
 
         Examples
         -----
         """
         url_prefix_params = dict(
                 a_url_prefix = "release/series?release_id=",
-                an_int_id = release_id)
+                an_int_id = release_id,
+                )
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -352,8 +375,8 @@ class Releases(Categories):
                 "&exclude_tag_names=": exclude_tag_names,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.release_stack[release_id] = self._fetch_data(url)
-        return self.release_stack[release_id]
+        self.release_stack["get_series_on_a_release"] = self._fetch_data(url)
+        return self.release_stack["get_series_on_a_release"]
 
     def get_sources_for_a_release(
             self,
