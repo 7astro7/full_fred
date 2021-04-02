@@ -18,7 +18,12 @@ def get_all_sources_method_works(fred: Fred) -> bool:
     observed = fred.source_stack["get_all_sources"]
     check_union = ('sources',)
     expected = params
-    return returned_ok(observed, expected, check_union)
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
 @pytest.mark.skip("passed v2")
 def test_get_all_sources(
@@ -34,7 +39,11 @@ def get_a_source_method_works(fred: Fred) -> bool:
     fred.get_a_source(**params)
     observed = fred.source_stack["get_a_source"]
     check_union = ('sources',)
-    return returned_ok(observed = observed, check_union = check_union)
+    returned_ok_params = {
+            'observed': observed,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
 @pytest.mark.skip("passed v2")
 def test_get_a_source(
@@ -55,7 +64,12 @@ def get_releases_for_a_source_method_works(fred: Fred) -> bool:
     check_union = ('releases',)
     params.pop('source_id')
     expected = params
-    return returned_ok(observed, params, check_union)
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
 
 @pytest.mark.skip("passed v2")
 def test_get_releases_for_a_source(
