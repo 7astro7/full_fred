@@ -64,9 +64,10 @@ class Series(Releases):
         f = Fred()
         f.get_a_series(series_id = "SAHMCURRENT")
         """
-        url_prefix_params = dict(
-                a_url_prefix = "series?series_id=",
-                a_str_id = series_id)
+        url_prefix_params = {
+                "a_url_prefix": "series?series_id=",
+                "a_str_id": series_id
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -76,6 +77,7 @@ class Series(Releases):
         self.series_stack["get_a_series"] = self._fetch_data(url)
         return self.series_stack["get_a_series"]
 
+    # param docstrings are checked
     def get_categories_of_series(
             self,
             series_id: str, 
@@ -89,12 +91,14 @@ class Series(Releases):
         ----------
         series_id: int
             the id of the series
-        realtime_start: str, default None 
-            The start of the real-time period formatted as "YYY-MM-DD"
-            If None, "1776-07-04" (earliest) is used.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD"
-            If None, "9999-12-31" (last available) is used.
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (last available) is used.
 
         Returns
         -------
@@ -113,17 +117,18 @@ class Series(Releases):
         Examples
         --------
         """
-        url_prefix_params = dict(
-                a_url_prefix = "series/categories?series_id=",
-                a_str_id = series_id)
+        url_prefix_params = {
+                "a_url_prefix": "series/categories?series_id=",
+                "a_str_id": series_id
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[series_id] = self._fetch_data(url)
-        return self.series_stack[series_id]
+        self.series_stack["get_categories_of_series"] = self._fetch_data(url)
+        return self.series_stack["get_categories_of_series"]
 
     def get_series_df(
             self, 
@@ -201,9 +206,10 @@ class Series(Releases):
         Examples
         --------
         """
-        url_prefix_params = dict(
-                a_url_prefix = "series/observations?series_id=",
-                a_str_id = series_id)
+        url_prefix_params = {
+                "a_url_prefix": "series/observations?series_id=",
+                "a_str_id": series_id
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -257,9 +263,10 @@ class Series(Releases):
         Examples
         --------
         """
-        url_prefix_params = dict(
-                a_url_prefix = "series/release?series_id=",
-                a_str_id = series_id)
+        url_prefix_params = {
+                "a_url_prefix": "series/release?series_id=",
+                "a_str_id": series_id
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -346,10 +353,10 @@ class Series(Releases):
         --------
         """
         fused_search_text = self._join_strings_by(search_text, '+')
-        url_prefix_params = dict(
-                a_url_prefix = "series/search?search_text=",
-                a_str_id = fused_search_text,
-                )
+        url_prefix_params = {
+                "a_url_prefix": "series/search?search_text=",
+                "a_str_id": fused_search_text,
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&search_type=": search_type,
@@ -440,10 +447,10 @@ class Series(Releases):
         --------
         """
         search_text = self._join_strings_by(series_search_text, '+')
-        url_prefix_params = dict(
-                a_url_prefix = "series/search/tags?series_search_text=",
-                a_str_id = search_text,
-                )
+        url_prefix_params = {
+                "a_url_prefix": "series/search/tags?series_search_text=",
+                "a_str_id": search_text,
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -532,10 +539,10 @@ class Series(Releases):
         """
         search_text = self._join_strings_by(series_search_text, '+')
         fused_tag_names = self._join_strings_by(tag_names, ';')
-        url_prefix_params = dict(
-                a_url_prefix = "series/search/related_tags?series_search_text=",
-                a_str_id = search_text,
-                )
+        url_prefix_params = {
+                "a_url_prefix": "series/search/related_tags?series_search_text=",
+                "a_str_id": search_text,
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         url_prefix = self._append_id_to_url(url_prefix, tag_names)
         optional_args = {
@@ -596,9 +603,10 @@ class Series(Releases):
         Examples
         --------
         """
-        url_prefix_params = dict(
-                a_url_prefix = "series/tags?series_id=",
-                a_str_id = series_id)
+        url_prefix_params = {
+                "a_url_prefix": "series/tags?series_id=",
+                "a_str_id": series_id
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -728,9 +736,10 @@ class Series(Releases):
         Examples
         --------
         """
-        url_prefix_params = dict(
-                a_url_prefix = "series/vintagedates?series_id=",
-                a_str_id = series_id)
+        url_prefix_params = {
+                "a_url_prefix": "series/vintagedates?series_id=",
+                "a_str_id": series_id
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,

@@ -20,7 +20,7 @@ def get_a_series_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_series(
         get_a_series_method_works: bool,
         ):
@@ -31,14 +31,15 @@ def get_categories_of_series_method_works(fred: Fred):
     params = {
             'series_id': 'EXJPUS',
             }
-    observed = fred.get_categories_of_series("EXJPUS")
-    if not isinstance(observed, dict):
-        return False
-    if not "categories" in observed.keys():
-        return False
-    return True
+    fred.get_categories_of_series(**params)
+    observed = fred.series_stack['get_categories_of_series']
+    returned_ok_params = {
+            'observed': observed,
+            'check_union': ('categories',),
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+@pytest.mark.skip("passed v2")
 def test_get_categories_of_series(
         get_categories_of_series_method_works: bool,
         ):
