@@ -148,59 +148,55 @@ def get_sources_for_a_release_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_sources_for_a_release(
         get_sources_for_a_release_method_works: bool,
         ):
     assert get_sources_for_a_release_method_works == True
 
 @pytest.fixture
+def get_tags_for_a_release_method_works(fred: Fred) -> bool:
+    params = {
+            'release_id': 86,
+            'limit': 3,
+            'tag_names': 'gnp',
+            'offset': 3,
+            'sort_order': 'desc',
+            'order_by': 'created',
+            }
+    fred.get_tags_for_a_release(**params)
+    observed = fred.release_stack['get_tags_for_a_release']
+    check_union = ('tags',)
+    params.pop('release_id')
+    params.pop('tag_names')
+    expected = params
+    returned_ok_params = {
+            'observed': observed,
+            'expected': expected,
+            'check_union': check_union,
+            }
+    return returned_ok(**returned_ok_params)
+
+#@pytest.mark.skip("passed v2")
+def test_get_tags_for_a_release(
+        get_tags_for_a_release_method_works: bool,
+        ):
+    assert get_tags_for_a_release_method_works == True
+
+@pytest.fixture
 def get_related_tags_for_release_method_works(fred: Fred) -> bool:
-    # fred/release/related_tags
     params = {
             'release_id': 1,
             'tag_names': ('sa', 'foreign',),
             'limit': 3,
             }
     observed = fred.get_related_tags_for_release(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "tags" in observed.keys():
-        return False
-    if not "limit" in observed.keys():
-        return False
-    return True
 
 @pytest.mark.skip("passed v1")
 def test_get_related_tags_for_release(
         get_related_tags_for_release_method_works: bool,
         ):
-    # fred/release/related_tags
     assert get_related_tags_for_release_method_works == True
-
-@pytest.fixture
-def get_tags_for_a_release_method_works(fred: Fred) -> bool:
-    # fred/release/tags
-    params = {
-            'release_id': 86,
-            'limit': 3,
-            }
-    observed = fred.get_tags_for_a_release(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "tags" in observed.keys():
-        return False
-    if not "limit" in observed.keys():
-        return False
-    return True
-
-@pytest.mark.skip("passed v1")
-def test_get_tags_for_a_release(
-        get_tags_for_a_release_method_works: bool,
-        ):
-    # fred/release/tags
-    assert get_tags_for_a_release_method_works == True
-
 
 
 @pytest.fixture
