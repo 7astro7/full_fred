@@ -100,7 +100,7 @@ def get_release_for_a_series_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_release_for_a_series(
         get_release_for_a_series_method_works: bool,
         ):
@@ -192,26 +192,24 @@ def test_get_tags_for_a_series(
     assert get_tags_for_a_series_method_works == True
 
 @pytest.fixture
-def get_series_vintage_dates_method_works(fred: Fred) -> bool:
+def get_series_vintagedates_method_works(fred: Fred) -> bool:
     params = {
             'series_id': 'GNPCA',
             'limit': 3,
+            'sort_order': 'desc',
+            'offset': 2,
             }
-    observed = fred.get_series_vintage_dates(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if observed["limit"] != params["limit"]:
-        return False
-    if not "vintage_dates" in observed.keys():
-        return False
-    return True
+    observed = fred.get_series_vintagedates(**params)
+    returned_ok_params = {
+            'observed': observed,
+            'check_union': ('vintage_dates',),
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
-def test_get_series_vintage_dates(
-        get_series_vintage_dates_method_works: bool,
+@pytest.mark.skip("passed v2")
+def test_get_series_vintagedates(
+        get_series_vintagedates_method_works: bool,
         ):
-    # fred/series/vintagedates
-    assert get_series_vintage_dates_method_works == True
+    assert get_series_vintagedates_method_works == True
+
 

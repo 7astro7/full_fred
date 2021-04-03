@@ -757,7 +757,8 @@ class Series(Releases):
         self.series_stack['updates'] = self._fetch_data(url) 
         return self.series_stack['updates']
 
-    def get_series_vintage_dates(
+    # param docstrings are checked
+    def get_series_vintagedates(
             self,
             series_id: str,
             realtime_start: str = None,
@@ -767,34 +768,40 @@ class Series(Releases):
             sort_order: str = None,
             ) -> dict:
         """
-        Get the dates in history when a series' data values were revised or new data values were released.
-        Vintage dates are the release dates for a series excluding release dates when the 
-        data for the series did not change.
+        Get the dates in history when a series' data values were 
+        revised or new data values were released. Vintage dates are 
+        the release dates for a series excluding release dates when 
+        the data for the series did not change.
 
         Parameters
         ----------
         series_id: int
             The ID of the series.
-        realtime_start: str, default "1776-07-04" (earliest available)
-            YYY-MM-DD as per fred
-            If None,
-        realtime_end: str, default "9999-12-31" (latest available) 
-            YYY-MM-DD as per fred
-            If None,
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-            If None,
-        offset: non-negative integer, default None (offset of 0)
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
+        realtime_end: str, default None
+            The end of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 10_001).
+            If None, FRED will use limit = 10_001.
+        offset: int, default None
             Non-negative integer.
-            If None,
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
-            If None,
+            If None, offset of 0 is used.
+        sort_order: str, default None
+            Return rows in ascending or descending order of vintagedate.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns
         -------
         dict
+            The vintage dates for the series.
+            
 
         See Also
         --------
@@ -802,6 +809,7 @@ class Series(Releases):
         Notes
         -----
         FRED web service endpoint: fred/series/vintagedates
+        https://fred.stlouisfed.org/docs/api/fred/series_vintagedates.html
 
         Examples
         --------
@@ -819,6 +827,6 @@ class Series(Releases):
                 "&sort_order=": sort_order,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[series_id] = self._fetch_data(url)
-        return self.series_stack[series_id]
+        self.series_stack["get_series_vintagedates"] = self._fetch_data(url)
+        return self.series_stack["get_series_vintagedates"]
 
