@@ -10,6 +10,11 @@ A new, full API to Federal Reserve Economic Data (FRED)
 
 ## API
 
+reference get_series_df example 
+more generally, note use of stacks 
+    - limited redundancy
+    - metadata included
+
 ## Contributing
 -welcomes feature requests, bug submissions, community contributions
 

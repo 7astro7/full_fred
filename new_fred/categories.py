@@ -65,11 +65,11 @@ class Categories(FredBase):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
 
         Returns
         -------
@@ -118,11 +118,11 @@ class Categories(FredBase):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
 
         Returns 
         -------
@@ -178,11 +178,11 @@ class Categories(FredBase):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -276,11 +276,11 @@ class Categories(FredBase):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         tag_names: list, default None
             list of tags [str] to include in returned data, excluding any tag not in tag_names;
             each tag must be present in the tag of returned series.
@@ -371,11 +371,11 @@ class Categories(FredBase):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         tag_names: list, default None
             list of tags [str] to include in returned data, excluding any tag not in tag_names;
             each tag must be present in the tag of returned series.

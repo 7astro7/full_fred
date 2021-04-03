@@ -25,7 +25,7 @@ class Series(Releases):
         """
         Get the metadata of a FRED series. 
         FRED accepts upper case series_id: maybe integrate something to capitalize automatically
-        default realtime start and realtime end: first to last available
+        default realtime start and realtime end: first to latest available
         if series_id attribute is not set, FredSeries.series_id will be set to 
         the series_id passed in this method
         explain that not merely the requested data is retrieved and stored but rather
@@ -38,11 +38,11 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
 
         Returns
         -------
@@ -94,11 +94,11 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
 
         Returns
         -------
@@ -130,78 +130,128 @@ class Series(Releases):
         self.series_stack["get_categories_of_series"] = self._fetch_data(url)
         return self.series_stack["get_categories_of_series"]
 
+    # param docstrings are checked
     def get_series_df(
             self, 
             series_id: str,
             realtime_start: str = None, 
             realtime_end: str = None,
-            limit: int = 100_000,
-            offset: int = 0,
-            sort_order: str = 'asc',
-            observation_start: str = "1776-07-04",
-            observation_end: str = "9999-12-31",
+            limit: int = None,
+            offset: int = None,
+            sort_order: str = None,
+            observation_start: str = None,
+            observation_end: str = None,
             units: str = None,
             frequency: str = None,
             aggregation_method: str = None,
             output_type: int = None,
             vintage_dates: str = None,
-            ):
+            ) -> pd.DataFrame:
         """
-        Get the data values in (pandas) DataFrame form for series associated
-        with series_id
-        distinguish between observation_start and realtime_start, same for end
+        Get the observations, the data values, for an economic data 
+        series in a pd.DataFrame.
 
         Parameters
         ----------
         series_id: int
             the id of the series
-        realtime_start: str, default None 
-            The start of the real-time period formatted as "YYY-MM-DD"
-            If None, "1776-07-04" (earliest) is used.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD"
-            If None, "9999-12-31" (last available) is used.
-        limit: int, default 100_000
-            maximum number of observations / rows 
-            range [1, 100_000]
-            If None,
-        offset: int, default 0
-            n/a, 
-            If None,
-        sort_order: str, default 'asc' 
-            return rows in ascending or descending order of observation_date 
-            options are 'asc' and 'desc'
-            If None,
-        observation_start: str, default "1776-07-04" (earliest)
-            YYY-MM-DD as per fred
-            If None,
-        observation_end: str, default "9999-12-31" (last available) 
-            YYY-MM-DD as per fred
-        units: str, default "lin" (no data value transformation)
-            see unit_info for more information
-            If None,
-        frequency
-            If None,
-        aggregation_method: str, default "avg"
-            If None,
-        output_type: int default None (realtime period)
-            1: real
-            2: vintage date, all observations
-            3: vintage date, new and revised observations only
-            4: initial release only
-            If None,
+            The end of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 100_001).
+            If None, FRED will use limit = 100_001.
+        offset: int, default None
+            Non-negative integer.
+            If None, offset of 0 is used.
+        sort_order: str, default None
+            Return rows in ascending or descending order of observation_date.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
+        observation_start: str, default None
+            The start of the observation period formatted as "YYY-MM-DD".
+            If None, "1776-07-04" (earliest available) is used.
+        observation_end: str, default None
+            The end of the observation period formatted as "YYY-MM-DD".
+            If None, "9999-12-31" (latest available) is used.
+        units: str, default None
+            A string that indicates a data value transformation.
+            Can be one of :
+                "lin" : Levels / No transformation
+                "chg" : Change
+                "ch1" : Change from 1 year ago
+                "pch" : Percent Change
+                "pc1" : Percent Change from 1 year go
+                "pca" : Compounded annual rate of change 
+                "cch" : Continuously compounded rate of change 
+                "cca" : Continuously compounded annual rate of change 
+                "log" : Natural log
+            If None, "lin": Levels / No transformation
+        frequency: str, default None
+            A string that indicates a lower frequency to aggregate 
+            values to. Frequency aggregation converts higher 
+            frequency series (such as daily) into lower frequency
+            series (such as monthly). If a frequency is given,
+            aggregation_method can indicate how aggregation is calculated.
+            If None, no frequency aggregation.
+            Frequency without period description can be one of:
+                "d": Daily
+                "w": Weekly
+                "bw": Biweekly
+                "m": Monthly
+                "q": Quarterly
+                "sa": Semiannual
+                "a": Annual
+            Frequency with period description can be one of:
+                "wem": Weekly, Ending Monday
+                "bwem": Biweekly, Ending Monday
+                "wetu": Weekly, Ending Tuesday
+                "wew": Weekly, Ending Wednesday
+                "bwew": Biweekly, Ending Wednesday
+                "weth": Weekly, Ending Thursday
+                "wef": Weekly, Ending Friday
+                "wesa": Weekly, Ending Saturday
+                "wesu": Weekly, Ending Sunday
+            Note: Attempting to aggregate from lower frequency such as annual
+            into higher frequency such as daily will likely generate an error
+            with no DataFrame returned.
+            FRED's frequency aggregation detail is at:
+            https://fred.stlouisfed.org/docs/api/fred/series_observations.html.
+        aggregation_method: str, default None
+            A string that indicates the aggregation method used for frequency aggregation.
+            If no argument is passed for frequency parameter, aggregation_method is moot.
+            Can be one of "avg", "sum", "eop" (end of period).
+            If None and frequency argument is given, "avg" is used.
+        output_type: int, default None 
+            An integer that indicates an output type.
+            1: Observations by Real-Time Period
+            2: Observations by Vintage Date, All Observations
+            3: Observations by Vintage Date, New and Revised Observations Only
+            4: Observations, Initial Release Only
+            If None, 1: Observations by Real-Time Period is used.
         vintage_dates
-            If None,
+            If None, no vintage dates are set.
 
         Returns
         -------
+        pd.DataFrame
+            DataFrame of requested observations. Metadata regarding
+            the series is accessible with: f.series_stack['get_series_df']
 
         See Also
         --------
+        FRED's unit transformation: https://alfred.stlouisfed.org/help#growth_formulas
 
         Notes
         -----
         FRED web service endpoint:/series/observations
+        https://fred.stlouisfed.org/docs/api/fred/series_observations.html
 
         Examples
         --------
@@ -226,8 +276,17 @@ class Series(Releases):
                 "&vintage_dates=": vintage_dates,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[series_id] = self._fetch_data(url)
-        return self.series_stack[series_id]
+        df_and_metadata = self._fetch_data(url)
+        self.series_stack["get_series_df"] = df_and_metadata
+        self.series_stack["get_series_df"]["series_id"] = series_id
+        try:
+            df = pd.DataFrame(df_and_metadata["observations"])
+        except KeyError:
+            e = "No key 'observations' found, cannot make DataFrame"
+            print(e)
+        self.series_stack["get_series_df"].pop("observations")
+        self.series_stack["get_series_df"]["df"] = df
+        return self.series_stack["get_series_df"]["df"]
 
     def get_release_for_a_series(
             self,
@@ -242,10 +301,10 @@ class Series(Releases):
         ----------
         series_id: int
             the id of the series
-        observation_start: str, default "1776-07-04" (earliest)
+        observation_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
-        observation_end: str, default "9999-12-31" (last available) 
+        observation_end: str, default "9999-12-31" (latest available) 
             YYY-MM-DD as per fred
             If None,
 
@@ -305,10 +364,10 @@ class Series(Releases):
             *** explain with reference to fred web service
             determines the type of search to perform
             If None,
-        realtime_start: str, default "1776-07-04" (earliest)
+        realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
-        realtime_end: str, default "9999-12-31" (last available) 
+        realtime_end: str, default "9999-12-31" (latest available) 
             YYY-MM-DD as per fred
             If None,
         limit: int, default None (FRED will use limit = 1_000)
@@ -316,6 +375,7 @@ class Series(Releases):
             range [1, 1_000]
             If None,
         offset: non-negative integer, default None (offset of 0)
+            Non-negative integer.
             If None,
         order_by: str, default "source_count"
             order results by values of the specified attribute
@@ -400,10 +460,10 @@ class Series(Releases):
             *** explain with reference to fred web service
             determines the type of search to perform
             If None,
-        realtime_start: str, default "1776-07-04" (earliest)
+        realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
-        realtime_end: str, default "9999-12-31" (last available) 
+        realtime_end: str, default "9999-12-31" (latest available) 
             YYY-MM-DD as per fred
             If None,
         tag_names: list
@@ -423,6 +483,7 @@ class Series(Releases):
             range [1, 1_000]
             If None,
         offset: non-negative integer, default None (offset of 0)
+            Non-negative integer.
             If None,
         order_by: str, default "source_count"
             order results by values of the specified attribute
@@ -488,10 +549,10 @@ class Series(Releases):
         ----------
         series_search_text: list
             list or tuple or words to match against economic data series
-        realtime_start: str, default "1776-07-04" (earliest)
+        realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
-        realtime_end: str, default "9999-12-31" (last available) 
+        realtime_end: str, default "9999-12-31" (latest available) 
             YYY-MM-DD as per fred
             If None,
         tag_names: list
@@ -514,6 +575,7 @@ class Series(Releases):
             range [1, 1_000]
             If None,
         offset: non-negative integer, default None (offset of 0)
+            Non-negative integer.
             If None,
         order_by: str, default "source_count"
             order results by values of the specified attribute
@@ -575,10 +637,10 @@ class Series(Releases):
         ----------
         series_id: int
             the id of the series
-        realtime_start: str, default "1776-07-04" (earliest)
+        realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
-        realtime_end: str, default "9999-12-31" (last available) 
+        realtime_end: str, default "9999-12-31" (latest available) 
             YYY-MM-DD as per fred
             If None,
         order_by: str, default "source_count"
@@ -636,10 +698,10 @@ class Series(Releases):
 
         Parameters
         ----------
-        realtime_start: str, default "1776-07-04" (earliest)
+        realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
-        realtime_end: str, default "9999-12-31" (last available) 
+        realtime_end: str, default "9999-12-31" (latest available) 
             YYY-MM-DD as per fred
             If None,
         limit: int, default None (FRED will use limit = 1_000)
@@ -647,6 +709,7 @@ class Series(Releases):
             range [1, 1_000]
             If None,
         offset: non-negative integer, default None (offset of 0)
+            Non-negative integer.
             If None,
         filter_value: str default None
             If None,
@@ -706,10 +769,10 @@ class Series(Releases):
         ----------
         series_id: int
             the id of the series
-        realtime_start: str, default "1776-07-04" (earliest)
+        realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
-        realtime_end: str, default "9999-12-31" (last available) 
+        realtime_end: str, default "9999-12-31" (latest available) 
             YYY-MM-DD as per fred
             If None,
         limit: int, default None (FRED will use limit = 1_000)
@@ -717,6 +780,7 @@ class Series(Releases):
             range [1, 1_000]
             If None,
         offset: non-negative integer, default None (offset of 0)
+            Non-negative integer.
             If None,
         sort_order: str, default None (FRED will use "asc")
             sort results in ascending or descending order for attribute values specified by order_by

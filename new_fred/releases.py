@@ -27,11 +27,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -98,11 +98,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -168,11 +168,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
 
         Returns 
         -------
@@ -228,11 +228,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 10_001).
@@ -306,11 +306,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -397,11 +397,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
 
         Returns 
         -------
@@ -459,11 +459,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         tag_names: list, default None
             list of tags [str] to include in returned data, excluding any tag not in tag_names;
             If None, no filtering by tag names is done.
@@ -552,11 +552,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         exclude_tag_names: list, default None
             list of tag names that series match none of.
             If None, no filtering by excluding tag names is done.
@@ -643,11 +643,11 @@ class Releases(Categories):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest) is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (last available) is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         include_observation_values: bool, default None
             Indicates that observations need to be returned.
             Observation value and date are only returned for a series

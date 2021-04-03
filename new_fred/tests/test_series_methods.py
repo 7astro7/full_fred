@@ -2,6 +2,7 @@
 import pytest
 from new_fred.fred import Fred
 from .fred_test_utils import returned_ok
+import pandas as pd
 
 @pytest.fixture
 def fred():
@@ -50,19 +51,37 @@ def get_series_df_method_works(fred: Fred) -> bool:
     params = {
             'series_id': 'GNPCA',
             'limit': 10,
+#            'units': 'log',
+            'sort_order': 'desc',
+            'offset': 1,
+            'observation_start': "1776-07-04",
+            'observation_end': "9999-12-31",
             }
-    observed = fred.get_series_df(**params)
-    if not isinstance(observed, dict):
+    fred.get_series_df(**params)
+    observed = fred.series_stack['get_series_df']
+    if not 'observation_start' in observed.keys():
         return False
-    if not 'limit' in observed.keys():
-        return False
-    if observed["limit"] != params["limit"]:
-        return False
-    if not 'observations' in observed.keys():
-        return False
-    return True
 
-@pytest.mark.skip("passed v1")
+    # 1600-01-01 was returned for 1776-07-04
+    expected_obs_start = ('1776-07-04', '1600-01-01',)
+    if observed['observation_start'] not in expected_obs_start:
+        return False
+    params.pop('observation_start')
+
+    # series_id is manually added to metadata of DataFrame,
+    # so series_id in params is retained as an expected key
+    returned_ok_params = {
+            'observed': observed,
+            'expected': params, 
+            'check_union': ('df', 'observations',),
+            }
+    if not returned_ok(**returned_ok_params):
+        return False
+    if isinstance(observed['df'], pd.DataFrame):
+        return True
+    return False
+
+#@pytest.mark.skip("passed v2")
 def test_get_series_df(
         get_series_df_method_works: bool,
         ):
