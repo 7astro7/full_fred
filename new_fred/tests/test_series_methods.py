@@ -177,15 +177,20 @@ def test_get_related_tags_for_a_series_search(
 def get_tags_for_a_series_method_works(fred: Fred) -> bool:
     params = {
             'series_id': 'STLFSI',
+            'order_by': 'name',
+            'sort_order': 'desc',
             }
-    observed = fred.get_tags_for_a_series(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "tags" in observed.keys():
-        return False
-    return True
+    fred.get_tags_for_a_series(**params)
+    observed = fred.series_stack["get_tags_for_a_series"]
+    params.pop('series_id')
+    returned_ok_params = {
+            'observed': observed,
+            'expected': params,
+            'check_union': ('tags',),
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_tags_for_a_series(
         get_tags_for_a_series_method_works: bool,
         ):
@@ -200,7 +205,8 @@ def get_series_updates_method_works(fred: Fred) -> bool:
             'end_time': "202104021951",
             'offset': 2,
             }
-    observed = fred.get_series_updates(**params)
+    fred.get_series_updates(**params)
+    observed = fred.series_stack["get_series_updates"]
     params.pop('start_time')
     params.pop('end_time')
     returned_ok_params = {

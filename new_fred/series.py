@@ -628,6 +628,7 @@ class Series(Releases):
         self.series_stack[search_text] = self._fetch_data(url)
         return self.series_stack[search_text]
 
+    # param docstrings are checked
     def get_tags_for_a_series(
             self,
             series_id: str,
@@ -637,29 +638,37 @@ class Series(Releases):
             sort_order: str = None,
             ) -> dict:
         """
-        Get the FRED tags for a series.
+        Get the FRED tags for a series. A FRED tag is an attribute 
+        assigned to a series, such as 'monetary aggregates', 
+        'weekly', 'oecd', 'slovenia', 'food', 'gdp'.
 
         Parameters
         ----------
         series_id: int
             The ID of the series.
-        realtime_start: str, default "1776-07-04" (earliest available)
-            YYY-MM-DD as per fred
-            If None,
-        realtime_end: str, default "9999-12-31" (latest available) 
-            YYY-MM-DD as per fred
-            If None,
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
+        realtime_end: str, default None
+            The end of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
         order_by: str, default "source_count"
             order results by values of the specified attribute
             can be one of "source_count", "popularity", "created", "name", "group_id"
-            If None,
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
-            If None,
+            If None, "source_count" is used.
+        sort_order: str, default None
+            Return rows in ascending or descending order for 
+            attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns
         -------
         dict
+            name, series_count, date of creation, notes, group_id 
+            for each tag that's assigned to the series.
 
         See Also
         --------
@@ -667,6 +676,7 @@ class Series(Releases):
         Notes
         -----
         FRED web service endpoint:/series/tags
+        https://fred.stlouisfed.org/docs/api/fred/series_tags.html
 
         Examples
         --------
@@ -683,8 +693,8 @@ class Series(Releases):
                 "&sort_order=": sort_order,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[series_id] = self._fetch_data(url)
-        return self.series_stack[series_id]
+        self.series_stack["get_tags_for_a_series"] = self._fetch_data(url)
+        return self.series_stack["get_tags_for_a_series"]
 
     # param docstrings are checked
     def get_series_updates(
