@@ -131,23 +131,30 @@ def test_search_for_a_series(
     assert search_for_a_series_method_works == True
 
 @pytest.fixture
-def get_tags_for_a_series_search_method_works(fred: Fred) -> bool:
+def get_tags_for_series_search_method_works(fred: Fred) -> bool:
     params = {
-            'series_search_text': ('monetary', 'service', 'index',),
+            'search_words': ('monetary', 'service', 'index',),
             'limit': 3,
+#            'tag_search_words': ('', '',),
+            'order_by': 'created',
+            'sort_order': 'desc',
+            'offset': 2,
             }
-    observed = fred.get_tags_for_a_series_search(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "tags" in observed.keys():
-        return False
-    return True
+    fred.get_tags_for_series_search(**params)
+    observed = fred.series_stack["get_tags_for_series_search"]
+    params.pop('search_words')
+    returned_ok_params = {
+            'observed': observed,
+            'expected': params,
+            'check_union': ('tags',),
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
-def test_get_tags_for_a_series_search(
-        get_tags_for_a_series_search_method_works: bool,
+@pytest.mark.skip("passed v2")
+def test_get_tags_for_series_search(
+        get_tags_for_series_search_method_works: bool,
         ):
-    assert get_tags_for_a_series_search_method_works == True
+    assert get_tags_for_series_search_method_works == True
 
 @pytest.fixture
 def get_related_tags_for_series_search_method_works(fred: Fred) -> bool:

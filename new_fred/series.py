@@ -417,6 +417,7 @@ class Series(Releases):
 
         Examples
         --------
+        m1 and m2 via FRED web service official docs
         """
         fused_search_text = self._join_strings_by(search_text, '+')
         url_prefix_params = {
@@ -441,14 +442,16 @@ class Series(Releases):
         self.series_stack[fused_search_text] = self._fetch_data(url)
         return self.series_stack[fused_search_text]
 
+    # fix returns docstring
+    # param docstrings are checked
     def get_tags_for_series_search(
             self, 
-            series_search_text: list,
+            search_words: list,
             realtime_start: str = None,
             realtime_end: str = None,
             tag_names: list = None,
             tag_group_id: str = None,
-            tag_search_text: list = None,
+            tag_search_words: list = None,
             limit: int = None,
             offset: int = None,
             order_by: str = None,
@@ -459,49 +462,51 @@ class Series(Releases):
 
         Parameters
         ----------
-        series_search_text: list
-            list or tuple or words to match against economic data series
-        search_type: str
-            one of: 'full_text', 'series_id'
-            *** explain with reference to fred web service
-            determines the type of search to perform
-            If None,
-        realtime_start: str, default "1776-07-04" (earliest available)
-            YYY-MM-DD as per fred
-            If None,
-        realtime_end: str, default "9999-12-31" (latest available) 
-            YYY-MM-DD as per fred
-            If None,
-        tag_names: list
-            list of tags (str); each tag must be present in the tag of returned series
-            If None,
+        search_words: list
+            list of words to match against economic data series.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
+        realtime_end: str, default None
+            The end of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
+        tag_names: list, default None
+            list of tags [str] that series match all of, excluding 
+            any tag not in tag_names.
+            If None, no filtering by tag names.
         tag_group_id: str, default None
-            a tag group id to filter tags by type with
+            A tag group id to filter tags by type with.
             can be one of 'freq' for frequency, 'gen' for general or concept, 
             'geo' for geography, 'geot' for geography type, 'rls' for release, 
             'seas' for seasonal adjustment, 'src' for source
-            If None,
-        tag_search_text: list, default None (no filtering by tag group)
-            the words to find matching tags with
-            If None,
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-            If None,
-        offset: non-negative integer, default None (offset of 0)
+            If None, no filtering by tag group is done.
+        tag_search_words: list, default None 
+            The words to find matching tags with.
+            If None, no filtering by search words is done.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
             Non-negative integer.
-            If None,
+            If None, offset of 0 is used.
         order_by: str, default "source_count"
             order results by values of the specified attribute
-            can be one of "source_count", "popularity", "created", "name", "group_id"
-            If None,
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
-            If None,
+            can be one of "series_count", "popularity", "created", "name", "group_id"
+            If None, "series_count" is used.
+        sort_order: str, default None
+            Return rows in ascending or descending order for 
+            attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None, "asc" is used.
 
         Returns
         -------
         dict
+            name, group_id, notes, creation date, series count, other
+            metadata for each tag.
 
         See Also
         --------
@@ -509,14 +514,16 @@ class Series(Releases):
         Notes
         -----
         FRED web service endpoint:/series/search/tags
+        https://fred.stlouisfed.org/docs/api/fred/series_search_tags.html
 
         Examples
         --------
+        m1 and m2 via FRED web service official docs
         """
-        search_text = self._join_strings_by(series_search_text, '+')
+        series_search_text = self._join_strings_by(search_words, '+')
         url_prefix_params = {
                 "a_url_prefix": "series/search/tags?series_search_text=",
-                "a_str_id": search_text,
+                "a_str_id": series_search_text,
                 }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
@@ -524,15 +531,15 @@ class Series(Releases):
                 "&realtime_end=": realtime_end,
                 "&tag_names=": tag_names,
                 "&tag_group_id=": tag_group_id,
-                "&tag_search_text=": tag_search_text,
+                "&tag_search_text=": tag_search_words,
                 "&limit=": limit,
                 "&offset=": offset,
                 "&order_by=": order_by,
                 "&sort_order=": sort_order,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[search_text] = self._fetch_data(url)
-        return self.series_stack[search_text]
+        self.series_stack["get_tags_for_series_search"] = self._fetch_data(url)
+        return self.series_stack["get_tags_for_series_search"]
 
     # param docstrings are checked
     def get_related_tags_for_series_search(
@@ -556,7 +563,7 @@ class Series(Releases):
         ----------
         search_words: list
             list of words to match against economic data series.
-        tag_names: list, default None
+        tag_names: list
             list of tags [str] that series match all of, excluding 
             any tag not in tag_names.
         realtime_start: str, default None
@@ -576,7 +583,7 @@ class Series(Releases):
             'geo' for geography, 'geot' for geography type, 'rls' for release, 
             'seas' for seasonal adjustment, 'src' for source
             If None, no filtering by tag group is done.
-        tag_search_words: list, default None (no filtering by tag group)
+        tag_search_words: list, default None 
             The words to find matching tags with.
             If None, no filtering by search words is done.
         limit: int, default None 
@@ -586,7 +593,7 @@ class Series(Releases):
         offset: int, default None
             Non-negative integer.
             If None, offset of 0 is used.
-        order_by: str, default "source_count"
+        order_by: str, default None
             order results by values of the specified attribute
             can be one of "series_count", "popularity", "created", "name", "group_id"
             If None, "series_count" is used.
