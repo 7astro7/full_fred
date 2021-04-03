@@ -107,28 +107,30 @@ def test_get_release_for_a_series(
     assert get_release_for_a_series_method_works == True
 
 @pytest.fixture
-def search_for_a_series_method_works(fred: Fred) -> bool:
+def search_for_series_method_works(fred: Fred) -> bool:
     params = {
-            'search_text': ('monetary', 'service', 'index',),
+            'search_words': ('monetary', 'service', 'index',),
             'limit': 3,
+#            'search_type': 'series_id',
+            'order_by': 'title',
+            'sort_order': 'desc',
+            'offset': 2,
             }
-    observed = fred.search_for_a_series(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "limit" in observed.keys():
-        return False
-    if not "series" in observed.keys():
-        if not "seriess" in observed.keys():
-            return False
-    # for v2 can look at each title to see if search text words are
-    # present
-    return True
+    fred.search_for_series(**params)
+    observed = fred.series_stack['search_for_series']
+    params.pop('search_words')
+    returned_ok_params = {
+            'observed': observed,
+            'expected': params,
+            'check_union': ('seriess', 'series',),
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
-def test_search_for_a_series(
-        search_for_a_series_method_works: bool,
+@pytest.mark.skip("passed v2")
+def test_search_for_series(
+        search_for_series_method_works: bool,
         ):
-    assert search_for_a_series_method_works == True
+    assert search_for_series_method_works == True
 
 @pytest.fixture
 def get_tags_for_series_search_method_works(fred: Fred) -> bool:

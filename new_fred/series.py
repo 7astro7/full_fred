@@ -341,10 +341,10 @@ class Series(Releases):
         self.series_stack["get_release_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_release_for_a_series"]
 
-    # case senstivity 
-    def search_for_a_series(
+    # param docstrings are checked
+    def search_for_series(
             self, 
-            search_text: list,
+            search_words: list,
             search_type: str = None,
             realtime_start: str = None,
             realtime_end: str = None,
@@ -358,50 +358,70 @@ class Series(Releases):
             exclude_tag_names: list = None,
             ) -> dict:
         """
-        Get economic data series that match search_text.
-        **** add fred url to each method for user reference
+        Get economic data series that match search words.
 
         Parameters
         ----------
-        search_text: list
-            list or tuple or words to match against economic data series
-        search_type: str
-            one of: 'full_text', 'series_id'
-            *** explain with reference to fred web service
-            determines the type of search to perform
-            If None,
-        realtime_start: str, default "1776-07-04" (earliest available)
-            YYY-MM-DD as per fred
-            If None,
-        realtime_end: str, default "9999-12-31" (latest available) 
-            YYY-MM-DD as per fred
-            If None,
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-            If None,
-        offset: non-negative integer, default None (offset of 0)
+        search_words: list
+            list of words to match against economic data series.
+        search_type: str, default None
+            Determines the type of search to perform.
+            Can be either 'full_text', 'series_id'.
+            full_text:
+                Searches series' attributes title, frequency, units, tags
+                via parsing words into stems.
+            series_id:
+                Substring search of series' IDs.
+            If None, 'full_text' is used.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
+        realtime_end: str, default None
+            The end of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
             Non-negative integer.
-            If None,
-        order_by: str, default "source_count"
-            order results by values of the specified attribute
-            can be one of "source_count", "popularity", "created", "name", "group_id"
-            If None,
-        sort_order: str, default None (FRED will use "asc")
-            sort results in ascending or descending order for attribute values specified by order_by
-            If None,
+            If None, offset of 0 is used.
+        order_by: str, default None
+            Order results by values of the specified attribute.
+            Can be one of "search_rank", "series_id", "title", 
+            "units", "frequency", "seasonal_adjustment", "realtime_start", 
+            "realtime_end", "last_updated", "observation_start", 
+            "observation_end", "popularity", "group_popularity".
+            If None and search_type is full_text, "search_rank" is used.
+            If None and search_type is series_id, "series_id" is used.
+        sort_order: str, default None
+            Return rows in ascending or descending order for 
+            attribute values specified by order_by.
+            attribute values specified by order_by.
+            Can be "asc" or "desc".
+            If None and order_by is "popularity" or "search_rank", 
+            "desc" is used.
+            If None and order_by is neither "popularity" nor 
+            "search_rank", "asc" is used.
         filter_variable: str default None
-            the attribute to filter results by
-            If None,
+            The attribute to filter results by.
+            Can be one of "frequency", "units", "seasonal_adjustment".
+            If None, no filter is used.
         filter_value: str default None
-            the value of the filter_variable attribute to filter results by
-            If None,
-        tag_names: list
-            list of tags (str); each tag must be present in the tag of returned series
-            If None,
-        exclude_tag_names: list, default None (don't exclude any tags)
-            tags that returned series must not have
-            If None,
+            The value of the filter_variable attribute to filter results by
+            If None, no filter is used.
+        tag_names: list, default None
+            list of tags [str] that series match all of, excluding 
+            any tag not in tag_names.
+            If None, no filtering by tag names.
+        exclude_tag_names: list, default None 
+            A list of tags that returned series match none of.
+            If passed, tag_names must also be passed to limit number 
+            of matching series (as per FRED web service)
+            https://fred.stlouisfed.org/docs/api/fred/series_search.html
+            If None, no tag names are excluded.
 
         Returns
         -------
@@ -419,7 +439,7 @@ class Series(Releases):
         --------
         m1 and m2 via FRED web service official docs
         """
-        fused_search_text = self._join_strings_by(search_text, '+')
+        fused_search_text = self._join_strings_by(search_words, '+')
         url_prefix_params = {
                 "a_url_prefix": "series/search?search_text=",
                 "a_str_id": fused_search_text,
@@ -439,8 +459,8 @@ class Series(Releases):
                 "&exclude_tag_names=": exclude_tag_names,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[fused_search_text] = self._fetch_data(url)
-        return self.series_stack[fused_search_text]
+        self.series_stack["search_for_series"] = self._fetch_data(url)
+        return self.series_stack["search_for_series"]
 
     # fix returns docstring
     # param docstrings are checked
@@ -492,7 +512,7 @@ class Series(Releases):
         offset: int, default None
             Non-negative integer.
             If None, offset of 0 is used.
-        order_by: str, default "source_count"
+        order_by: str, default None
             order results by values of the specified attribute
             can be one of "series_count", "popularity", "created", "name", "group_id"
             If None, "series_count" is used.
