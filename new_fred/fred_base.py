@@ -72,7 +72,7 @@ class FredBase:
                                 "cannot create request url to fetch" \
                                 " data"
                         print(e)
-                if k == "&tag_names=":
+                if "tag_names" in k:
                     tag_names = optional_params[k] 
                     try:
                         str_names = self._join_strings_by(tag_names, ";")
