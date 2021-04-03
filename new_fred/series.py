@@ -686,7 +686,8 @@ class Series(Releases):
         self.series_stack[series_id] = self._fetch_data(url)
         return self.series_stack[series_id]
 
-    def get_series_by_update(
+    # param docstrings are checked
+    def get_series_updates(
             self,
             realtime_start: str = None,
             realtime_end: str = None,
@@ -695,48 +696,61 @@ class Series(Releases):
             filter_value: str = None,
             start_time: str = None,
             end_time: str = None,
-            ):
+            ) -> dict:
         """
         Get economic data series sorted by when observations were updated on the FRED server. 
         Results are limited to series updated within the last two weeks.
 
-        FRED web service endpoint:/series/updates
-
         Parameters
         ----------
-        realtime_start: str, default "1776-07-04" (earliest available)
-            YYY-MM-DD as per fred
-            If None,
-        realtime_end: str, default "9999-12-31" (latest available) 
-            YYY-MM-DD as per fred
-            If None,
-        limit: int, default None (FRED will use limit = 1_000)
-            maximum number of results to return
-            range [1, 1_000]
-            If None,
-        offset: non-negative integer, default None (offset of 0)
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
+        realtime_end: str, default None
+            The end of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
+        limit: int, default None 
+            The maximum number of results to return.
+            Values can be in range(1, 1_001).
+            If None, FRED will use limit = 1_001.
+        offset: int, default None
             Non-negative integer.
-            If None,
-        filter_value: str default None
-            If None,
+            If None, offset of 0 is used.
+        filter_value: str, default None
+            Limit results by geography. 
+            Can be one of:
+                "macro": national 
+                "regional": state, county, metropolitan area 
+                "all": no filtering results by geography
+            If None, no filtering by geographic type of series.
         start_time: str, default None
-            lower bound for a time range
-            can be precise to the minute
-            If None,
+            The start time for limiting results for a time range.
+            Expected format is "YYYMMDDHhmm". 
+            "1999-12-31 23:59": "199912312359"
+            Can filter down to minutes.
+            If start_time is passed, end_time is required.
+            If None, end_time must also be None.
         end_time: str, default None
-            upper bound for a time range
-            can be precise to the minute
-            If None,
+            The end time for limiting results for a time range.
+            If end_time is passed, end_time is required.
+            If None, start_time must also be None.
 
         Returns
         -------
         dict
+            FRED series sorted by when each was last updated.
+            Metadata for each series includes series_id, title,
+            units of measurement, time of last update, etc.
 
         See Also
         --------
 
         Notes
         -----
+        FRED web service endpoint:/series/updates
+        https://fred.stlouisfed.org/docs/api/fred/series_updates.html
 
         Examples
         --------
@@ -752,10 +766,8 @@ class Series(Releases):
                 "&end_time=": end_time,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-
-        # change key used here to something more detailed for clarity
-        self.series_stack['updates'] = self._fetch_data(url) 
-        return self.series_stack['updates']
+        self.series_stack['get_series_updates'] = self._fetch_data(url) 
+        return self.series_stack['get_series_updates']
 
     # param docstrings are checked
     def get_series_vintagedates(

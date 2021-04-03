@@ -192,6 +192,31 @@ def test_get_tags_for_a_series(
     assert get_tags_for_a_series_method_works == True
 
 @pytest.fixture
+def get_series_updates_method_works(fred: Fred) -> bool:
+    params = {
+            'limit': 3,
+            'filter_value': "regional",
+            'start_time': "202103210851",
+            'end_time': "202104021951",
+            'offset': 2,
+            }
+    observed = fred.get_series_updates(**params)
+    params.pop('start_time')
+    params.pop('end_time')
+    returned_ok_params = {
+            'observed': observed,
+            'expected': params,
+            'check_union': ('seriess', 'series',),
+            }
+    return returned_ok(**returned_ok_params)
+
+@pytest.mark.skip("passed v2")
+def test_get_series_updates(
+        get_series_updates_method_works: bool,
+        ):
+    assert get_series_updates_method_works == True
+
+@pytest.fixture
 def get_series_vintagedates_method_works(fred: Fred) -> bool:
     params = {
             'series_id': 'GNPCA',
