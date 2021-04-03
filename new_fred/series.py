@@ -34,7 +34,7 @@ class Series(Releases):
         Parameters
         ----------
         series_id: int
-            the id of the series
+            The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -90,7 +90,7 @@ class Series(Releases):
         Parameters
         ----------
         series_id: int
-            the id of the series
+            The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -130,7 +130,8 @@ class Series(Releases):
         self.series_stack["get_categories_of_series"] = self._fetch_data(url)
         return self.series_stack["get_categories_of_series"]
 
-    # param docstrings are checked
+    # param docstrings are checked EXCEPT vintage dates
+    # vintage dates
     def get_series_df(
             self, 
             series_id: str,
@@ -154,7 +155,7 @@ class Series(Releases):
         Parameters
         ----------
         series_id: int
-            the id of the series
+            The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -288,6 +289,7 @@ class Series(Releases):
         self.series_stack["get_series_df"]["df"] = df
         return self.series_stack["get_series_df"]["df"]
 
+    # param docstrings are checked
     def get_release_for_a_series(
             self,
             series_id: str,
@@ -300,17 +302,20 @@ class Series(Releases):
         Parameters
         ----------
         series_id: int
-            the id of the series
-        observation_start: str, default "1776-07-04" (earliest available)
-            YYY-MM-DD as per fred
-            If None,
-        observation_end: str, default "9999-12-31" (latest available) 
-            YYY-MM-DD as per fred
-            If None,
+            The ID of the series.
+        realtime_start: str, default None
+            The start of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_start is used.
+            If default isn't set by user, "1776-07-04" (earliest available) is used.
+        realtime_end: str, default None
+            The end of the real-time period formatted as "YYY-MM-DD".
+            If None, default realtime_end is used.
+            If default isn't set by user, "9999-12-31" (latest available) is used.
 
         Returns
         -------
         dict
+            ID, name, url, other metadata of release for given realtime period.
 
         See Also
         --------
@@ -318,6 +323,7 @@ class Series(Releases):
         Notes
         -----
         FRED web service endpoint:/series/release
+        https://fred.stlouisfed.org/docs/api/fred/series_release.html
 
         Examples
         --------
@@ -332,8 +338,8 @@ class Series(Releases):
                 "&realtime_end=": realtime_end,
                 }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack[series_id] = self._fetch_data(url)
-        return self.series_stack[series_id]
+        self.series_stack["get_release_for_a_series"] = self._fetch_data(url)
+        return self.series_stack["get_release_for_a_series"]
 
     # case senstivity 
     def search_for_a_series(
@@ -636,7 +642,7 @@ class Series(Releases):
         Parameters
         ----------
         series_id: int
-            the id of the series
+            The ID of the series.
         realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,
@@ -768,7 +774,7 @@ class Series(Releases):
         Parameters
         ----------
         series_id: int
-            the id of the series
+            The ID of the series.
         realtime_start: str, default "1776-07-04" (earliest available)
             YYY-MM-DD as per fred
             If None,

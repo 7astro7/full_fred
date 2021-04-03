@@ -164,7 +164,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id of the release
+            The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -224,7 +224,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id of the release
+            The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -302,7 +302,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id of the release
+            The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -393,7 +393,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id of the release
+            The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -455,7 +455,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id of the release
+            The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -546,7 +546,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id of the release
+            The ID of the release.
         tag_names: list, default None
             list of tags [str] to include in returned data, excluding any tag not in tag_names;
         realtime_start: str, default None
@@ -636,7 +636,7 @@ class Releases(Categories):
         Parameters
         ----------
         release_id: int
-            id of the release
+            The ID of the release.
         element_id: int, default None
             The release table element id to retrieve
             If None, root (most general) element_id for the release is used.

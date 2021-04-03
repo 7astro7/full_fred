@@ -92,7 +92,7 @@ class Sources(Series):
         Parameters
         ----------
         source_id: int
-            the id of the series.
+            The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -144,7 +144,7 @@ class Sources(Series):
         Parameters
         ----------
         source_id: int
-            the id of the series.
+            The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.

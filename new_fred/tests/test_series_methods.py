@@ -81,7 +81,7 @@ def get_series_df_method_works(fred: Fred) -> bool:
         return True
     return False
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_series_df(
         get_series_df_method_works: bool,
         ):
@@ -92,14 +92,15 @@ def get_release_for_a_series_method_works(fred: Fred) -> bool:
     params = {
             'series_id': 'IRA',
             }
-    observed = fred.get_release_for_a_series(**params)
-    if not isinstance(observed, dict):
-        return False
-    if not "releases" in observed.keys():
-        return False
-    return True
+    fred.get_release_for_a_series(**params)
+    observed = fred.series_stack['get_release_for_a_series']
+    returned_ok_params = {
+            'observed': observed,
+            'check_union': ('releases',),
+            }
+    return returned_ok(**returned_ok_params)
 
-@pytest.mark.skip("passed v1")
+#@pytest.mark.skip("passed v2")
 def test_get_release_for_a_series(
         get_release_for_a_series_method_works: bool,
         ):

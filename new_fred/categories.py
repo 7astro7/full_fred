@@ -20,7 +20,7 @@ class Categories(FredBase):
         Parameters
         ----------
         category_id: int, default None
-            id for a category.
+            The ID of the category.
             If None, root category_id of 0 is used.
 
         Returns
@@ -60,7 +60,7 @@ class Categories(FredBase):
         Parameters
         ----------
         category_id: int, default None
-            id for a category.
+            The ID of the category.
             If None, root category_id of 0 is used.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
@@ -114,7 +114,7 @@ class Categories(FredBase):
         Parameters
         ----------
         category_id: int
-            the id of the category
+            The ID of the category.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -174,7 +174,7 @@ class Categories(FredBase):
         Parameters
         ----------
         category_id: int
-            the id of the category
+            The ID of the category.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -272,7 +272,7 @@ class Categories(FredBase):
         Parameters
         ----------
         category_id: int
-            the id of the category
+            The ID of the category.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
@@ -367,7 +367,7 @@ class Categories(FredBase):
         Parameters
         ----------
         category_id: int
-            the id of the category
+            The ID of the category.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYY-MM-DD".
             If None, default realtime_start is used.
