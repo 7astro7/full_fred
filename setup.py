@@ -4,7 +4,7 @@ import os
 
 setup(
         name = 'full_fred',
-        packages = ['new_fred',],
+        packages = ['full_fred',],
         version = '0.0.1.dev1',
         author = 'Zachary A. Kraehling',
         author_email = 'zaknyy@protonmail.com',
