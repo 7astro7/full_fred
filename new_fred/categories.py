@@ -440,9 +440,10 @@ class Categories(FredBase):
                 "&offset=": offset,
                 "&order_by=": order_by,
                 "&sort_order=": sort_order,
-            }
+                }
         url = self._add_optional_params(url_prefix, optional_args)
         self.category_stack["get_related_tags_for_a_category"] = self._fetch_data(url)
         return self.category_stack["get_related_tags_for_a_category"]
+
 
 

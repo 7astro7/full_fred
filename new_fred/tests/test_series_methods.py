@@ -2,7 +2,7 @@
 import pytest
 from new_fred.fred import Fred
 from .fred_test_utils import returned_ok
-import pandas as pd
+from pandas import DataFrame
 
 @pytest.fixture
 def fred():
@@ -77,7 +77,7 @@ def get_series_df_method_works(fred: Fred) -> bool:
             }
     if not returned_ok(**returned_ok_params):
         return False
-    if isinstance(observed['df'], pd.DataFrame):
+    if isinstance(observed['df'], DataFrame):
         return True
     return False
 

@@ -197,4 +197,5 @@ class FredBase:
         except TypeError:
             print("Unable to join strings using %s" % use_str)
         return fused_str
-            
+
+
