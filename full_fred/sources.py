@@ -67,6 +67,7 @@ class Sources(Series):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "sources?"
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -116,6 +117,7 @@ class Sources(Series):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "source?source_id="
         try:
             url_prefix += str(source_id)
@@ -184,6 +186,7 @@ class Sources(Series):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "source/releases?source_id="
         try:
             url_prefix += str(source_id)

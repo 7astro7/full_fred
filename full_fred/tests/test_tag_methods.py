@@ -1,6 +1,6 @@
 
 import pytest
-from new_fred.fred import Fred
+from full_fred.fred import Fred
 from .fred_test_utils import returned_ok
 
 @pytest.fixture

@@ -84,6 +84,7 @@ class Tags(Sources):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "tags?"
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -175,6 +176,7 @@ class Tags(Sources):
         f = Fred()
         f.get_related_tags_for_a_tag(exclude_tag_names = ("discontinued",))
         """
+        self._viable_api_key()
         url_prefix = "related_tags?tag_names="
         try:
             url_prefix += ";".join(tag_names)
@@ -261,6 +263,7 @@ class Tags(Sources):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "tags/series?tag_names=" 
         try:
             url_prefix += ";".join(tag_names)

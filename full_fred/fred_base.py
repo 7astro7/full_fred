@@ -13,8 +13,8 @@ class FredBase:
 
     def __init__(
             self, 
-            api_key = None, 
-            api_key_file = None,
+            api_key: str = None, 
+            api_key_file: str = None,
             ):
         """
         FredBase defines methods common to Categories, Releases, 
@@ -23,20 +23,58 @@ class FredBase:
         self.__realtime_start = "1776-07-04"
         self.__realtime_end = "9999-12-31"
         self.__url_base = "https://api.stlouisfed.org/fred/"
-        self.__api_key_env_var = False
-        self.__api_key_file = False
-        if api_key_file is not None:
-            try:
-                pass
-            except Exception:
-                pass
-        if "FRED_API_KEY" in os.environ.keys():
-            if os.environ["FRED_API_KEY"] is not None:
-                self.__api_key_env_var = True
         self.__api_key = api_key
+        self.__api_key_file = api_key_file
+        self.__api_key_env_var = False
+        if api_key is None and api_key_file is not None:
+            self.set_api_key_file(api_key_file)
+        elif self.env_api_key_found():
+            self.__api_key_env_var = True
 
-    def api_key_found(self):
-        return self.__api_key_env_var
+    def get_api_key_file(self) -> str:
+        """
+        Return currently assigned key file.
+        """
+        return self.__api_key_file
+
+    def set_api_key_file(
+            self,
+            api_key_file: str,
+            ) -> bool:
+        """
+        Return True if api key file attribute successfully assigned.
+        If user-passed api_key_file is not found, let user know.
+        """
+        if api_key_file is None:
+            e = 'set_api_key_file missing api_key_file argument'
+            raise TypeError(e)
+        if not os.path.isfile(api_key_file):
+            e = "Can't find %s, on path" % api_key_file
+            raise FileNotFoundError(e)
+        self.__api_key_file = api_key_file
+        return True
+
+    def _read_api_key_file(
+            self,
+            ) -> str:
+        """
+        Read FRED api key from file. This method exists to minimize the
+        time that the user's API key is human-readable
+        """
+        try:
+            with open(self.__api_key_file, 'r') as key_file:
+                return key_file.readline().strip()
+        except FileNotFoundError as e:
+            print(e)
+
+    def env_api_key_found(self) -> bool:
+        """
+        Indicate whether a FRED_API_KEY environment variable is detected.
+        """
+        elif "FRED_API_KEY" in os.environ.keys():
+            if os.environ["FRED_API_KEY"] is not None:
+                return True
+        return False
 
     def _add_optional_params(
             self,
@@ -100,6 +138,29 @@ class FredBase:
                 except TypeError:
                     print(k + " " + optional_params[k] + " cannot be cast to str")
         return new_url_string
+
+    def _viable_api_key(self) -> str:
+        """
+        Verifies that there's an api key to make a request url with.
+        Raise error if necessary allow methods to catch early in 
+        query process whether a request for data can be sent to FRED.
+        If there's a usable key, return which one to use
+        
+        Returns
+        -------
+        str
+            A string indicating where to find user's api key
+            attribute: user has set self.__api_key attribute
+            env: it's an environment variable
+            file: user has specified a file holding the key
+        """
+        if self.__api_key is None:
+            if self.__api_key_file is None:
+                if not self.env_api_key_found():
+                    raise AttributeError("Cannot locate a FRED API key")
+                return 'env'
+            return 'file'
+        return 'attribute'
     
     def _make_request_url(
             self, 
@@ -108,29 +169,33 @@ class FredBase:
         """
         Return the url that can be used to retrieve the desired data given var_url.
         """
+        key_to_use = self._viable_api_key()
         url_base = [
                 self.__url_base, 
                 var_url, 
                 "&file_type=json&api_key=",
                 ]
         base = "".join(url_base)
-        if self.__api_key_env_var:
+        if key_to_use == 'attribute':
+            return base + self.__api_key 
+        if key_to_use == 'env':
             try:
                 return base + os.environ["FRED_API_KEY"] 
             except KeyError as sans:
                 print(sans, ' no longer found in environment')
-        return base + self.__api_key 
+        if key_to_use == 'file':
+            return base + self._read_api_key_file()
 
     # modify: never print api key in message
     def _fetch_data(self, url_prefix: str) -> dict:
         """
+        Make request URL, send it to FRED, return JSON upshot
         """
         url = self._make_request_url(url_prefix)
         json_data = self._get_response(url)
         if json_data is None:
-            # modify here to never print api key in message
-            message = "Data could not be retrieved using " 
-            message += url_prefix 
+            # never print api key in message for security
+            message = "Data could not be retrieved, returning None"
             print(message)
             return
         return json_data

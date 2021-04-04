@@ -30,6 +30,7 @@ class Categories(FredBase):
 
         See Also
         --------
+        get_related_categories
 
         Notes
         -----
@@ -39,6 +40,7 @@ class Categories(FredBase):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "category?category_id=" 
         try:
             url = url_prefix + str(category_id)
@@ -87,6 +89,7 @@ class Categories(FredBase):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "category/children?category_id=" 
         try:
             url_prefix += str(category_id)
@@ -143,6 +146,7 @@ class Categories(FredBase):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "category/related?category_id="
         try:
             url_prefix += str(category_id)
@@ -233,6 +237,7 @@ class Categories(FredBase):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "category/series?category_id="
         try:
             url_prefix += str(category_id)
@@ -329,6 +334,7 @@ class Categories(FredBase):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "category/tags?category_id="
         try:
             url_prefix += str(category_id)
@@ -423,6 +429,7 @@ class Categories(FredBase):
         FRED web service endpoint: fred/category/related_tags
         https://fred.stlouisfed.org/docs/api/fred/category_related_tags.html
         """
+        self._viable_api_key()
         url_prefix = "category/related_tags?category_id="
         try:
             url_prefix += str(category_id)
