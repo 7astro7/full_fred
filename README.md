@@ -86,4 +86,4 @@ The full_fred project welcomes feature requests, bug submissions, contributions 
 full_fred aims to be responsive in integrating patches, 
 
 ## License
-
+GPLv3

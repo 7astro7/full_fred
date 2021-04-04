@@ -14,7 +14,7 @@ setup(
         install_requires = [],
         python_requires = '>=3.8',
         url = 'https://github.com/7astro7/full_fred',
-        test_suite = 'new_fred.tests',
+        test_suite = 'full_fred.tests',
         platforms = ['Any'],
         classifiers = [
             'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
