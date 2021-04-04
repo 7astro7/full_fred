@@ -33,7 +33,7 @@ class Categories(FredBase):
 
         Notes
         -----
-        fred/category
+        FRED web service endpoint: fred/category
         https://fred.stlouisfed.org/docs/api/fred/category.html
 
         Examples
@@ -81,8 +81,11 @@ class Categories(FredBase):
 
         Notes
         -----
-        fred/category/children
+        FRED web service endpoint: fred/category/children
         https://fred.stlouisfed.org/docs/api/fred/category_children.html
+
+        Examples
+        --------
         """
         url_prefix = "category/children?category_id=" 
         try:
@@ -134,7 +137,7 @@ class Categories(FredBase):
 
         Notes
         -----
-        fred/category/related
+        FRED web service endpoint: fred/category/related
         https://fred.stlouisfed.org/docs/api/fred/category_related.html
 
         Examples
@@ -224,7 +227,7 @@ class Categories(FredBase):
 
         Notes
         -----
-        fred/category/series
+        FRED web service endpoint: fred/category/series
         https://fred.stlouisfed.org/docs/api/fred/category_series.html
 
         Examples
@@ -320,7 +323,7 @@ class Categories(FredBase):
 
         Notes
         -----
-        fred/category/tags
+        FRED web service endpoint: fred/category/tags
         https://fred.stlouisfed.org/docs/api/fred/category_tags.html
 
         Examples
@@ -417,7 +420,7 @@ class Categories(FredBase):
 
         Notes
         -----
-        fred/category/related_tags
+        FRED web service endpoint: fred/category/related_tags
         https://fred.stlouisfed.org/docs/api/fred/category_related_tags.html
         """
         url_prefix = "category/related_tags?category_id="

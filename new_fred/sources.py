@@ -61,7 +61,8 @@ class Sources(Series):
 
         Notes
         -----
-        fred/sources
+        FRED web service endpoint: fred/sources
+        https://fred.stlouisfed.org/docs/api/fred/sources.html
 
         Examples
         --------
@@ -109,7 +110,8 @@ class Sources(Series):
 
         Notes
         -----
-        fred/source
+        FRED web service endpoint: fred/source
+        https://fred.stlouisfed.org/docs/api/fred/source.html
 
         Examples
         --------
@@ -176,7 +178,7 @@ class Sources(Series):
 
         Notes
         -----
-        fred/source/releases
+        FRED web service endpoint: fred/source/releases
         https://fred.stlouisfed.org/docs/api/fred/source_releases.html
 
         Examples

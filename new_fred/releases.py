@@ -57,7 +57,7 @@ class Releases(Categories):
 
         Notes
         -----
-        fred/releases
+        FRED web service endpoint: fred/releases
         https://fred.stlouisfed.org/docs/api/fred/releases.html
 
         Examples
@@ -132,8 +132,11 @@ class Releases(Categories):
 
         Notes
         -----
-        fred/releases
+        FRED web service endpoint: fred/releases
         https://fred.stlouisfed.org/docs/api/fred/releases_dates.html
+
+        Examples
+        --------
         """
         url_prefix = "releases/dates?"
         optional_args = {
@@ -185,7 +188,7 @@ class Releases(Categories):
 
         Notes
         -----
-        fred/release
+        FRED web service endpoint: fred/release
         https://fred.stlouisfed.org/docs/api/fred/release.html
 
         Examples
@@ -259,7 +262,8 @@ class Releases(Categories):
 
         Notes
         -----
-        fred/release/dates
+        FRED web service endpoint: fred/release/dates
+        https://fred.stlouisfed.org/docs/api/fred/release_dates.html
 
         Examples
         -----
@@ -353,7 +357,7 @@ class Releases(Categories):
 
         Notes
         -----
-        fred/release/series
+        FRED web service endpoint: fred/release/series
         https://fred.stlouisfed.org/docs/api/fred/release_series.html
 
         Examples
@@ -412,12 +416,9 @@ class Releases(Categories):
         See Also
         --------
 
-        Examples
-        -----
-
         Notes
         -----
-        fred/release/sources
+        FRED web service endpoint: fred/release/sources
         https://fred.stlouisfed.org/docs/api/fred/releases_dates.html
 
         Examples
@@ -494,13 +495,15 @@ class Releases(Categories):
         Returns 
         -------
         dict
+            name, group ID, notes, and other metadata for each tag.
 
         See Also
         --------
+        get_related_tags_for_release
 
         Notes
         -----
-        fred/release/tags
+        FRED web service endpoint: fred/release/tags
         https://fred.stlouisfed.org/docs/api/fred/release_tags.html
 
         Examples
@@ -587,14 +590,16 @@ class Releases(Categories):
         Returns 
         -------
         dict
+            name, group ID, notes, series count, and other metadata for each related tag.
+            
 
         See Also
         --------
-        get_tags
+        get_tags_for_release
 
         Notes
         -----
-        fred/release/related_tags
+        FRED web service endpoint: fred/release/related_tags
         https://fred.stlouisfed.org/docs/api/fred/release_related_tags.html
 
         Examples
@@ -629,7 +634,7 @@ class Releases(Categories):
             element_id: int = None,
             include_observation_values: bool = None,
             observation_date: str = None,
-            ):
+            ) -> dict:
         """
         Get release tables for a given release.
         
@@ -666,7 +671,7 @@ class Releases(Categories):
 
         Notes
         -----
-        fred/release/tables
+        FRED web service endpoint: fred/release/tables
         https://fred.stlouisfed.org/docs/api/fred/release_tables.html
 
         Examples

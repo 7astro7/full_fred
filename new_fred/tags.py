@@ -78,7 +78,8 @@ class Tags(Sources):
 
         Notes
         -----
-        FRED web service endpoint:fred/tags
+        FRED web service endpoint: fred/tags
+        https://fred.stlouisfed.org/docs/api/fred/tags.html
 
         Examples
         --------
@@ -167,6 +168,7 @@ class Tags(Sources):
         Notes
         -----
         FRED web service endpoint: fred/related_tags
+        https://fred.stlouisfed.org/docs/api/fred/related_tags.html
 
         Examples
         --------
@@ -254,6 +256,7 @@ class Tags(Sources):
         Notes
         -----
         FRED web service endpoint: fred/tags/series
+        https://fred.stlouisfed.org/docs/api/fred/tags_series.html
 
         Examples
         --------
