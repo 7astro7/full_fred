@@ -61,8 +61,8 @@ class Series(Releases):
 
         Examples
         --------
-        f = Fred()
-        f.get_a_series(series_id = "SAHMCURRENT")
+        fred.get_a_series(series_id = "SAHMCURRENT")
+        fred.series_stack["get_a_series"]
         """
         url_prefix_params = {
                 "a_url_prefix": "series?series_id=",

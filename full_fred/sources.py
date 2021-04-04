@@ -11,7 +11,7 @@ class Sources(Series):
         super().__init__()
         self.source_stack = dict()
 
-    # param docstrings are checked
+    # 
     def get_all_sources(
             self,
             realtime_start: str = None,

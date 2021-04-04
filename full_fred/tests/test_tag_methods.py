@@ -3,12 +3,6 @@ import pytest
 from new_fred.fred import Fred
 from .fred_test_utils import returned_ok
 
-# v2: 
-# don't assign returned data but rather assign 
-# the value from tag_stack
-# maximize number of arguments
-# use returned_ok()
-
 @pytest.fixture
 def fred() -> Fred:
     return Fred()

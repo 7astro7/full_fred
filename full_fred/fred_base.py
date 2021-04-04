@@ -1,6 +1,5 @@
 
 from requests.exceptions import RequestException
-import pandas as pd
 import requests
 import os
 
@@ -11,19 +10,29 @@ import os
 # integrate ALFRED, GeoFRED
 
 class FredBase:
-    """
-    go heavy on getters and setters so data can be stored
-    store api key with salts
-    """
-    def __init__(self, 
+
+    def __init__(
+            self, 
             api_key = None, 
-            api_key_file = None):
+            api_key_file = None,
+            ):
+        """
+        FredBase defines methods common to Categories, Releases, 
+        Series, Releases, Sources, Tags classes.
+        """
         self.__realtime_start = "1776-07-04"
         self.__realtime_end = "9999-12-31"
         self.__url_base = "https://api.stlouisfed.org/fred/"
         self.__api_key_env_var = False
-        if os.environ["FRED_API_KEY"] is not None:
-            self.__api_key_env_var = True
+        self.__api_key_file = False
+        if api_key_file is not None:
+            try:
+                pass
+            except Exception:
+                pass
+        if "FRED_API_KEY" in os.environ.keys():
+            if os.environ["FRED_API_KEY"] is not None:
+                self.__api_key_env_var = True
         self.__api_key = api_key
 
     def api_key_found(self):
@@ -36,7 +45,8 @@ class FredBase:
             ) -> str:
         """
         Create a parameter string that adds any non-None parameters in optional_params to
-        og_url_string
+        og_url_string and return og_url_string with these additions. If all optional_params
+        are None, return og_url_string
 
         Parameters
         ----------
@@ -53,12 +63,15 @@ class FredBase:
         Returns
         -------
         str
+            og_url_string with any existent k, v pairs concatenated to it.
 
         Notes
         -----
-        if tag_names is a parameter in optional_params, whitespace is
-        replaced with "+" so the request URL encodes the whitespace 
-        in a standard way. There's more on this at
+        Not all paramaters passed in optional_params need be optional. Most are.
+
+        If tag_names is a substring of a parameter in optional_params, whitespace is
+        replaced with "+" so the request URL encodes the whitespace in a standard way. 
+        There's more on this at
         https://fred.stlouisfed.org/docs/api/fred/related_tags.html
         """
         new_url_string = og_url_string
@@ -93,14 +106,8 @@ class FredBase:
             var_url: str, 
             ):
         """
-        Return the url that can be used to retrieve the desired data for series_id
-        need to integrate other parameters as well
-        Maximizes security in allowing direct pass of environment variable FRED_API_KEY 
-        as api key sent to fred's web service
-
-        var_url must include id irrespective of whether series_id, category_id, etc.
+        Return the url that can be used to retrieve the desired data given var_url.
         """
-#        file_type = "&file_type=json"
         url_base = [
                 self.__url_base, 
                 var_url, 
@@ -108,8 +115,11 @@ class FredBase:
                 ]
         base = "".join(url_base)
         if self.__api_key_env_var:
-            return base + os.environ["FRED_API_KEY"] #+ file_type
-        return base + self.__api_key #+ file_type
+            try:
+                return base + os.environ["FRED_API_KEY"] 
+            except KeyError as sans:
+                print(sans, ' no longer found in environment')
+        return base + self.__api_key 
 
     # modify: never print api key in message
     def _fetch_data(self, url_prefix: str) -> dict:
