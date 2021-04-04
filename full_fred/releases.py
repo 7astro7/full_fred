@@ -63,6 +63,7 @@ class Releases(Categories):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "releases?"
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -138,6 +139,7 @@ class Releases(Categories):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "releases/dates?"
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -194,6 +196,7 @@ class Releases(Categories):
         Examples
         -----
         """
+        self._viable_api_key()
         url_prefix = "release?release_id="
         try:
             url_prefix += str(release_id)
@@ -268,6 +271,7 @@ class Releases(Categories):
         Examples
         -----
         """
+        self._viable_api_key()
         url_prefix = "release/dates?release_id="
         try:
             url_prefix += str(release_id)
@@ -363,6 +367,7 @@ class Releases(Categories):
         Examples
         -----
         """
+        self._viable_api_key()
         url_prefix_params = dict(
                 a_url_prefix = "release/series?release_id=",
                 an_int_id = release_id,
@@ -424,6 +429,7 @@ class Releases(Categories):
         Examples
         -----
         """
+        self._viable_api_key()
         url_prefix_params = dict(
                 a_url_prefix = "release/sources?release_id=",
                 an_int_id = release_id)
@@ -509,6 +515,7 @@ class Releases(Categories):
         Examples
         -----
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "release/tags?release_id=",
                 "an_int_id": release_id,
@@ -677,6 +684,7 @@ class Releases(Categories):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "release/tables?release_id=",
                 "an_int_id": release_id,

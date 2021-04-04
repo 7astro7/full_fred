@@ -12,6 +12,7 @@ from .tags import Tags
 
 # go heavy on examples
 # make keys for each stack the parameters that were passed, not only the id used
+# define realtime periods
 # set default params to None, not fred web service params
 # add option to retrieve tag notes
 # heavily integrate pandas
@@ -20,26 +21,20 @@ from .tags import Tags
 # must provide for case where new parameters are sent to already-used method and data has to be queried again
 # Can save metadata about last df query to check new request against
 class Fred(Tags):
-    """
-    When a request to FRED's servers is made, the returned data is
-    available in a stack (a dict): series_stack for series requests, 
-    category_stack for categories requests, tag_stack for tags requests, 
-    etc. Keys are the name of the method used to retrieve the data.
-    For example, after calling f.get_tags() f.tag_stack["get_tags"] will 
-    return the data that FRED responded with, until a new get_tags method
-    invocation is made. 
-    Clarify what series_stack is
-    # go ham on docstrings for methods
-    Use api_key_found() to determine if an api key is found as 
-    an environment variable with name FRED_API_KEY
-    realtime period: (start, end), not [start, end]
-
-    define realtime periods
-
-    set return_type for pd.DataFrame
-    """
     
-    def __init__(self):
+    def __init__(
+            self,
+            api_key = None,
+            api_key_file = None,
+            ):
+        """
+        api key details :::::
+        When a request to FRED's servers is made, the returned data is available in a stack (a dict): series_stack for series requests, 
+        category_stack for categories requests, tag_stack for tags requests, etc. Keys are the name of the method used to retrieve the data.
+        For example, after calling f.get_tags() f.tag_stack["get_tags"] will return the data that FRED responded with, until a new get_tags method
+        invocation is made. Clarify what series_stack is. Use api_key_found() to determine if an api key is found as 
+        an environment variable with name FRED_API_KEY realtime period: (start, end), not [start, end]
+        """
         super().__init__()
         self.unit_info = dict() # put explanation of units options<- no, explain in method doc
         self.return_type = dict

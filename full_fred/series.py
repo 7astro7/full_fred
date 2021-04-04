@@ -64,6 +64,7 @@ class Series(Releases):
         fred.get_a_series(series_id = "SAHMCURRENT")
         fred.series_stack["get_a_series"]
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "series?series_id=",
                 "a_str_id": series_id
@@ -117,6 +118,7 @@ class Series(Releases):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "series/categories?series_id=",
                 "a_str_id": series_id
@@ -257,6 +259,7 @@ class Series(Releases):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "series/observations?series_id=",
                 "a_str_id": series_id
@@ -328,6 +331,7 @@ class Series(Releases):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "series/release?series_id=",
                 "a_str_id": series_id
@@ -439,6 +443,7 @@ class Series(Releases):
         --------
         m1 and m2 via FRED web service official docs
         """
+        self._viable_api_key()
         fused_search_text = self._join_strings_by(search_words, '+')
         url_prefix_params = {
                 "a_url_prefix": "series/search?search_text=",
@@ -540,6 +545,7 @@ class Series(Releases):
         --------
         m1 and m2 via FRED web service official docs
         """
+        self._viable_api_key()
         series_search_text = self._join_strings_by(search_words, '+')
         url_prefix_params = {
                 "a_url_prefix": "series/search/tags?series_search_text=",
@@ -639,6 +645,7 @@ class Series(Releases):
         Examples
         --------
         """
+        self._viable_api_key()
         series_search_text = self._join_strings_by(search_words, '+')
         fused_tag_names = "&tag_names=" + self._join_strings_by(tag_names, ';')
         url_prefix_params = {
@@ -719,6 +726,7 @@ class Series(Releases):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "series/tags?series_id=",
                 "a_str_id": series_id
@@ -803,6 +811,7 @@ class Series(Releases):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix = "series/updates?"
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -874,6 +883,7 @@ class Series(Releases):
         Examples
         --------
         """
+        self._viable_api_key()
         url_prefix_params = {
                 "a_url_prefix": "series/vintagedates?series_id=",
                 "a_str_id": series_id
