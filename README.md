@@ -15,6 +15,8 @@ is saved in a dictionary, accessible and fungible.
 ## Installation
     pip install full_fred
 
+FRED has [free API keys available immediately](https://research.stlouisfed.org/useraccount/apikey)
+
 ## Testing
 
 ## API
