@@ -78,6 +78,27 @@ realtime_start      realtime_end        date               value
  [332 rows x 4 columns]}
 ```
 
+To find data a specific category_id or to search FRED categories from
+most general to most specific you can start with 0, the root category. 
+A search along the lines of the following can help to pinpoint different 
+category_ids:
+
+```python
+fred.get_child_categories(0)
+{'categories': [{'id': 32991,
+   'name': 'Money, Banking, & Finance',
+   'parent_id': 0},
+  {'id': 10,
+   'name': 'Population, Employment, & Labor Markets',
+   'parent_id': 0},
+  {'id': 32992, 'name': 'National Accounts', 'parent_id': 0},
+  {'id': 1, 'name': 'Production & Business Activity', 'parent_id': 0},
+  {'id': 32455, 'name': 'Prices', 'parent_id': 0},
+  {'id': 32263, 'name': 'International Data', 'parent_id': 0},
+  {'id': 3008, 'name': 'U.S. Regional Data', 'parent_id': 0},
+  {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
+```
+
 reference get_series_df example 
 more generally, note use of stacks 
     - limited redundancy

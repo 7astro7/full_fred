@@ -26,10 +26,11 @@ class Categories(FredBase):
         Returns
         -------
         dict
-            Metadata of category: id, name, parent_id
+            Metadata of category: ID, name, parent_id
 
         See Also
         --------
+        get_child_categories: name, ID, 
         get_related_categories
 
         Notes
@@ -39,6 +40,14 @@ class Categories(FredBase):
 
         Examples
         --------
+        >>> fred.get_a_category(32991)
+        {'categories': [{'id': 32991,
+            'name': 'Money, Banking, & Finance',
+            'parent_id': 0}]}
+
+        >>> fred.get_a_category(0)
+        >>> fred.category_stack['get_a_category']
+        {'categories': [{'id': 0, 'name': 'Categories', 'parent_id': 0}]}
         """
         self._viable_api_key()
         url_prefix = "category?category_id=" 
@@ -76,7 +85,7 @@ class Categories(FredBase):
         Returns
         -------
         dict
-            id, name, parent_id for each child category.
+            ID, name, parent_id for each child category.
 
         See Also
         --------
@@ -88,6 +97,21 @@ class Categories(FredBase):
 
         Examples
         --------
+        >>> fred.get_child_categories(0)
+        {'categories': [{'id': 32991,
+            'name': 'Money, Banking, & Finance',
+            'parent_id': 0},
+            {'id': 10,
+            'name': 'Population, Employment, & Labor Markets',
+            'parent_id': 0},
+            {'id': 32992, 'name': 'National Accounts', 'parent_id': 0},
+            {'id': 1, 'name': 'Production & Business Activity', 'parent_id': 0},
+            {'id': 32455, 'name': 'Prices', 'parent_id': 0},
+            {'id': 32263, 'name': 'International Data', 'parent_id': 0},
+            {'id': 3008, 'name': 'U.S. Regional Data', 'parent_id': 0},
+            {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
+
+
         """
         self._viable_api_key()
         url_prefix = "category/children?category_id=" 
@@ -133,7 +157,7 @@ class Categories(FredBase):
         Returns 
         -------
         dict
-            id, name, parent_id of related categories.
+            ID, name, parent_id of related categories.
 
         See Also
         --------
@@ -294,7 +318,7 @@ class Categories(FredBase):
             each tag must be present in the tag of returned series.
             If None, no filtering by tag names is done.
         tag_group_id: str, default None
-            A tag group id to filter tags by type with.
+            A tag group ID to filter tags by type with.
             Can be one of 'freq' for frequency, 'gen' for general or concept,
             'geo' for geography, 'geot' for geography type, 'rls' for release,
             'seas' for seasonal adjustment, 'src' for source.
@@ -393,7 +417,7 @@ class Categories(FredBase):
             list of tag names that series match none of.
             If None, no filtering by tag names is done.
         tag_group_id: str, default None
-            A tag group id to filter tags by type with.
+            A tag group ID to filter tags by type with.
             Can be one of 'freq' for frequency, 'gen' for general or concept,
             'geo' for geography, 'geot' for geography type, 'rls' for release,
             'seas' for seasonal adjustment, 'src' for source.
