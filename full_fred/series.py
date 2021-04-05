@@ -362,7 +362,7 @@ class Series(Releases):
             exclude_tag_names: list = None,
             ) -> dict:
         """
-        Get economic data series that match search words.
+        Get economic data series that match search_words using search_type.
 
         Parameters
         ----------
@@ -401,24 +401,19 @@ class Series(Releases):
             If None and search_type is full_text, "search_rank" is used.
             If None and search_type is series_id, "series_id" is used.
         sort_order: str, default None
-            Return rows in ascending or descending order for 
-            attribute values specified by order_by.
-            attribute values specified by order_by.
+            Return rows in ascending or descending order for attribute values specified by order_by.
             Can be "asc" or "desc".
-            If None and order_by is "popularity" or "search_rank", 
-            "desc" is used.
-            If None and order_by is neither "popularity" nor 
-            "search_rank", "asc" is used.
+            If None and order_by is "popularity" or "search_rank", "desc" is used.
+            If None and order_by is neither "popularity" nor "search_rank", "asc" is used.
         filter_variable: str default None
             The attribute to filter results by.
             Can be one of "frequency", "units", "seasonal_adjustment".
             If None, no filter is used.
         filter_value: str default None
-            The value of the filter_variable attribute to filter results by
+            The value of the filter_variable attribute to filter results by.
             If None, no filter is used.
         tag_names: list, default None
-            list of tags [str] that series match all of, excluding 
-            any tag not in tag_names.
+            list of tags [str] that series match all of, excluding any tag not in tag_names.
             If None, no filtering by tag names.
         exclude_tag_names: list, default None 
             A list of tags that returned series match none of.
@@ -430,6 +425,7 @@ class Series(Releases):
         Returns
         -------
         dict
+            Metadata for each matching series.
 
         See Also
         --------
@@ -441,7 +437,7 @@ class Series(Releases):
 
         Examples
         --------
-        m1 and m2 via FRED web service official docs
+        fred.search_for_series(('SAHM',), limit = 5)
         """
         self._viable_api_key()
         fused_search_text = self._join_strings_by(search_words, '+')

@@ -5,7 +5,7 @@ from .fred_test_utils import returned_ok
 
 @pytest.fixture
 def fred() -> Fred:
-    return Fred(api_key_file = 'example_key.txt')
+    return Fred()
 
 @pytest.fixture
 def returned_ok_params() -> dict:

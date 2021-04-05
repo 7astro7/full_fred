@@ -1,65 +1,68 @@
 
 from .tags import Tags
 
-# create getters and setters for default realtime variables
 
-# api key
-# expand on current docstrings to explain with greater clarity
-# define tags, sources, series, categories, releases, etc.
-# define realtime_start and realtime_end
-# create a thing on how to set environment variables to enable broad use 
-# integrate ALFRED, GeoFRED
-
-# go heavy on examples
-# make keys for each stack the parameters that were passed, not only the id used
-# define realtime periods
-# set default params to None, not fred web service params
-# add option to retrieve tag notes
-# heavily integrate pandas
-# add parameter to return all requested data as dataframes
-# create a stack that holds only the parameters of the *latest* request
-# must provide for case where new parameters are sent to already-used method and data has to be queried again
-# Can save metadata about last df query to check new request against
 class Fred(Tags):
     
     def __init__(
             self,
-            api_key = None,
             api_key_file = None,
             ):
         """
-        api key details :::::
-        When a request to FRED's servers is made, the returned data is available in a stack (a dict): series_stack for series requests, 
-        category_stack for categories requests, tag_stack for tags requests, etc. Keys are the name of the method used to retrieve the data.
-        For example, after calling f.get_tags() f.tag_stack["get_tags"] will return the data that FRED responded with, until a new get_tags method
-        invocation is made. Clarify what series_stack is. Use api_key_found() to determine if an api key is found as 
-        an environment variable with name FRED_API_KEY realtime period: (start, end), not [start, end]
+        API Key
+        -------
+        Querying FRED's servers can be done with an API key. To get a new key use https://fred.stlouisfed.org/ -> My Account -> API Keys.
+        
+            FRED_API_KEY environment variable
+            ---------------------------------
+            Automatically detected and used for queries if no api_key string or api_key_file are given. To check that Fred 
+            detects FRED_API_KEY:
+                fred.env_api_key_found()
+            
+            api_key_file
+            ------------
+            Fred(api_key_file = 'key_file.txt')
+            fred.set_api_key_file('key_file.txt')
+
+            If an api_key_file is given Fred will ensure the file can be found and will use the string on the file's first line for queries.
+            To get current api_key_file value:
+                fred.get_api_key_file()
+
+        Accessing Fetched Data 
+        ----------------------
+        When a request to FRED's servers is made, the returned data is available in a dictionary. 
+        category_stack for category requests, tag_stack for tag requests, etc. Keys are the name of the method used to retrieve the data.
+        For example, after calling fred.get_tags(), fred.tag_stack["get_tags"] will return the data that FRED responded with, until a new get_tags method
+        invocation is made. 
+
+        Setting Realtime Defaults
+        -------------------------
+        define realtime_start and realtime_end
         """
         super().__init__()
-        self.unit_info = dict() # put explanation of units options<- no, explain in method doc
-        self.return_type = dict
+        self.api_key_file = api_key_file
 
-    def get_realtime_start(self):
+    def get_default_rt_start(self):
         """
-        Returns default realtime_start
+        Return default realtime_start
         """
         return self._FredBase_realtime_start
 
-    def set_realtime_start(self, new_rt_start: str):
+    def set_rt_start(self, new_rt_start: str):
         """
-        Sets default realtime_start
+        Set default realtime_start
         """
         self._FredBase_realtime_start = new_rt_start
 
-    def get_realtime_end(self):
+    def get_default_rt_end(self):
         """
-        Returns default realtime_end
+        Return default realtime_end
         """
         return self._FredBase_realtime_end
 
-    def set_realtime_end(self, new_rt_end: str):
+    def set_rt_end(self, new_rt_end: str):
         """
-        Sets default realtime_end
+        Set default realtime_end
         """
         self._FredBase_realtime_end = new_rt_end
 

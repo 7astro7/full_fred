@@ -13,7 +13,6 @@ class FredBase:
 
     def __init__(
             self, 
-            api_key: str = None, 
             api_key_file: str = None,
             ):
         """
@@ -23,35 +22,28 @@ class FredBase:
         self.__realtime_start = "1776-07-04"
         self.__realtime_end = "9999-12-31"
         self.__url_base = "https://api.stlouisfed.org/fred/"
-        self.__api_key = api_key
-        self.__api_key_file = api_key_file
-        self.__api_key_env_var = False
-        if api_key is None and api_key_file is not None:
+        if api_key_file is not None:
             self.set_api_key_file(api_key_file)
-        elif self.env_api_key_found():
-            self.__api_key_env_var = True
+        else:
+            self.api_key_file = api_key_file
 
     def get_api_key_file(self) -> str:
         """
         Return currently assigned key file.
         """
-        return self.__api_key_file
+        return self.api_key_file
 
     def set_api_key_file(
             self,
             api_key_file: str,
             ) -> bool:
         """
-        Return True if api key file attribute successfully assigned.
-        If user-passed api_key_file is not found, let user know.
+        Return True if api_key_file has been found.
         """
-        if api_key_file is None:
-            e = 'set_api_key_file missing api_key_file argument'
-            raise TypeError(e)
         if not os.path.isfile(api_key_file):
             e = "Can't find %s, on path" % api_key_file
             raise FileNotFoundError(e)
-        self.__api_key_file = api_key_file
+        self.api_key_file = api_key_file
         return True
 
     def _read_api_key_file(
@@ -62,16 +54,18 @@ class FredBase:
         time that the user's API key is human-readable
         """
         try:
-            with open(self.__api_key_file, 'r') as key_file:
+            with open(self.api_key_file, 'r') as key_file:
                 return key_file.readline().strip()
         except FileNotFoundError as e:
             print(e)
 
-    def env_api_key_found(self) -> bool:
+    def env_api_key_found(
+            self
+            ) -> bool:
         """
         Indicate whether a FRED_API_KEY environment variable is detected.
         """
-        elif "FRED_API_KEY" in os.environ.keys():
+        if "FRED_API_KEY" in os.environ.keys():
             if os.environ["FRED_API_KEY"] is not None:
                 return True
         return False
@@ -154,13 +148,11 @@ class FredBase:
             env: it's an environment variable
             file: user has specified a file holding the key
         """
-        if self.__api_key is None:
-            if self.__api_key_file is None:
-                if not self.env_api_key_found():
-                    raise AttributeError("Cannot locate a FRED API key")
-                return 'env'
-            return 'file'
-        return 'attribute'
+        if self.api_key_file is None:
+            if not self.env_api_key_found():
+                raise AttributeError("Cannot locate a FRED API key")
+            return 'env'
+        return 'file'
     
     def _make_request_url(
             self, 
@@ -176,8 +168,6 @@ class FredBase:
                 "&file_type=json&api_key=",
                 ]
         base = "".join(url_base)
-        if key_to_use == 'attribute':
-            return base + self.__api_key 
         if key_to_use == 'env':
             try:
                 return base + os.environ["FRED_API_KEY"] 
