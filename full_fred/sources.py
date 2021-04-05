@@ -66,6 +66,21 @@ class Sources(Series):
 
         Examples
         --------
+        >>> fred.get_all_sources(order_by = 'name', limit = 3, sort_order = 'desc')
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'name',
+        'sort_order': 'desc',
+        'count': 103,
+        'offset': 0,
+        'limit': 3,
+        'sources': [
+            {'id': 57,
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'name': 'World Bank',
+            'link': 'http://www.worldbank.org/'},
+            {'id': 44, ..........
         """
         self._viable_api_key()
         url_prefix = "sources?"
@@ -116,6 +131,14 @@ class Sources(Series):
 
         Examples
         --------
+        >>> fred.get_a_source(1)
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'sources': [{'id': 1,
+        'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'name': 'Board of Governors of the Federal Reserve System (US)',
+        'link': 'http://www.federalreserve.gov/'}]}
         """
         self._viable_api_key()
         url_prefix = "source?source_id="
@@ -185,6 +208,22 @@ class Sources(Series):
 
         Examples
         --------
+        >>> fred.get_releases_for_a_source(source_id = 1, limit = 3, order_by = 'press_release', sort_order = 'desc')
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'press_release',
+        'sort_order': 'desc',
+        'count': 34,
+        'offset': 0,
+        'limit': 3,
+        'releases': [
+            {'id': 13,
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'name': 'G.17 Industrial Production and Capacity Utilization',
+            'press_release': True,
+            'link': 'http://www.federalreserve.gov/releases/g17/'},
+            {'id': 14, ......
         """
         self._viable_api_key()
         url_prefix = "source/releases?source_id="
