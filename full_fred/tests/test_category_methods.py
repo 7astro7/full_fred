@@ -51,7 +51,7 @@ def test_get_child_categories(
 @pytest.fixture
 def get_related_categories_method_works(fred: Fred) -> bool:
     params = {
-            'category_id': 13, 
+            'category_id': 32073, 
             }
     fred.get_related_categories(**params)
     observed = fred.category_stack["get_related_categories"]

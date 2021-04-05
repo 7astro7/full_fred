@@ -110,8 +110,6 @@ class Categories(FredBase):
             {'id': 32263, 'name': 'International Data', 'parent_id': 0},
             {'id': 3008, 'name': 'U.S. Regional Data', 'parent_id': 0},
             {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
-
-
         """
         self._viable_api_key()
         url_prefix = "category/children?category_id=" 
@@ -169,6 +167,14 @@ class Categories(FredBase):
 
         Examples
         --------
+        >>> fred.get_related_categories(32073)
+        {'categories': [{'id': 149, 'name': 'Arkansas', 'parent_id': 27281},
+            {'id': 150, 'name': 'Illinois', 'parent_id': 27281},
+            {'id': 151, 'name': 'Indiana', 'parent_id': 27281},
+            {'id': 152, 'name': 'Kentucky', 'parent_id': 27281},
+            {'id': 153, 'name': 'Mississippi', 'parent_id': 27281},
+            {'id': 154, 'name': 'Missouri', 'parent_id': 27281},
+            {'id': 193, 'name': 'Tennessee', 'parent_id': 27281}]}
         """
         self._viable_api_key()
         url_prefix = "category/related?category_id="
@@ -260,6 +266,41 @@ class Categories(FredBase):
 
         Examples
         --------
+        >>> params = {
+            'category_id': 125,
+            'limit': 3,
+            'filter_variable': 'units',
+            'order_by': 'units',
+            'sort_order': 'desc',
+            'offset': 1,
+            }
+        >>> fred.get_series_in_a_category(**params)
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05', 
+        'filter_variable': 'units',
+        'filter_value': None,
+        'order_by': 'units',
+        'sort_order': 'desc',
+        'count': 47,
+        'offset': 1,
+        'limit': 3,
+        'seriess': [{'id': 'IEABCSIA',
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'title': 'Balance on secondary income',
+            'observation_start': '1999-01-01',
+            'observation_end': '2020-01-01',
+            'frequency': 'Annual',
+            'frequency_short': 'A',
+            'units': 'Millions of Dollars',
+            'units_short': 'Mil. of $',
+            'seasonal_adjustment': 'Not Seasonally Adjusted',
+            'seasonal_adjustment_short': 'NSA',
+            'last_updated': '2021-03-23 07:31:14-05',
+            'popularity': 3,
+            'group_popularity': 4,
+            'notes': 'Calculated by subtracting the secondary income (current transfer) payments from the secondary income (current transfer) receipts'},
+            {'id': 'IEABCSIN', .......
         """
         self._viable_api_key()
         url_prefix = "category/series?category_id="
@@ -357,6 +398,23 @@ class Categories(FredBase):
 
         Examples
         --------
+        >>> fred.get_tags_for_a_category(category_id = 125, limit = 3, order_by = 'created')
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'created',
+        'sort_order': 'desc',
+        'count': 27,
+        'offset': 0,
+        'limit': 3,
+        'tags': [
+            {'name': 'public domain: citation requested',
+            'group_id': 'cc',
+            'notes': None,
+            'created': '2018-12-17 23:33:13-06',
+            'popularity': 100,
+            'series_count': 42},
+            {'name': 'headline figure', ...........
+
         """
         self._viable_api_key()
         url_prefix = "category/tags?category_id="
@@ -447,11 +505,31 @@ class Categories(FredBase):
 
         See Also
         --------
+        fred.get_tags
 
         Notes
         -----
         FRED web service endpoint: fred/category/related_tags
         https://fred.stlouisfed.org/docs/api/fred/category_related_tags.html
+
+        Examples
+        --------
+        >>> fred.get_related_tags_for_a_category(category_id = 125, tag_names = ('services', 'quarterly',), limit = 3)
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'series_count',
+        'sort_order': 'desc',
+        'count': 9,
+        'offset': 0,
+        'limit': 3,
+        'tags': [
+            {'name': 'balance',
+            'group_id': 'gen',
+            'notes': '',
+            'created': '2012-02-27 10:18:19-06',
+            'popularity': 47,
+            'series_count': 10},
+            {'name': 'bea', .........
         """
         self._viable_api_key()
         url_prefix = "category/related_tags?category_id="
