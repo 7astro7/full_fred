@@ -192,6 +192,7 @@ def get_related_tags_for_release_method_works(fred: Fred) -> bool:
             'offset': 3,
             'sort_order': 'desc',
             'order_by': 'created',
+            'realtime_end': '2013-08-14',
             }
     fred.get_related_tags_for_release(**params)
     observed = fred.release_stack['get_related_tags_for_release']

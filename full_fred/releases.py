@@ -62,6 +62,23 @@ class Releases(Categories):
 
         Examples
         --------
+        >>> fred.get_all_releases(limit = 2, sort_order = 'desc', order_by = 'press_release')
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'press_release',
+        'sort_order': 'desc',
+        'count': 298,
+        'offset': 0,
+        'limit': 2,
+        'releases': [
+            {'id': 9,
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'name': 'Advance Monthly Sales for Retail and Food Services',
+            'press_release': True,
+            'link': 'http://www.census.gov/retail/',
+            'notes': 'The U.S. Census Bureau conducts the Advance Monthly Retail Trade and Food Services Survey to provide an early estimate of monthly sales by kind of business for retail and food service firms located in the United States. Each month, questionnaires are mailed to a probability sample of approximately 4,700 employer firms selected from the larger Monthly Retail Trade Survey. Advance sales estimates are computed using a link relative estimator. For each detailed industry, we compute a ratio of current-to previous month weighted sales using data from units for which we have obtained usable responses for both the current and previous month. For each detailed industry, the advance total sales estimates for the current month is computed by multiplying this ratio by the preliminary sales estimate for the previous month (derived from the larger MRTS) at the appropriate industry level. Total estimates for broader industries are computed as the sum of the detailed industry estimates. The link relative estimate is used because imputation is not performed for most nonrespondents in MARTS. For a limited number of nonresponding companies that have influential effects on the estimates, sales may be estimated based on historical performance of that company. The monthly estimates are benchmarked to the annual survey estimates from the Annual Retail Trade Survey once available. The estimates are adjusted for seasonal variation and holiday and trading day differences. Additional information on MARTS and MRTS can be found on the Census Bureau website at: www.census.gov/retail.\r\nDescription of the survey as provided by the Census, https://census.gov/retail/marts/www/marts_current.pdf'},
+            {'id': 10, .......
         """
         self._viable_api_key()
         url_prefix = "releases?"
@@ -138,6 +155,19 @@ class Releases(Categories):
 
         Examples
         --------
+        >>> fred.get_release_dates_all_releases(limit = 3, order_by = 'release_name')
+        {'realtime_start': '2021-01-01',
+        'realtime_end': '9999-12-31',
+        'order_by': 'release_name',
+        'sort_order': 'asc',
+        'count': 2288,
+        'offset': 0,
+        'limit': 3,
+        'release_dates': [
+            {'release_id': 194,
+            'release_name': 'ADP National Employment Report',
+            'date': '2021-01-06'},
+            {'release_id': 194, ......
         """
         self._viable_api_key()
         url_prefix = "releases/dates?"
@@ -154,7 +184,6 @@ class Releases(Categories):
         url = self._add_optional_params(url_prefix, optional_args)
         self.release_stack["get_release_dates_all_releases"] = self._fetch_data(url)
         return self.release_stack["get_release_dates_all_releases"]
-
     
     # param docstrings are checked
     def get_a_release(
@@ -195,6 +224,16 @@ class Releases(Categories):
 
         Examples
         -----
+        >>> fred.get_a_release(53)
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'releases': [
+            {'id': 53,
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'name': 'Gross Domestic Product',
+            'press_release': True,
+            'link': 'https://www.bea.gov/data/gdp/gross-domestic-product'}]}
         """
         self._viable_api_key()
         url_prefix = "release?release_id="
@@ -270,6 +309,20 @@ class Releases(Categories):
 
         Examples
         -----
+        >>> fred.get_release_dates(release_id=82, limit = 3, sort_order = 'desc')
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'order_by': 'release_date',
+        'sort_order': 'desc',
+        'count': 24,
+        'offset': 0,
+        'limit': 3,
+        'release_dates': [
+            {'release_id': 82, 'date': '2020-02-20'},
+            {'release_id': 82, 'date': '2019-03-19'},
+            {'release_id': 82, 'date': '2018-02-12'}
+            ]
+        }
         """
         self._viable_api_key()
         url_prefix = "release/dates?release_id="
@@ -366,6 +419,32 @@ class Releases(Categories):
 
         Examples
         -----
+        >>> fred.get_series_on_a_release(tag_names=('japan',), release_id=51, limit = 3, sort_order='desc', order_by='last_updated')
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'last_updated',
+        'sort_order': 'desc',
+        'count': 2,
+        'offset': 0,
+        'limit': 3,
+        'seriess': [
+            {'id': 'EXPJP',
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'title': 'U.S. Exports of Goods by F.A.S. Basis to Japan',
+            'observation_start': '1985-01-01',
+            'observation_end': '2021-01-01',
+            'frequency': 'Monthly',
+            'frequency_short': 'M',
+            'units': 'Millions of Dollars',
+            'units_short': 'Mil. of $',
+            'seasonal_adjustment': 'Not Seasonally Adjusted',
+            'seasonal_adjustment_short': 'NSA',
+            'last_updated': '2021-03-05 07:52:02-06',
+            'popularity': 37,
+            'group_popularity': 37,
+            'notes': 'Free Alongside Ship Basis (f.a.s.)\nFurther information related to the ...
+            {'id': 'IMPJP', .........
         """
         self._viable_api_key()
         url_prefix_params = dict(
@@ -428,6 +507,16 @@ class Releases(Categories):
 
         Examples
         -----
+        >>> fred.get_sources_on_a_release(51)
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'sources': [
+            {'id': 19,
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'name': 'U.S. Census Bureau',
+            'link': 'http://www.census.gov/'},
+            {'id': 18, ......
         """
         self._viable_api_key()
         url_prefix_params = dict(
@@ -514,6 +603,22 @@ class Releases(Categories):
 
         Examples
         -----
+        >>> fred.get_tags_for_a_release(release_id=86, limit=3, tag_names=('gnp',), sort_order='desc', order_by='created')
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'created',
+        'sort_order': 'desc',
+        'count': 44,
+        'offset': 0,
+        'limit': 3,
+        'tags': [
+            {'name': 'public domain: citation requested',
+            'group_id': 'cc',
+            'notes': None,
+            'created': '2018-12-17 23:33:13-06',
+            'popularity': 100,
+            'series_count': 168},
+            {'name': 'a2/p2', .....
         """
         self._viable_api_key()
         url_prefix_params = {
@@ -611,6 +716,22 @@ class Releases(Categories):
 
         Examples
         -----
+        >>> fred.get_related_tags_for_release(release_id=86, limit=2, tag_names=('sa', 'foreign',), realtime_end='2013-08-14')
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '2013-08-14',
+        'order_by': 'series_count',
+        'sort_order': 'desc',
+        'count': 9,
+        'offset': 0,
+        'limit': 2,
+        'tags': [
+            {'name': 'commercial',
+            'group_id': 'gen',
+            'notes': '',
+            'created': '2012-02-27 10:18:19-06',
+            'popularity': 61,
+            'series_count': 2},
+            {'name': 'commercial paper', ......
         """
         url_prefix_params = {
                 "a_url_prefix": "release/related_tags?release_id=",
@@ -683,6 +804,29 @@ class Releases(Categories):
 
         Examples
         --------
+        >>> fred.get_release_tables(release_id=53, element_id=12886, include_observation_values=True)
+        {'name': 'Personal consumption expenditures',
+        'element_id': 12886,
+        'release_id': '53',
+        'elements': 
+        {'12887': {'element_id': 12887,
+        'release_id': 53,
+        'series_id': 'DGDSRL1A225NBEA',
+        'parent_id': 12886,
+        'line': '3',
+        'type': 'series',
+        'name': 'Goods',
+        'level': '1',
+        'children': [{'element_id': 12888,
+            'release_id': 53,
+            'series_id': 'DDURRL1A225NBEA',
+            'parent_id': 12887,
+            'line': '4',
+            'type': 'series',
+            'name': 'Durable goods',
+            'level': '2',
+            'children': []},
+            {'element_id': 12889, ......
         """
         self._viable_api_key()
         url_prefix_params = {
