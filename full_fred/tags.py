@@ -83,6 +83,22 @@ class Tags(Sources):
 
         Examples
         --------
+        >>> fred.get_all_tags(limit = 2, sort_order = 'desc', tag_names = ('gdp', 'oecd',), order_by = 'name')
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'name',
+        'sort_order': 'desc',
+        'count': 2,
+        'offset': 0,
+        'limit': 2,
+        'tags': [
+            {'name': 'oecd',
+            'group_id': 'src',
+            'notes': 'Org. for Economic Co-operation and Development',
+            'created': '2012-02-27 10:18:19-06',
+            'popularity': 77,
+            'series_count': 64090},
+            {'name': 'gdp', ...........
         """
         self._viable_api_key()
         url_prefix = "tags?"
@@ -114,7 +130,7 @@ class Tags(Sources):
             offset: int = None,
             order_by: str = None,
             sort_order: str = None,
-            ):
+            ) -> dict:
         """
         Get related FRED tags for one or more FRED tags.
 
@@ -175,6 +191,27 @@ class Tags(Sources):
         --------
         f = Fred()
         f.get_related_tags_for_a_tag(exclude_tag_names = ("discontinued",))
+
+        >>> params = {'tag_names': ('monetary aggregates', 'weekly'),
+                    'limit': 2,
+                    'tag_group_id': 'geo',
+                    'order_by': 'name',
+                    'sort_order': 'desc',}
+        >>> fred.get_related_tags_for_a_tag(**params)
+       {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'name',
+        'sort_order': 'desc',
+        'count': 1,
+        'offset': 0,
+        'limit': 2,
+        'tags': [
+            {'name': 'usa',
+            'group_id': 'geo',
+            'notes': 'United States of America',
+            'created': '2012-02-27 10:18:19-06',
+            'popularity': 100,
+            'series_count': 14}]}
         """
         self._viable_api_key()
         url_prefix = "related_tags?tag_names="
@@ -262,6 +299,37 @@ class Tags(Sources):
 
         Examples
         --------
+        >>> params = {
+            'tag_names': ('oecd', 'spain',),
+            'limit': 2,
+            'order_by': 'seasonal_adjustment',
+            'sort_order': 'desc',
+            }
+        >>> fred.get_series_matching_tags(**params)
+        {'realtime_start': '2021-04-05',
+        'realtime_end': '2021-04-05',
+        'order_by': 'seasonal_adjustment',
+        'sort_order': 'desc',
+        'count': 1630,
+        'offset': 1,
+        'limit': 2,
+        'seriess': [{'id': 'XTNTVA01ESM667S',
+            'realtime_start': '2021-04-05',
+            'realtime_end': '2021-04-05',
+            'title': 'Net Trade: Value Goods for Spain',
+            'observation_start': '1966-01-01',
+            'observation_end': '2020-12-01',
+            'frequency': 'Monthly',
+            'frequency_short': 'M',
+            'units': 'US Dollars Monthly Level',
+            'units_short': 'US $, Monthly Level',
+            'seasonal_adjustment': 'Seasonally Adjusted',
+            'seasonal_adjustment_short': 'SA',
+            'last_updated': '2021-03-16 17:07:37-05',
+            'popularity': 1,
+            'group_popularity': 1,
+            'notes': 'OECD descriptor ID: XTNTVA01'
+            {'id': 'XTNTVA01ESQ664S', ...........
         """
         self._viable_api_key()
         url_prefix = "tags/series?tag_names=" 

@@ -71,8 +71,8 @@ def get_series_matching_tags_method_works(fred: Fred) -> bool:
             'offset': 1,
             'order_by': 'seasonal_adjustment',
             'sort_order': 'desc',
-            'realtime_start': '2000-01-01',
-            'realtime_end': '2003-01-01',
+#            'realtime_start': '2000-01-01',
+#            'realtime_end': '2003-01-01',
             }
     fred.get_series_matching_tags(**params)
     observed = fred.tag_stack["get_series_matching_tags"]
