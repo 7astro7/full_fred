@@ -51,6 +51,8 @@ class Categories(FredBase):
         """
         self._viable_api_key()
         url_prefix = "category?category_id=" 
+        if category_id is None:
+            category_id = 0
         try:
             url = url_prefix + str(category_id)
         except TypeError:
