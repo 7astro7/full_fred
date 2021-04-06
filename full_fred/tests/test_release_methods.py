@@ -233,7 +233,7 @@ def get_release_tables_method_works(fred: Fred) -> bool:
             }
     return returned_ok(**returned_ok_params)
 
-#@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v2")
 def test_get_release_tables(
         get_release_tables_method_works: bool,
         ):
