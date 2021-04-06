@@ -27,11 +27,11 @@ class Sources(Series):
         Parameters
         ----------
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None
@@ -111,11 +111,11 @@ class Sources(Series):
         source_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
 
@@ -173,11 +173,11 @@ class Sources(Series):
         source_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None

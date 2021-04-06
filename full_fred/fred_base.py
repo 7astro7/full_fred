@@ -19,15 +19,17 @@ class FredBase:
         FredBase defines methods common to Categories, Releases, 
         Series, Releases, Sources, Tags classes.
         """
-        self.__realtime_start = "1776-07-04"
-        self.__realtime_end = "9999-12-31"
+        self.realtime_start = "1776-07-04"
+        self.realtime_end = "9999-12-31"
         self.__url_base = "https://api.stlouisfed.org/fred/"
         if api_key_file is not None:
             self.set_api_key_file(api_key_file)
         else:
             self.api_key_file = api_key_file
 
-    def get_api_key_file(self) -> str:
+    def get_api_key_file(
+            self,
+            ) -> str:
         """
         Return currently assigned key file.
         """
@@ -131,13 +133,29 @@ class FredBase:
                     new_url_string += a_parameter_string
                 except TypeError:
                     print(k + " " + optional_params[k] + " cannot be cast to str")
+            elif "realtime_start" in k or "realtime_end" in k:
+                # either no realtime_start arg or no realtime_end arg
+                # passed: use attribute
+                default_realtime_param = self.realtime_start 
+                if "realtime_end" in k:
+                    default_realtime_param = self.realtime_end
+
+                # if user has set it to None, don't do anything
+                if default_realtime_param is not None:
+                    try:
+                        a_parameter_string = k + default_realtime_param
+                        new_url_string += a_parameter_string
+                    except TypeError:
+                        e = "%s attribute value " % default_realtime_param
+                        e += " cannot be added to request URL" 
+                        print(e)
         return new_url_string
 
     def _viable_api_key(self) -> str:
         """
         Verifies that there's an api key to make a request url with.
-        Raise error if necessary allow methods to catch early in 
-        query process whether a request for data can be sent to FRED.
+        Raises error if necessary to allow methods to catch, early in 
+        query process, whether a request for data can be sent to FRED.
         If there's a usable key, return which one to use
         
         Returns
@@ -157,7 +175,7 @@ class FredBase:
     def _make_request_url(
             self, 
             var_url: str, 
-            ):
+            ) -> str:
         """
         Return the url that can be used to retrieve the desired data given var_url.
         """
@@ -176,8 +194,10 @@ class FredBase:
         if key_to_use == 'file':
             return base + self._read_api_key_file()
 
-    # modify: never print api key in message
-    def _fetch_data(self, url_prefix: str) -> dict:
+    def _fetch_data(
+            self, 
+            url_prefix: str,
+            ) -> dict:
         """
         Make request URL, send it to FRED, return JSON upshot
         """
@@ -190,32 +210,6 @@ class FredBase:
             return
         return json_data
 
-    def _get_realtime_date(self, 
-            realtime_start: str = None,
-            realtime_end: str = None,
-            ) -> str:
-        """
-        Takes a string as input and returns the YYY-MM-DD 
-        realtime date string to use for construction of a request url
-        """
-        rt_start = "&realtime_start="
-        rt_end = "&realtime_end="
-        if realtime_start is None:
-            rt_start += self.__realtime_start
-        else:
-            try:
-                realtime_start = str(realtime_start)
-            except TypeError:
-                pass # this needs to be more effective
-        if realtime_end is None:
-            rt_end += self.__realtime_end
-        else:
-            try:
-                realtime_end = str(realtime_end)
-            except TypeError:
-                pass # this needs to be more effective
-        return rt_start + rt_end
-        
     def _get_response(self, a_url: str) -> dict:
         """
         Return a JSON dictionary response with data retrieved from a_url

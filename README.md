@@ -20,6 +20,13 @@ FRED has [free API keys available immediately](https://research.stlouisfed.org/u
 ## Testing
 
 ## API
+
+api key can be set in 2 secure ways:
+api key file
+environment variable
+
+full_fred doesn't save api_key for the sake of security
+
 ```python
 api_key_found()
 ```
@@ -97,6 +104,16 @@ fred.get_child_categories(0)
   {'id': 32263, 'name': 'International Data', 'parent_id': 0},
   {'id': 3008, 'name': 'U.S. Regional Data', 'parent_id': 0},
   {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
+```
+
+full_fred realtime period defaults:
+realtime start is set to earliest available '1776-07-04'
+realtime end is set to latest available '9999-12-31'
+to use defaults set by FRED web service realtime period for each query, 
+you can set realtime_start attribute and realtime_end attribute to None
+```python
+fred.realtime_start = None
+fred.realtime_end = None
 ```
 
 reference get_series_df example 

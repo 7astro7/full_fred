@@ -36,11 +36,11 @@ class Series(Releases):
         series_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
 
@@ -61,8 +61,25 @@ class Series(Releases):
 
         Examples
         --------
-        fred.get_a_series(series_id = "SAHMCURRENT")
-        fred.series_stack["get_a_series"]
+        >>> fred.get_a_series(series_id = "SAHMCURRENT")
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'seriess': [
+            {'id': 'SAHMCURRENT',
+            'realtime_start': '2019-09-06',
+            'realtime_end': '9999-12-31',
+            'title': 'Sahm Rule Recession Indicator',
+            'observation_start': '1949-03-01',
+            'observation_end': '2021-03-01',
+            'frequency': 'Monthly',
+            'frequency_short': 'M',
+            'units': 'Percentage Points',
+            'units_short': 'Percentage Points',
+            'seasonal_adjustment': 'Seasonally Adjusted',
+            'seasonal_adjustment_short': 'SA',
+            'last_updated': '2021-04-02 08:01:39-05',
+            'popularity': 44,
+            'notes': 'Sahm Recession Indicator signals the start of .....
         """
         self._viable_api_key()
         url_prefix_params = {
@@ -93,11 +110,11 @@ class Series(Releases):
         series_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
 
@@ -117,6 +134,11 @@ class Series(Releases):
 
         Examples
         --------
+        >>> fred.get_categories_of_series('SAHMCURRENT')
+        {'categories': [
+            {'id': 33120,
+            'name': 'Recession Probabilities',
+            'parent_id': 33060}]}
         """
         self._viable_api_key()
         url_prefix_params = {
@@ -148,7 +170,7 @@ class Series(Releases):
             frequency: str = None,
             aggregation_method: str = None,
             output_type: int = None,
-            vintage_dates: str = None,
+            vintage_dates: list = None,
             ) -> DataFrame:
         """
         Get the observations, the data values, for an economic data 
@@ -159,11 +181,11 @@ class Series(Releases):
         series_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None 
@@ -178,10 +200,10 @@ class Series(Releases):
             Can be "asc" or "desc".
             If None, "asc" is used.
         observation_start: str, default None
-            The start of the observation period formatted as "YYY-MM-DD".
+            The start of the observation period formatted as "YYYY-MM-DD".
             If None, "1776-07-04" (earliest available) is used.
         observation_end: str, default None
-            The end of the observation period formatted as "YYY-MM-DD".
+            The end of the observation period formatted as "YYYY-MM-DD".
             If None, "9999-12-31" (latest available) is used.
         units: str, default None
             A string that indicates a data value transformation.
@@ -239,6 +261,10 @@ class Series(Releases):
             4: Observations, Initial Release Only
             If None, 1: Observations by Real-Time Period is used.
         vintage_dates
+            A list[str] of "YYY-MM-DD" formatted dates in history: FRED web service returns 
+            observations of the series as it existed on these historical dates. 
+            Specifying vintage_dates can be a substitute for specifying a realtime period.
+            For more on vintage_dates, see the URL in the Notes section below.
             If None, no vintage dates are set.
 
         Returns
@@ -307,11 +333,11 @@ class Series(Releases):
         series_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
 
@@ -378,11 +404,11 @@ class Series(Releases):
                 Substring search of series' IDs.
             If None, 'full_text' is used.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None 
@@ -486,11 +512,11 @@ class Series(Releases):
         search_words: list
             list of words to match against economic data series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         tag_names: list, default None
@@ -589,11 +615,11 @@ class Series(Releases):
             list of tags [str] that series match all of, excluding 
             any tag not in tag_names.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         exclude_tag_names: list, default None 
@@ -688,11 +714,11 @@ class Series(Releases):
         series_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         order_by: str, default "source_count"
@@ -756,11 +782,11 @@ class Series(Releases):
         Parameters
         ----------
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None 
@@ -779,7 +805,7 @@ class Series(Releases):
             If None, no filtering by geographic type of series.
         start_time: str, default None
             The start time for limiting results for a time range.
-            Expected format is "YYYMMDDHhmm". 
+            Expected format is "YYYYMMDDHhmm". 
             "1999-12-31 23:59": "199912312359"
             Can filter down to minutes.
             If start_time is passed, end_time is required.
@@ -843,11 +869,11 @@ class Series(Releases):
         series_id: int
             The ID of the series.
         realtime_start: str, default None
-            The start of the real-time period formatted as "YYY-MM-DD".
+            The start of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_start is used.
             If default isn't set by user, "1776-07-04" (earliest available) is used.
         realtime_end: str, default None
-            The end of the real-time period formatted as "YYY-MM-DD".
+            The end of the real-time period formatted as "YYYY-MM-DD".
             If None, default realtime_end is used.
             If default isn't set by user, "9999-12-31" (latest available) is used.
         limit: int, default None 

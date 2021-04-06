@@ -41,30 +41,3 @@ class Fred(Tags):
         """
         super().__init__()
         self.api_key_file = api_key_file
-
-    def get_default_rt_start(self):
-        """
-        Return default realtime_start
-        """
-        return self._FredBase_realtime_start
-
-    def set_rt_start(self, new_rt_start: str):
-        """
-        Set default realtime_start
-        """
-        self._FredBase_realtime_start = new_rt_start
-
-    def get_default_rt_end(self):
-        """
-        Return default realtime_end
-        """
-        return self._FredBase_realtime_end
-
-    def set_rt_end(self, new_rt_end: str):
-        """
-        Set default realtime_end
-        """
-        self._FredBase_realtime_end = new_rt_end
-
-
-

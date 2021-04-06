@@ -51,6 +51,7 @@ def get_series_df_method_works(fred: Fred) -> bool:
     params = {
             'series_id': 'GNPCA',
             'limit': 10,
+            'realtime_start': "2003-01-01",
 #            'units': 'log',
             'sort_order': 'desc',
             'offset': 1,
@@ -81,7 +82,7 @@ def get_series_df_method_works(fred: Fred) -> bool:
         return True
     return False
 
-@pytest.mark.skip("passed v2")
+@pytest.mark.skip("passed v3")
 def test_get_series_df(
         get_series_df_method_works: bool,
         ):
