@@ -29,6 +29,8 @@ def returned_ok(
                 return False
             if expected[expected_key] != observed[expected_key]:
                 return False
+    if check_union is None:
+        return True
     for key in check_union:
         if key in observed.keys():
             return True
