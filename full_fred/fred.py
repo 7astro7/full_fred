@@ -40,4 +40,11 @@ class Fred(Tags):
         define realtime_start and realtime_end
         """
         super().__init__()
-        self.api_key_file = api_key_file
+        if api_key_file is None:
+            self.api_key_file = api_key_file
+        else:
+            self.api_key_file = self.set_api_key_file(api_key_file)
+
+
+
+

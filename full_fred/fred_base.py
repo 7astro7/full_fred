@@ -43,7 +43,7 @@ class FredBase:
         Return True if api_key_file has been found.
         """
         if not os.path.isfile(api_key_file):
-            e = "Can't find %s, on path" % api_key_file
+            e = "Can't find %s on path" % api_key_file
             raise FileNotFoundError(e)
         self.api_key_file = api_key_file
         return True

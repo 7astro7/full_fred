@@ -85,7 +85,7 @@ realtime_start      realtime_end        date               value
  [332 rows x 4 columns]}
 ```
 
-To find data a specific category_id or to search FRED categories from
+To find a specific category_id or to search FRED categories from
 most general to most specific you can start with 0, the root category. 
 A search along the lines of the following can help to pinpoint different 
 category_ids:

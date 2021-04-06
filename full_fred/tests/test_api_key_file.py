@@ -25,13 +25,12 @@ def test_api_key_file_works_with_get_a_category_method(
 
 @pytest.fixture
 def a_random_api_key_dummy_file() -> str:
-    return 'orange_juice.txt'
+    return 'orange_juice_and_peanuts.txt'
 
 def test_api_key_file_get_works_after_constructor(
         a_random_api_key_dummy_file: str,
         ):
-    fred = Fred(api_key_file = a_random_api_key_dummy_file)
-    assert fred.get_api_key_file() == a_random_api_key_dummy_file
-
+    with pytest.raises(FileNotFoundError):
+        Fred(api_key_file = a_random_api_key_dummy_file)
 
 
