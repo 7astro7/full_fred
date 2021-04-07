@@ -77,7 +77,7 @@ class Releases(Categories):
             'name': 'Advance Monthly Sales for Retail and Food Services',
             'press_release': True,
             'link': 'http://www.census.gov/retail/',
-            'notes': 'The U.S. Census Bureau conducts the Advance Monthly Retail Trade and Food Services Survey to provide an early estimate of monthly sales by kind of business for retail and food service firms located in the United States. Each month, questionnaires are mailed to a probability sample of approximately 4,700 employer firms selected from the larger Monthly Retail Trade Survey. Advance sales estimates are computed using a link relative estimator. For each detailed industry, we compute a ratio of current-to previous month weighted sales using data from units for which we have obtained usable responses for both the current and previous month. For each detailed industry, the advance total sales estimates for the current month is computed by multiplying this ratio by the preliminary sales estimate for the previous month (derived from the larger MRTS) at the appropriate industry level. Total estimates for broader industries are computed as the sum of the detailed industry estimates. The link relative estimate is used because imputation is not performed for most nonrespondents in MARTS. For a limited number of nonresponding companies that have influential effects on the estimates, sales may be estimated based on historical performance of that company. The monthly estimates are benchmarked to the annual survey estimates from the Annual Retail Trade Survey once available. The estimates are adjusted for seasonal variation and holiday and trading day differences. Additional information on MARTS and MRTS can be found on the Census Bureau website at: www.census.gov/retail.\r\nDescription of the survey as provided by the Census, https://census.gov/retail/marts/www/marts_current.pdf'},
+            'notes': 'The U.S. Census Bureau conducts ...
             {'id': 10, .......
         """
         self._viable_api_key()
@@ -236,11 +236,11 @@ class Releases(Categories):
             'link': 'https://www.bea.gov/data/gdp/gross-domestic-product'}]}
         """
         self._viable_api_key()
-        url_prefix = "release?release_id="
-        try:
-            url_prefix += str(release_id)
-        except TypeError:
-            print("Unable to cast release_id %s to str" % release_id) # line contradicts itself
+        url_prefix_params = {
+                "a_url_prefix":  "release?release_id=",
+                "an_int_id": release_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -325,11 +325,11 @@ class Releases(Categories):
         }
         """
         self._viable_api_key()
-        url_prefix = "release/dates?release_id="
-        try:
-            url_prefix += str(release_id)
-        except TypeError:
-            print("Unable to cast release_id %s to str" % release_id)
+        url_prefix_params = {
+                "a_url_prefix":  "release/dates?release_id=",
+                "an_int_id": release_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -447,10 +447,10 @@ class Releases(Categories):
             {'id': 'IMPJP', .........
         """
         self._viable_api_key()
-        url_prefix_params = dict(
-                a_url_prefix = "release/series?release_id=",
-                an_int_id = release_id,
-                )
+        url_prefix_params = {
+                "a_url_prefix":  "release/series?release_id=",
+                "an_int_id": release_id,
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -519,9 +519,10 @@ class Releases(Categories):
             {'id': 18, ......
         """
         self._viable_api_key()
-        url_prefix_params = dict(
-                a_url_prefix = "release/sources?release_id=",
-                an_int_id = release_id)
+        url_prefix_params = {
+                "a_url_prefix":  "release/sources?release_id=",
+                "an_int_id": release_id,
+                }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
