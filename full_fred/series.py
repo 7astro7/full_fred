@@ -16,7 +16,7 @@ class Series(Releases):
         super().__init__()
         self.series_stack = dict() 
 
-    # param docstrings are checked
+    # rt checked
     def get_a_series(
             self, 
             series_id: str, 
@@ -38,12 +38,12 @@ class Series(Releases):
             The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
 
         Returns
         -------
@@ -96,7 +96,7 @@ class Series(Releases):
         self.series_stack["get_a_series"] = self._fetch_data(url)
         return self.series_stack["get_a_series"]
 
-    # param docstrings are checked
+    # rt checked
     def get_categories_of_series(
             self,
             series_id: str, 
@@ -112,12 +112,12 @@ class Series(Releases):
             The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
 
         Returns
         -------
@@ -155,8 +155,7 @@ class Series(Releases):
         self.series_stack["get_categories_of_series"] = self._fetch_data(url)
         return self.series_stack["get_categories_of_series"]
 
-    # param docstrings are checked EXCEPT vintage dates
-    # vintage dates
+    # rt checked
     def get_series_df(
             self, 
             series_id: str,
@@ -183,12 +182,12 @@ class Series(Releases):
             The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
         limit: int, default None 
             The maximum number of results to return.
             Values can be in range(1, 100_001).
@@ -354,7 +353,7 @@ class Series(Releases):
         self.series_stack["get_series_df"]["df"] = df
         return self.series_stack["get_series_df"]["df"]
 
-    # param docstrings are checked
+    # rt checked
     def get_release_for_a_series(
             self,
             series_id: str,
@@ -370,12 +369,12 @@ class Series(Releases):
             The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
 
         Returns
         -------
@@ -418,7 +417,7 @@ class Series(Releases):
         self.series_stack["get_release_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_release_for_a_series"]
 
-    # param docstrings are checked
+    # rt checked
     def search_for_series(
             self, 
             search_words: list,
@@ -452,12 +451,12 @@ class Series(Releases):
             If None, 'full_text' is used.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
         limit: int, default None 
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -588,8 +587,7 @@ class Series(Releases):
         self.series_stack["search_for_series"] = self._fetch_data(url)
         return self.series_stack["search_for_series"]
 
-    # fix returns docstring
-    # param docstrings are checked
+    # rt checked
     def get_tags_for_series_search(
             self, 
             search_words: list,
@@ -612,12 +610,12 @@ class Series(Releases):
             list of words to match against economic data series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
         tag_names: list, default None
             list of tags [str] that series match all of, excluding 
             any tag not in tag_names.
@@ -721,7 +719,7 @@ class Series(Releases):
         self.series_stack["get_tags_for_series_search"] = self._fetch_data(url)
         return self.series_stack["get_tags_for_series_search"]
 
-    # param docstrings are checked
+    # rt checked
     def get_related_tags_for_series_search(
             self, 
             search_words: list,
@@ -748,12 +746,12 @@ class Series(Releases):
             any tag not in tag_names.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
         exclude_tag_names: list, default None 
             A list of tags that returned series match none of.
             If None, no tag names are excluded.
@@ -860,7 +858,7 @@ class Series(Releases):
         self.series_stack["get_related_tags_for_series_search"] = self._fetch_data(url)
         return self.series_stack["get_related_tags_for_series_search"]
 
-    # param docstrings are checked
+    # rt checked
     def get_tags_for_a_series(
             self,
             series_id: str,
@@ -880,12 +878,12 @@ class Series(Releases):
             The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
         order_by: str, default "source_count"
             order results by values of the specified attribute
             can be one of "series_count", "popularity", "created", "name", "group_id"
@@ -945,7 +943,7 @@ class Series(Releases):
         self.series_stack["get_tags_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_tags_for_a_series"]
 
-    # ensure start_time, end_time format
+    # rt checked
     def get_series_updates(
             self,
             realtime_start: str = None,
@@ -964,12 +962,12 @@ class Series(Releases):
         ----------
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date. 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date. 
         limit: int, default None 
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -1126,12 +1124,12 @@ class Series(Releases):
             The ID of the series.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use "1776-07-04". 
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use "9999-12-31". 
         limit: int, default None 
             The maximum number of results to return.
             Values can be in range(1, 10_001).
