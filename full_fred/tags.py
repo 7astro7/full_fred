@@ -214,11 +214,12 @@ class Tags(Sources):
             'series_count': 14}]}
         """
         self._viable_api_key()
-        url_prefix = "related_tags?tag_names="
-        try:
-            url_prefix += ";".join(tag_names)
-        except TypeError:
-            print("tag_names must be list or tuple")
+        fused_tag_names = self._join_strings_by(tag_names, ";")
+        url_prefix_params = {
+                "a_url_prefix": "related_tags?tag_names=",
+                "a_str_id": fused_tag_names,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -332,11 +333,12 @@ class Tags(Sources):
             {'id': 'XTNTVA01ESQ664S', ...........
         """
         self._viable_api_key()
-        url_prefix = "tags/series?tag_names=" 
-        try:
-            url_prefix += ";".join(tag_names)
-        except TypeError:
-            print("tag_names must be list or tuple")
+        fused_tag_names = self._join_strings_by(tag_names, ";")
+        url_prefix_params = {
+                "a_url_prefix": "tags/series?tag_names=",
+                "a_str_id": fused_tag_names,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&exclude_tag_names=": exclude_tag_names,
                 "&realtime_start=": realtime_start,
@@ -345,7 +347,7 @@ class Tags(Sources):
                 "&offset=": offset,
                 "&order_by=": order_by,
                 "&sort_order=": sort_order,
-            }
+                }
         url = self._add_optional_params(url_prefix, optional_args)
         self.tag_stack["get_series_matching_tags"] = self._fetch_data(url)
         return self.tag_stack["get_series_matching_tags"]
