@@ -50,13 +50,13 @@ class Categories(FredBase):
         {'categories': [{'id': 0, 'name': 'Categories', 'parent_id': 0}]}
         """
         self._viable_api_key()
-        url_prefix = "category?category_id=" 
-        if category_id is None:
-            category_id = 0
-        try:
-            url = url_prefix + str(category_id)
-        except TypeError:
-            print("Cannot cast category_id %s to str" % category_id)
+        url_prefix_params = {
+                "a_url_prefix": "category?category_id=",
+                "an_int_id": category_id
+                }
+        if url_prefix_params["an_int_id"] is None:
+            url_prefix_params["an_int_id"] = 0
+        url = self._append_id_to_url(**url_prefix_params)
         self.category_stack["get_a_category"] = self._fetch_data(url)
         return self.category_stack["get_a_category"] 
 
@@ -114,11 +114,11 @@ class Categories(FredBase):
             {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
         """
         self._viable_api_key()
-        url_prefix = "category/children?category_id=" 
-        try:
-            url_prefix += str(category_id)
-        except TypeError:
-            print("Cannot cast category_id %s to str" % category_id)
+        url_prefix_params = {
+                "a_url_prefix":  "category/children?category_id=",
+                "an_int_id": category_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -179,11 +179,11 @@ class Categories(FredBase):
             {'id': 193, 'name': 'Tennessee', 'parent_id': 27281}]}
         """
         self._viable_api_key()
-        url_prefix = "category/related?category_id="
-        try:
-            url_prefix += str(category_id)
-        except TypeError:
-            print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
+        url_prefix_params = {
+                "a_url_prefix":  "category/related?category_id=",
+                "an_int_id": category_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -305,11 +305,11 @@ class Categories(FredBase):
             {'id': 'IEABCSIN', .......
         """
         self._viable_api_key()
-        url_prefix = "category/series?category_id="
-        try:
-            url_prefix += str(category_id)
-        except TypeError:
-            print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
+        url_prefix_params = {
+            "a_url_prefix":  "category/series?category_id=",
+            "an_int_id": category_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -419,11 +419,11 @@ class Categories(FredBase):
 
         """
         self._viable_api_key()
-        url_prefix = "category/tags?category_id="
-        try:
-            url_prefix += str(category_id)
-        except TypeError:
-            print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
+        url_prefix_params = {
+            "a_url_prefix":  "category/tags?category_id=",
+            "an_int_id": category_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -534,27 +534,23 @@ class Categories(FredBase):
             {'name': 'bea', .........
         """
         self._viable_api_key()
-        url_prefix = "category/related_tags?category_id="
-        try:
-            url_prefix += str(category_id)
-        except TypeError:
-            print("Cannot cast category_id %s to str" % category_id) # doesn't this line contradict itself?
-        url_prefix += "&tag_names="
-        try:
-            url_prefix += ";".join(tag_names)
-        except TypeError:
-            print("tag_names must be list or tuple")
-        optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&exclude_tag_names=": exclude_tag_names,
-                "&tag_group_id=": tag_group_id,
-                "&search_text=": search_text,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&order_by=": order_by,
-                "&sort_order=": sort_order,
+        url_prefix_params = {
+            "a_url_prefix":  "category/related_tags?category_id=",
+            "an_int_id": category_id,
                 }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
+        optional_args = {
+            "&tag_names=": tag_names, # tag_names are required *
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&exclude_tag_names=": exclude_tag_names,
+            "&tag_group_id=": tag_group_id,
+            "&search_text=": search_text,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&order_by=": order_by,
+            "&sort_order=": sort_order,
+            }
         url = self._add_optional_params(url_prefix, optional_args)
         self.category_stack["get_related_tags_for_a_category"] = self._fetch_data(url)
         return self.category_stack["get_related_tags_for_a_category"]
