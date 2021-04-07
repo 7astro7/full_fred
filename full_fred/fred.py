@@ -6,7 +6,7 @@ class Fred(Tags):
     
     def __init__(
             self,
-            api_key_file = None,
+            api_key_file: str = None,
             ):
         """
         API Key
@@ -40,10 +40,10 @@ class Fred(Tags):
         define realtime_start and realtime_end
         """
         super().__init__()
-        if api_key_file is None:
-            self.api_key_file = api_key_file
+        if api_key_file is not None:
+            self.set_api_key_file(api_key_file)
         else:
-            self.api_key_file = self.set_api_key_file(api_key_file)
+            self.api_key_file = api_key_file
 
 
 
