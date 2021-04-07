@@ -21,6 +21,8 @@ FRED has [free API keys available immediately](https://research.stlouisfed.org/u
 
 ## API
 
+expand: search_for_series -> get_tags_for_series_search -> get_related_tags_for_series_search
+
 api key can be set in 2 secure ways:
 api key file
 environment variable

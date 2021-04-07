@@ -285,6 +285,41 @@ class Series(Releases):
 
         Examples
         --------
+        >>> params = {'series_id': 'GNPCA',
+                    'limit': 10,
+                    'realtime_start': '2003-01-01',
+                    'sort_order': 'desc',
+                    'offset': 1,
+                    'observation_start': '1776-07-04',
+                    'observation_end': '9999-12-31'}
+        >>>  fred.get_series_df(**params)
+          realtime_start realtime_end        date      value
+        0     2020-03-26   2020-07-29  2019-01-01   19351.27
+        1     2020-07-30   9999-12-31  2019-01-01  19338.371
+        2     2019-03-28   2019-07-25  2018-01-01  18815.882
+        3     2019-07-26   2020-07-29  2018-01-01    18897.8
+        4     2020-07-30   9999-12-31  2018-01-01  18951.897
+        5     2018-03-28   2018-07-26  2017-01-01  17275.268
+        6     2018-07-27   2019-07-25  2017-01-01  18284.031
+        7     2019-07-26   2020-07-29  2017-01-01  18344.563
+        8     2020-07-30   9999-12-31  2017-01-01  18421.034
+        9     2017-03-30   2017-07-27  2016-01-01    16835.2
+
+        >>> fred.get_series_df(series_id = 'FYFSD') 
+            realtime_start realtime_end        date       value
+        0       1998-02-02   9999-12-31  1901-06-30          63
+        1       1998-02-02   9999-12-31  1902-06-30          77
+        2       1998-02-02   9999-12-31  1903-06-30          45
+        3       1998-02-02   9999-12-31  1904-06-30         -43
+        4       1998-02-02   9999-12-31  1905-06-30         -23
+        ..             ...          ...         ...         ...
+        238     2020-02-12   9999-12-31  2018-09-30   -779137.0
+        239     2019-10-25   2020-02-11  2019-09-30   -984388.0
+        240     2020-02-12   2020-10-15  2019-09-30   -984155.0
+        241     2020-10-16   9999-12-31  2019-09-30   -984388.0
+        242     2020-10-16   9999-12-31  2020-09-30  -3131917.0
+
+        [243 rows x 4 columns]
         """
         self._viable_api_key()
         url_prefix_params = {
@@ -357,6 +392,17 @@ class Series(Releases):
 
         Examples
         --------
+        >>> fred.get_release_for_a_series(series_id = 'IRA', realtime_end = '2014-07-04')
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '2014-07-04',
+        'releases': [
+            {'id': 21,
+            'realtime_start': '1996-12-12',
+            'realtime_end': '1998-12-09',
+            'name': 'H.6 Money Stock, Liquid Assets, and Debt Measures',
+            'press_release': True,
+            'link': 'http://www.federalreserve.gov/releases/h6/'},
+            {'id': 21, .......
         """
         self._viable_api_key()
         url_prefix_params = {
@@ -464,7 +510,59 @@ class Series(Releases):
 
         Examples
         --------
-        fred.search_for_series(('SAHM',), limit = 5)
+        >>> fred.search_for_series(('SAHM',), limit = 5)
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'order_by': 'search_rank',
+        'sort_order': 'desc',
+        'count': 2,
+        'offset': 0,
+        'limit': 5,
+        'seriess': [
+            {'id': 'SAHMREALTIME',
+            'realtime_start': '2019-09-06',
+            'realtime_end': '9999-12-31',
+            'title': 'Real-time Sahm Rule Recession Indicator',
+            'observation_start': '1959-12-01',
+            'observation_end': '2021-03-01',
+            'frequency': 'Monthly',
+            'frequency_short': 'M',
+            'units': 'Percentage Points',
+            'units_short': 'Percentage Points',
+            'seasonal_adjustment': 'Seasonally Adjusted',
+            'seasonal_adjustment_short': 'SA',
+            'last_updated': '2021-04-02 08:01:07-05',
+            'popularity': 62,
+            'group_popularity': 62,
+            'notes': 'Sahm Recession Indicator signals the start of a ...
+            {'id': 'SAHMCURRENT', ........
+
+        >>> fred.search_for_series(['trade', 'manufacturing',], limit = 3)
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'order_by': 'search_rank',
+        'sort_order': 'desc',
+        'count': 384,
+        'offset': 0,
+        'limit': 3,
+        'seriess': [
+            {'id': 'ISRATIO',
+            'realtime_start': '1997-03-14',
+            'realtime_end': '9999-12-31',
+            'title': 'Total Business: Inventories to Sales Ratio',
+            'observation_start': '1948-01-01',
+            'observation_end': '2021-01-01',
+            'frequency': 'Monthly',
+            'frequency_short': 'M',
+            'units': 'Ratio',
+            'units_short': 'Ratio',
+            'seasonal_adjustment': 'Seasonally Adjusted',
+            'seasonal_adjustment_short': 'SA',
+            'last_updated': '2021-03-16 09:06:02-05',
+            'popularity': 69,
+            'group_popularity': 70,
+            'notes': 'Effective June 14, 2001, data were ...
+            {'id': 'CMRMTSPL', ........
         """
         self._viable_api_key()
         fused_search_text = self._join_strings_by(search_words, '+')
@@ -558,6 +656,7 @@ class Series(Releases):
 
         See Also
         --------
+        search_for_series
 
         Notes
         -----
@@ -566,7 +665,39 @@ class Series(Releases):
 
         Examples
         --------
-        m1 and m2 via FRED web service official docs
+        >>> fred.get_tags_for_series_search(('SAHM',), limit = 5) 
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'order_by': 'series_count',
+        'sort_order': 'desc',
+        'count': 8,
+        'offset': 0,
+        'limit': 5,
+        'tags': [
+            {'name': 'academic data',
+            'group_id': 'gen',
+            'notes': '',
+            'created': '2012-08-29 10:22:19-05',
+            'popularity': 47,
+            'series_count': 2},
+            {'name': 'claudia sahm', .......
+        
+        >>> fred.get_tags_for_series_search(['trade', 'manufacturing',], limit = 3)
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'order_by': 'series_count',
+        'sort_order': 'desc',
+        'count': 221,
+        'offset': 0,
+        'limit': 3,
+        'tags': [
+            {'name': 'usa',
+            'group_id': 'geo',
+            'notes': 'United States of America',
+            'created': '2012-02-27 10:18:19-06',
+            'popularity': 100,
+            'series_count': 370},
+            {'name': 'nation', ......
         """
         self._viable_api_key()
         series_search_text = self._join_strings_by(search_words, '+')
@@ -659,6 +790,7 @@ class Series(Releases):
         See Also
         --------
         get_tags_for_series_search:
+        search_for_series
 
         Notes
         -----
@@ -667,6 +799,39 @@ class Series(Releases):
 
         Examples
         --------
+        >>> fred.get_related_tags_for_series_search(('SAHM',), limit = 5, tag_names = ('claudia sahm',))
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'order_by': 'series_count',
+        'sort_order': 'desc',
+        'count': 7,
+        'offset': 0,
+        'limit': 5,
+        'tags': [
+            {'name': 'academic data',
+            'group_id': 'gen',
+            'notes': '',
+            'created': '2012-08-29 10:22:19-05',
+            'popularity': 47,
+            'series_count': 2},
+            {'name': 'monthly', .......
+
+        >>> fred.get_related_tags_for_series_search(['trade', 'manufacturing',], limit = 3, tag_names = ['usa', 'nation',])
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'order_by': 'series_count',
+        'sort_order': 'desc',
+        'count': 165,
+        'offset': 0,
+        'limit': 3,
+        'tags': [
+            {'name': 'manufacturing',
+            'group_id': 'gen',
+            'notes': '',
+            'created': '2012-02-27 10:18:19-06',
+            'popularity': 68,
+            'series_count': 242},
+            {'name': 'nsa', ........
         """
         self._viable_api_key()
         series_search_text = self._join_strings_by(search_words, '+')
@@ -747,6 +912,22 @@ class Series(Releases):
 
         Examples
         --------
+        >>> fred.get_tags_for_a_series('FYFSD')
+        {'realtime_start': '1998-02-02',
+        'realtime_end': '9999-12-31',
+        'order_by': 'series_count',
+        'sort_order': 'desc',
+        'count': 8,
+        'offset': 0,
+        'limit': 1000,
+        'tags': [
+            {'name': 'omb',
+            'group_id': 'src',
+            'notes': 'Office of Management and Budget',
+            'created': '2012-02-27 10:18:19-06',
+            'popularity': 39,
+            'series_count': 6},
+            {'name': 'usa', .........
         """
         self._viable_api_key()
         url_prefix_params = {
@@ -764,7 +945,7 @@ class Series(Releases):
         self.series_stack["get_tags_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_tags_for_a_series"]
 
-    # param docstrings are checked
+    # ensure start_time, end_time format
     def get_series_updates(
             self,
             realtime_start: str = None,
@@ -805,13 +986,12 @@ class Series(Releases):
             If None, no filtering by geographic type of series.
         start_time: str, default None
             The start time for limiting results for a time range.
-            Expected format is "YYYYMMDDHhmm". 
-            "1999-12-31 23:59": "199912312359"
-            Can filter down to minutes.
+            Expected format is "YYYYMMDDHhmm", 24-hour (11:59PM = 23:59). 
             If start_time is passed, end_time is required.
             If None, end_time must also be None.
         end_time: str, default None
             The end time for limiting results for a time range.
+            Expected format is "YYYYMMDDHhmm", 24-hour (11:59PM = 23:59).
             If end_time is passed, end_time is required.
             If None, start_time must also be None.
 
@@ -832,16 +1012,81 @@ class Series(Releases):
 
         Examples
         --------
+        >>> params = {'limit': 3,
+                    'filter_value': 'macro',
+                    'start_time': '202104011659',
+                    'end_time': '202104061300'}
+        >>> fred.get_series_updates(**params)
+        {'realtime_end': '9999-12-31',
+        'filter_variable': 'geography',
+        'filter_value': 'macro',
+        'order_by': 'last_updated',
+        'sort_order': 'desc',
+        'count': 31838,
+        'offset': 0,
+        'limit': 3,
+        'seriess': [
+            {'id': 'AB14AAAMT',
+            'realtime_start': '1776-07-04',
+            'realtime_end': '9999-12-31',
+            'title': 'Total Value of Issues, with a Maturity ...
+            'observation_start': '2001-01-02',
+            'observation_end': '2021-04-05',
+            'frequency': 'Daily',
+            'frequency_short': 'D',
+            'units': 'Millions of Dollars',
+            'units_short': 'Mil. of $',
+            'seasonal_adjustment': 'Not Seasonally Adjusted',
+            'seasonal_adjustment_short': 'NSA',
+            'last_updated': '2021-04-06 12:12:13-05',
+            'popularity': 2,
+            'notes': 'For more information, please see http://www.federalreserve.gov/releases/cp/about.htm.'},
+            {'id': 'AB14AAVOL', .......
+        
+        >>> params = {'limit': 3,
+                    'filter_value': 'regional',
+                    'offset': 2,
+                    'start_time': '202104010000',
+                    'end_time': '202104060000'}
+        >>> fred.get_series_updates(**params)
+        {'realtime_start': '1776-07-04',
+        'realtime_end': '9999-12-31',
+        'filter_variable': 'geography',
+        'filter_value': 'regional',
+        'order_by': 'last_updated',
+        'sort_order': 'desc',
+        'count': 132717,
+        'offset': 2,
+        'limit': 3,
+        'seriess': [
+            {'id': 'MDINSUREDUR',
+            'realtime_start': '1776-07-04',
+            'realtime_end': '9999-12-31',
+            'title': 'Insured Unemployment Rate in Maryland',
+            'observation_start': '1986-02-08',
+            'observation_end': '2021-03-20',
+            'frequency': 'Weekly, Ending Saturday',
+            'frequency_short': 'W',
+            'units': 'Percent',
+            'units_short': '%',
+            'seasonal_adjustment': 'Not Seasonally Adjusted',
+            'seasonal_adjustment_short': 'NSA',
+            'last_updated': '2021-04-05 07:37:03-05',
+            'popularity': 1,
+            'notes': 'The insured unemployment rate (% of ...
+            {'id': 'MDICLAIMS', ........
         """
         self._viable_api_key()
         if start_time is not None or end_time is not None:
             if start_time is None or end_time is None:
                 e = "Both start_time and end_time are required if one is given"
                 raise TypeError(e)
-            if len(end_time) == 12 and end_time.isdigit(): # YYYYMMDDHHmm
-                diff = datetime.now() - datetime.strptime(end_time, "%Y%m%d%H%M")
-            if len(end_time) == 8 and end_time.isdigit(): # YYYYMMDD
-                diff = datetime.now() - datetime.strptime(end_time, "%Y%m%d")
+            only_digit = end_time.isdigit() and start_time.isdigit()
+            correct_len = len(end_time) == len(start_time) == 12
+            if not (only_digit and correct_len):
+                e = "start_time and end_time must be YYYYMMDDHhmm"
+                raise ValueError(e)
+            diff = datetime.now() - datetime.strptime(end_time, "%Y%m%d%H%M")
             if diff.days > 14:
                 e = "Start date must come from last 2 weeks"
                 raise ValueError(e)
@@ -915,6 +1160,19 @@ class Series(Releases):
 
         Examples
         --------
+        >>> params = {'series_id': 'FYFSD',
+                    'limit': 3,
+                    'realtime_start': '1812-06-18',
+                    'sort_order': 'desc'}
+        >>> fred.get_series_vintagedates(**params)
+        {'realtime_start': '1812-06-18',
+        'realtime_end': '9999-12-31',
+        'order_by': 'vintage_date',
+        'sort_order': 'desc',
+        'count': 46,
+        'offset': 0,
+        'limit': 3,
+        'vintage_dates': ['2020-10-16', '2020-02-12', '2019-10-25']}
         """
         self._viable_api_key()
         url_prefix_params = {
