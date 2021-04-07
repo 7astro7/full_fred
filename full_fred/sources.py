@@ -11,7 +11,6 @@ class Sources(Series):
         super().__init__()
         self.source_stack = dict()
 
-    # 
     def get_all_sources(
             self,
             realtime_start: str = None,
@@ -141,11 +140,11 @@ class Sources(Series):
         'link': 'http://www.federalreserve.gov/'}]}
         """
         self._viable_api_key()
-        url_prefix = "source?source_id="
-        try:
-            url_prefix += str(source_id)
-        except TypeError:
-            print("Unable to cast source_id %s to str" % source_id)
+        url_prefix_params = {
+                "a_url_prefix": "source?source_id=",
+                "an_int_id": source_id,
+                }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
@@ -226,11 +225,11 @@ class Sources(Series):
             {'id': 14, ......
         """
         self._viable_api_key()
-        url_prefix = "source/releases?source_id="
-        try:
-            url_prefix += str(source_id)
-        except TypeError:
-            print("Unable to cast source_id %s to str" % source_id)
+        url_prefix_params = {
+            "a_url_prefix": "source/releases?source_id=",
+            "an_int_id": source_id,
+            }
+        url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
                 "&realtime_start=": realtime_start,
                 "&realtime_end=": realtime_end,
