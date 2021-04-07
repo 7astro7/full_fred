@@ -1,6 +1,7 @@
 
 from .releases import Releases
 from pandas import DataFrame
+from datetime import datetime, timedelta
 
 class Series(Releases):
 
@@ -691,7 +692,6 @@ class Series(Releases):
                 "&sort_order=": sort_order,
                 }
         url = self._add_optional_params(url_prefix1, optional_args)
-#        breakpoint()
         self.series_stack["get_related_tags_for_series_search"] = self._fetch_data(url)
         return self.series_stack["get_related_tags_for_series_search"]
 
@@ -834,6 +834,17 @@ class Series(Releases):
         --------
         """
         self._viable_api_key()
+        if start_time is not None or end_time is not None:
+            if start_time is None or end_time is None:
+                e = "Both start_time and end_time are required if one is given"
+                raise TypeError(e)
+            if len(end_time) == 12 and end_time.isdigit(): # YYYYMMDDHHmm
+                diff = datetime.now() - datetime.strptime(end_time, "%Y%m%d%H%M")
+            if len(end_time) == 8 and end_time.isdigit(): # YYYYMMDD
+                diff = datetime.now() - datetime.strptime(end_time, "%Y%m%d")
+            if diff.days > 14:
+                e = "Start date must come from last 2 weeks"
+                raise ValueError(e)
         url_prefix = "series/updates?"
         optional_args = {
                 "&realtime_start=": realtime_start,
@@ -861,7 +872,7 @@ class Series(Releases):
         """
         Get the dates in history when a series' data values were 
         revised or new data values were released. Vintage dates are 
-        the release dates for a series excluding release dates when 
+        the release dates for a series, excluding release dates when 
         the data for the series did not change.
 
         Parameters

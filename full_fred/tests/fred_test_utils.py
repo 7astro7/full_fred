@@ -1,4 +1,5 @@
 
+from datetime import datetime, timedelta
 
 def returned_ok(
     observed: dict,
@@ -35,3 +36,17 @@ def returned_ok(
         if key in observed.keys():
             return True
     return False
+
+def make_time_string(
+        start: bool = False,
+        ) -> str:
+    """
+    Method to create start_time, end_time arguments for 
+    test_series_methods.test_get_series_updates_method_works
+    """
+    time_string = datetime.now() - timedelta(days = 10) # start_time
+    if not start:
+        time_string = datetime.now() - timedelta(days = 5) # end_time
+    return time_string.strftime(format = '%Y%m%d%H%M')
+
+
