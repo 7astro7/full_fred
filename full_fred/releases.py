@@ -54,6 +54,7 @@ class Releases(Categories):
 
         See Also
         --------
+        fred.get_a_release: Get metadata of a specific release of data.
 
         Notes
         -----
@@ -143,10 +144,11 @@ class Releases(Categories):
         Returns 
         -------
         dict
-            release_id, release_name, date for all releases
+            Release_id, release_name, date for all releases
 
         See Also
         --------
+        fred.get_a_release: Get metadata of a specific release of data.
 
         Notes
         -----
@@ -216,6 +218,7 @@ class Releases(Categories):
 
         See Also
         --------
+        fred.get_all_releases: Get all releases of economic data.
 
         Notes
         -----
@@ -300,7 +303,7 @@ class Releases(Categories):
 
         See Also
         --------
-        get_release_dates_all_releases
+        get_release_dates_all_releases: Get release dates for all releases of economic data. 
 
         Notes
         -----
@@ -411,6 +414,7 @@ class Releases(Categories):
 
         See Also
         --------
+        get_series_df: Get observations of a series in pd.DataFrame form.
 
         Notes
         -----
@@ -499,6 +503,7 @@ class Releases(Categories):
 
         See Also
         --------
+        fred.get_a_source: Get metadata pertaining to a data source.
 
         Notes
         -----
@@ -591,11 +596,11 @@ class Releases(Categories):
         Returns 
         -------
         dict
-            name, group ID, notes, and other metadata for each tag.
+            Name, group ID, notes, and other metadata for each tag.
 
         See Also
         --------
-        get_related_tags_for_release
+        get_related_tags_for_release: Get tags related to those found within a release. 
 
         Notes
         -----
@@ -703,12 +708,11 @@ class Releases(Categories):
         Returns 
         -------
         dict
-            name, group ID, notes, series count, and other metadata for each related tag.
+            Name, group ID, notes, series count, and other metadata for each related tag.
             
-
         See Also
         --------
-        get_tags_for_release
+        get_tags_for_release: Get the FRED tags found within a release.
 
         Notes
         -----
@@ -755,8 +759,6 @@ class Releases(Categories):
         self.release_stack["get_related_tags_for_release"] = self._fetch_data(url)
         return self.release_stack["get_related_tags_for_release"]
 
-    # param docstrings are checked
-    # add further notes that FRED clarifies with
     def get_release_tables(
             self,
             release_id: int,
@@ -786,9 +788,8 @@ class Releases(Categories):
 
         Returns 
         -------
-
-        See Also
-        --------
+        dict
+            Heirarchical metadata for a release. 
 
         Notes
         -----

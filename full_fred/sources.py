@@ -56,7 +56,7 @@ class Sources(Series):
 
         See Also
         --------
-        get_a_source: get metadata about a source
+        fred.get_a_source: Get metadata about a source.
 
         Notes
         -----
@@ -95,7 +95,6 @@ class Sources(Series):
         self.source_stack["get_all_sources"] = self._fetch_data(url) 
         return self.source_stack["get_all_sources"]
 
-    # param docstrings are checked
     def get_a_source(
             self,
             source_id: int,
@@ -122,6 +121,10 @@ class Sources(Series):
         -------
         dict
             Metadata of requested FRED source
+
+        See Also
+        --------
+        fred.get_all_sources: Get all sources of economic data.
 
         Notes
         -----
@@ -199,6 +202,10 @@ class Sources(Series):
         -------
         dict
             Metadata of each release for a source.
+
+        See Also
+        --------
+        fred.get_series_on_a_release: Get the series within a release of economic data.
 
         Notes
         -----
