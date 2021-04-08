@@ -30,8 +30,8 @@ class Categories(FredBase):
 
         See Also
         --------
-        get_child_categories: name, ID, 
-        get_related_categories
+        fred.get_child_categories: Get specific categories within a category.
+        fred.get_related_categories: Get similar categories that aren't part of a child-parent link.
 
         Notes
         -----
@@ -91,6 +91,7 @@ class Categories(FredBase):
 
         See Also
         --------
+        fred.get_related_categories: Get similar categories that aren't part of a child-parent link.
 
         Notes
         -----
@@ -161,6 +162,7 @@ class Categories(FredBase):
 
         See Also
         --------
+        fred.get_child_categories: Get specific categories within a category.
 
         Notes
         -----
@@ -257,9 +259,6 @@ class Categories(FredBase):
         -------
         dict
             Metadata of series that belong to category. 
-
-        See Also
-        --------
 
         Notes
         -----
@@ -392,6 +391,7 @@ class Categories(FredBase):
 
         See Also
         --------
+        fred.get_related_tags_for_a_category: Find related tags for tags within a FRED category. 
 
         Notes
         -----
@@ -504,10 +504,11 @@ class Categories(FredBase):
         Returns 
         -------
         dict
+            Metadata for each related tag.
 
         See Also
         --------
-        fred.get_tags
+        fred.get_tags_for_a_category: Get tags found within a category. 
 
         Notes
         -----

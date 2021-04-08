@@ -189,9 +189,6 @@ class Tags(Sources):
 
         Examples
         --------
-        f = Fred()
-        f.get_related_tags_for_a_tag(exclude_tag_names = ("discontinued",))
-
         >>> params = {'tag_names': ('monetary aggregates', 'weekly'),
                     'limit': 2,
                     'tag_group_id': 'geo',
