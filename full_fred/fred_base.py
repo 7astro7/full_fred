@@ -1,22 +1,15 @@
-
 from requests.exceptions import RequestException
 import requests
 import os
 
-# expand on current docstrings to explain with greater clarity
-# define tags, sources, series, categories, releases, etc.
-# define realtime_start and realtime_end
-# create a thing on how to set environment variables to enable broad use 
-# integrate ALFRED, GeoFRED
 
 class FredBase:
-
     def __init__(
-            self, 
-            api_key_file: str = None,
-            ):
+        self,
+        api_key_file: str = None,
+    ):
         """
-        FredBase defines methods common to Categories, Releases, 
+        FredBase defines methods common to Categories, Releases,
         Series, Releases, Sources, Tags classes.
         """
         self.realtime_start = "1776-07-04"
@@ -28,17 +21,17 @@ class FredBase:
             self.api_key_file = api_key_file
 
     def get_api_key_file(
-            self,
-            ) -> str:
+        self,
+    ) -> str:
         """
-        Return currently assigned key file.
+        Return currently assigned api_key_file.
         """
         return self.api_key_file
 
     def set_api_key_file(
-            self,
-            api_key_file: str,
-            ) -> bool:
+        self,
+        api_key_file: str,
+    ) -> bool:
         """
         Return True if api_key_file has been found.
         """
@@ -49,21 +42,19 @@ class FredBase:
         return True
 
     def _read_api_key_file(
-            self,
-            ) -> str:
+        self,
+    ) -> str:
         """
         Read FRED api key from file. This method exists to minimize the
         time that the user's API key is human-readable
         """
         try:
-            with open(self.api_key_file, 'r') as key_file:
+            with open(self.api_key_file, "r") as key_file:
                 return key_file.readline().strip()
         except FileNotFoundError as e:
             print(e)
 
-    def env_api_key_found(
-            self
-            ) -> bool:
+    def env_api_key_found(self) -> bool:
         """
         Indicate whether a FRED_API_KEY environment variable is detected.
         """
@@ -73,10 +64,10 @@ class FredBase:
         return False
 
     def _add_optional_params(
-            self,
-            og_url_string: str,
-            optional_params: dict,
-            ) -> str:
+        self,
+        og_url_string: str,
+        optional_params: dict,
+    ) -> str:
         """
         Create a parameter string that adds any non-None parameters in optional_params to
         og_url_string and return og_url_string with these additions. If all optional_params
@@ -90,7 +81,7 @@ class FredBase:
         optional_params: dict
             a dictionary mapping parameter strings to actual arguments passed by user
             for example:
-                "&tag_group_id=": None 
+                "&tag_group_id=": None
                 "&limit=": 23
             if the value is not None, "&limit=" + str(23) is added to og_url_string
 
@@ -104,7 +95,7 @@ class FredBase:
         Not all paramaters passed in optional_params need be optional. Most are.
 
         If tag_names is a substring of a parameter in optional_params, whitespace is
-        replaced with "+" so the request URL encodes the whitespace in a standard way. 
+        replaced with "+" so the request URL encodes the whitespace in a standard way.
         There's more on this at
         https://fred.stlouisfed.org/docs/api/fred/related_tags.html
         """
@@ -115,12 +106,14 @@ class FredBase:
                     try:
                         optional_params[k] = str(optional_params[k]).lower()
                     except TypeError:
-                        e = "Cannot cast include_empty to str, " \
-                                "cannot create request url to fetch" \
-                                " data"
+                        e = (
+                            "Cannot cast include_empty to str, "
+                            "cannot create request url to fetch"
+                            " data"
+                        )
                         print(e)
                 if "tag_names" in k:
-                    tag_names = optional_params[k] 
+                    tag_names = optional_params[k]
                     try:
                         str_names = self._join_strings_by(tag_names, ";")
                         str_names = str_names.strip().replace(" ", "+")
@@ -136,7 +129,7 @@ class FredBase:
             elif "realtime_start" in k or "realtime_end" in k:
                 # either no realtime_start arg or no realtime_end arg
                 # passed: use attribute
-                default_realtime_param = self.realtime_start 
+                default_realtime_param = self.realtime_start
                 if "realtime_end" in k:
                     default_realtime_param = self.realtime_end
 
@@ -147,17 +140,17 @@ class FredBase:
                         new_url_string += a_parameter_string
                     except TypeError:
                         e = "%s attribute value " % default_realtime_param
-                        e += " cannot be added to request URL" 
+                        e += " cannot be added to request URL"
                         print(e)
         return new_url_string
 
     def _viable_api_key(self) -> str:
         """
         Verifies that there's an api key to make a request url with.
-        Raises error if necessary to allow methods to catch, early in 
+        Raises error if necessary to allow methods to catch, early in
         query process, whether a request for data can be sent to FRED.
         If there's a usable key, return which one to use
-        
+
         Returns
         -------
         str
@@ -169,35 +162,35 @@ class FredBase:
         if self.api_key_file is None:
             if not self.env_api_key_found():
                 raise AttributeError("Cannot locate a FRED API key")
-            return 'env'
-        return 'file'
-    
+            return "env"
+        return "file"
+
     def _make_request_url(
-            self, 
-            var_url: str, 
-            ) -> str:
+        self,
+        var_url: str,
+    ) -> str:
         """
         Return the url that can be used to retrieve the desired data given var_url.
         """
         key_to_use = self._viable_api_key()
         url_base = [
-                self.__url_base, 
-                var_url, 
-                "&file_type=json&api_key=",
-                ]
+            self.__url_base,
+            var_url,
+            "&file_type=json&api_key=",
+        ]
         base = "".join(url_base)
-        if key_to_use == 'env':
+        if key_to_use == "env":
             try:
-                return base + os.environ["FRED_API_KEY"] 
+                return base + os.environ["FRED_API_KEY"]
             except KeyError as sans:
-                print(sans, ' no longer found in environment')
-        if key_to_use == 'file':
+                print(sans, " no longer found in environment")
+        if key_to_use == "file":
             return base + self._read_api_key_file()
 
     def _fetch_data(
-            self, 
-            url_prefix: str,
-            ) -> dict:
+        self,
+        url_prefix: str,
+    ) -> dict:
         """
         Make request URL, send it to FRED, return JSON upshot
         """
@@ -221,13 +214,13 @@ class FredBase:
         return response.json()
 
     def _append_id_to_url(
-            self, 
-            a_url_prefix: str,
-            an_int_id: int = None,
-            a_str_id: str = None,
-            ) -> str:
+        self,
+        a_url_prefix: str,
+        an_int_id: int = None,
+        a_str_id: str = None,
+    ) -> str:
         """
-        Return a_url_prefix with either an_int_id or a_str_id appended to it. 
+        Return a_url_prefix with either an_int_id or a_str_id appended to it.
         """
         if an_int_id is None and a_str_id is None:
             raise ValueError("No id argument given, cannot append to url")
@@ -242,10 +235,10 @@ class FredBase:
         return new_url_str
 
     def _join_strings_by(
-            self,
-            strings: list,
-            use_str: str,
-            ) -> str:
+        self,
+        strings: list,
+        use_str: str,
+    ) -> str:
         """
         Join an iterable of strings using use_str and return the fused string.
         """
@@ -256,5 +249,3 @@ class FredBase:
         except TypeError:
             print("Unable to join strings using %s" % use_str)
         return fused_str
-
-

@@ -1,8 +1,7 @@
-
 from .series import Series
 
-class Sources(Series):
 
+class Sources(Series):
     def __init__(self):
         """
         FRED source = a provider of economic data series such as
@@ -12,14 +11,14 @@ class Sources(Series):
         self.source_stack = dict()
 
     def get_all_sources(
-            self,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            limit: int = None,
-            offset: int = None,
-            order_by: str = None,
-            sort_order: str = None,
-            ) -> dict:
+        self,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        limit: int = None,
+        offset: int = None,
+        order_by: str = None,
+        sort_order: str = None,
+    ) -> dict:
         """
         Get all sources of economic data.
 
@@ -37,14 +36,14 @@ class Sources(Series):
             The maximum number of results to return.
             Values can be in range(1, 1_001).
             If None, FRED will use limit = 1_000.
-        offset: int, default None 
+        offset: int, default None
             Can be a non-negative int.
             If None, offset of 0 is used.
         order_by: str, default None
             Order results by values of the specified attribute.
             Can be one of "source_id", "name", "realtime_start", "realtime_end".
             If None, "source_id" is used.
-        sort_order: str, default None 
+        sort_order: str, default None
             Sort results in ascending or descending order for attribute values specified by order_by.
             Can be "asc" or "desc".
             If None, "asc" is used.
@@ -84,23 +83,23 @@ class Sources(Series):
         self._viable_api_key()
         url_prefix = "sources?"
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&order_by=": order_by,
-                "&sort_order=": sort_order,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&order_by=": order_by,
+            "&sort_order=": sort_order,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.source_stack["get_all_sources"] = self._fetch_data(url) 
+        self.source_stack["get_all_sources"] = self._fetch_data(url)
         return self.source_stack["get_all_sources"]
 
     def get_a_source(
-            self,
-            source_id: int,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            ) -> dict:
+        self,
+        source_id: int,
+        realtime_start: str = None,
+        realtime_end: str = None,
+    ) -> dict:
         """
         Get a source of economic data.
 
@@ -144,28 +143,28 @@ class Sources(Series):
         """
         self._viable_api_key()
         url_prefix_params = {
-                "a_url_prefix": "source?source_id=",
-                "an_int_id": source_id,
-                }
+            "a_url_prefix": "source?source_id=",
+            "an_int_id": source_id,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-            }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.source_stack["get_a_source"] = self._fetch_data(url)
         return self.source_stack["get_a_source"]
 
     def get_releases_for_a_source(
-            self,
-            source_id: int,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            limit: int = None,
-            offset: int = None,
-            order_by: str = None,
-            sort_order: str = None,
-            ):
+        self,
+        source_id: int,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        limit: int = None,
+        offset: int = None,
+        order_by: str = None,
+        sort_order: str = None,
+    ):
         """
         Get the releases for a source.
 
@@ -185,14 +184,14 @@ class Sources(Series):
             The maximum number of results to return.
             Values can be in range(1, 1_001).
             If None, FRED will use limit = 1_000.
-        offset: int, default None 
+        offset: int, default None
             Can be a non-negative int.
             If None, offset of 0 is used.
         order_by: str, default None
             Order results by values of the specified attribute.
             Can be one of "release_id", "name", "press_release", "realtime_start", "realtime_end".
             If None, "release_id" is used.
-        sort_order: str, default None 
+        sort_order: str, default None
             Sort results in ascending or descending order for attribute values specified by order_by.
             Can be "asc" or "desc".
             If None, "asc" is used.
@@ -234,18 +233,16 @@ class Sources(Series):
         url_prefix_params = {
             "a_url_prefix": "source/releases?source_id=",
             "an_int_id": source_id,
-            }
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&order_by=": order_by,
-                "&sort_order=": sort_order,
-            }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&order_by=": order_by,
+            "&sort_order=": sort_order,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.source_stack["get_releases_for_a_source"] = self._fetch_data(url)
         return self.source_stack["get_releases_for_a_source"]
-
-

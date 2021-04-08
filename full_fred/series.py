@@ -1,10 +1,9 @@
-
 from .releases import Releases
 from pandas import DataFrame
-from datetime import datetime, timedelta
+from datetime import datetime
+
 
 class Series(Releases):
-
     def __init__(self):
         """
         FRED series = measurements of an economic variable at different points in time.
@@ -14,16 +13,16 @@ class Series(Releases):
         For a pd.DataFrame of a series use get_series_df
         """
         super().__init__()
-        self.series_stack = dict() 
+        self.series_stack = dict()
 
     def get_a_series(
-            self, 
-            series_id: str, 
-            realtime_start: str = None, 
-            realtime_end: str = None,
-            ):
+        self,
+        series_id: str,
+        realtime_start: str = None,
+        realtime_end: str = None,
+    ):
         """
-        Get the metadata of a FRED series. 
+        Get the metadata of a FRED series.
 
         Parameters
         ----------
@@ -32,16 +31,16 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
+            If fred.realtime_end = None, FRED web service will use today's date.
 
         Returns
         -------
         dict
-            Title, ID, units, frequency, notes, seasonal adjustment 
+            Title, ID, units, frequency, notes, seasonal adjustment
             condition, and other metadata of the series.
 
         See Also
@@ -76,25 +75,22 @@ class Series(Releases):
             'notes': 'Sahm Recession Indicator signals the start of .....
         """
         self._viable_api_key()
-        url_prefix_params = {
-                "a_url_prefix": "series?series_id=",
-                "a_str_id": series_id
-                }
+        url_prefix_params = {"a_url_prefix": "series?series_id=", "a_str_id": series_id}
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack["get_a_series"] = self._fetch_data(url)
         return self.series_stack["get_a_series"]
 
     def get_categories_of_series(
-            self,
-            series_id: str, 
-            realtime_start: str = None, 
-            realtime_end: str = None,
-            ):
+        self,
+        series_id: str,
+        realtime_start: str = None,
+        realtime_end: str = None,
+    ):
         """
         Get the categories that FRED uses to classify a series.
 
@@ -105,11 +101,11 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
+            If fred.realtime_end = None, FRED web service will use today's date.
 
         Returns
         -------
@@ -135,36 +131,36 @@ class Series(Releases):
         """
         self._viable_api_key()
         url_prefix_params = {
-                "a_url_prefix": "series/categories?series_id=",
-                "a_str_id": series_id
-                }
+            "a_url_prefix": "series/categories?series_id=",
+            "a_str_id": series_id,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack["get_categories_of_series"] = self._fetch_data(url)
         return self.series_stack["get_categories_of_series"]
 
     def get_series_df(
-            self, 
-            series_id: str,
-            realtime_start: str = None, 
-            realtime_end: str = None,
-            limit: int = None,
-            offset: int = None,
-            sort_order: str = None,
-            observation_start: str = None,
-            observation_end: str = None,
-            units: str = None,
-            frequency: str = None,
-            aggregation_method: str = None,
-            output_type: int = None,
-            vintage_dates: list = None,
-            ) -> DataFrame:
+        self,
+        series_id: str,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        limit: int = None,
+        offset: int = None,
+        sort_order: str = None,
+        observation_start: str = None,
+        observation_end: str = None,
+        units: str = None,
+        frequency: str = None,
+        aggregation_method: str = None,
+        output_type: int = None,
+        vintage_dates: list = None,
+    ) -> DataFrame:
         """
-        Get the observations, the data values, for an economic data 
+        Get the observations, the data values, for an economic data
         series in a pd.DataFrame.
 
         Parameters
@@ -174,12 +170,12 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
-        limit: int, default None 
+            If fred.realtime_end = None, FRED web service will use today's date.
+        limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 100_001).
             If None, FRED will use limit = 100_001.
@@ -204,14 +200,14 @@ class Series(Releases):
                 "ch1" : Change from 1 year ago
                 "pch" : Percent Change
                 "pc1" : Percent Change from 1 year go
-                "pca" : Compounded annual rate of change 
-                "cch" : Continuously compounded rate of change 
-                "cca" : Continuously compounded annual rate of change 
+                "pca" : Compounded annual rate of change
+                "cch" : Continuously compounded rate of change
+                "cca" : Continuously compounded annual rate of change
                 "log" : Natural log
             If None, "lin": Levels / No transformation
         frequency: str, default None
-            A string that indicates a lower frequency to aggregate 
-            values to. Frequency aggregation converts higher 
+            A string that indicates a lower frequency to aggregate
+            values to. Frequency aggregation converts higher
             frequency series (such as daily) into lower frequency
             series (such as monthly). If a frequency is given,
             aggregation_method can indicate how aggregation is calculated.
@@ -244,7 +240,7 @@ class Series(Releases):
             If no argument is passed for frequency parameter, aggregation_method is moot.
             Can be one of "avg", "sum", "eop" (end of period).
             If None and frequency argument is given, "avg" is used.
-        output_type: int, default None 
+        output_type: int, default None
             An integer that indicates an output type.
             1: Observations by Real-Time Period
             2: Observations by Vintage Date, All Observations
@@ -252,8 +248,8 @@ class Series(Releases):
             4: Observations, Initial Release Only
             If None, 1: Observations by Real-Time Period is used.
         vintage_dates
-            A list[str] of "YYY-MM-DD" formatted dates in history: FRED web service returns 
-            observations of the series as it existed on these historical dates. 
+            A list[str] of "YYY-MM-DD" formatted dates in history: FRED web service returns
+            observations of the series as it existed on these historical dates.
             Specifying vintage_dates can be a substitute for specifying a realtime period.
             For more on vintage_dates, see the URL in the Notes section below.
             If None, no vintage dates are set.
@@ -295,7 +291,7 @@ class Series(Releases):
         8     2020-07-30   9999-12-31  2017-01-01  18421.034
         9     2017-03-30   2017-07-27  2016-01-01    16835.2
 
-        >>> fred.get_series_df(series_id = 'FYFSD') 
+        >>> fred.get_series_df(series_id = 'FYFSD')
             realtime_start realtime_end        date       value
         0       1998-02-02   9999-12-31  1901-06-30          63
         1       1998-02-02   9999-12-31  1902-06-30          77
@@ -313,24 +309,24 @@ class Series(Releases):
         """
         self._viable_api_key()
         url_prefix_params = {
-                "a_url_prefix": "series/observations?series_id=",
-                "a_str_id": series_id
-                }
+            "a_url_prefix": "series/observations?series_id=",
+            "a_str_id": series_id,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&sort_order=": sort_order,
-                "&observation_start": observation_start,
-                "&observation_end": observation_end,
-                "&units": units,
-                "&frequency": frequency,
-                "&aggregation_method": aggregation_method,
-                "&output_type=": output_type,
-                "&vintage_dates=": vintage_dates,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&sort_order=": sort_order,
+            "&observation_start": observation_start,
+            "&observation_end": observation_end,
+            "&units": units,
+            "&frequency": frequency,
+            "&aggregation_method": aggregation_method,
+            "&output_type=": output_type,
+            "&vintage_dates=": vintage_dates,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         df_and_metadata = self._fetch_data(url)
         self.series_stack["get_series_df"] = df_and_metadata
@@ -345,11 +341,11 @@ class Series(Releases):
         return self.series_stack["get_series_df"]["df"]
 
     def get_release_for_a_series(
-            self,
-            series_id: str,
-            realtime_start: str = None, 
-            realtime_end: str = None,
-            ) -> dict:
+        self,
+        series_id: str,
+        realtime_start: str = None,
+        realtime_end: str = None,
+    ) -> dict:
         """
         Get the release for an economic data series.
 
@@ -360,11 +356,11 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
+            If fred.realtime_end = None, FRED web service will use today's date.
 
         Returns
         -------
@@ -392,33 +388,33 @@ class Series(Releases):
         """
         self._viable_api_key()
         url_prefix_params = {
-                "a_url_prefix": "series/release?series_id=",
-                "a_str_id": series_id
-                }
+            "a_url_prefix": "series/release?series_id=",
+            "a_str_id": series_id,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack["get_release_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_release_for_a_series"]
 
     def search_for_series(
-            self, 
-            search_words: list,
-            search_type: str = None,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            limit: int = None,
-            offset: int = None,
-            order_by: str = None,
-            sort_order: str = None,
-            filter_variable: str = None,
-            filter_value:str = None,
-            tag_names: list = None,
-            exclude_tag_names: list = None,
-            ) -> dict:
+        self,
+        search_words: list,
+        search_type: str = None,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        limit: int = None,
+        offset: int = None,
+        order_by: str = None,
+        sort_order: str = None,
+        filter_variable: str = None,
+        filter_value: str = None,
+        tag_names: list = None,
+        exclude_tag_names: list = None,
+    ) -> dict:
         """
         Get economic data series that match search_words using search_type.
 
@@ -438,12 +434,12 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
-        limit: int, default None 
+            If fred.realtime_end = None, FRED web service will use today's date.
+        limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
             If None, FRED will use limit = 1_001.
@@ -452,9 +448,9 @@ class Series(Releases):
             If None, offset of 0 is used.
         order_by: str, default None
             Order results by values of the specified attribute.
-            Can be one of "search_rank", "series_id", "title", 
-            "units", "frequency", "seasonal_adjustment", "realtime_start", 
-            "realtime_end", "last_updated", "observation_start", 
+            Can be one of "search_rank", "series_id", "title",
+            "units", "frequency", "seasonal_adjustment", "realtime_start",
+            "realtime_end", "last_updated", "observation_start",
             "observation_end", "popularity", "group_popularity".
             If None and search_type is full_text, "search_rank" is used.
             If None and search_type is series_id, "series_id" is used.
@@ -473,9 +469,9 @@ class Series(Releases):
         tag_names: list, default None
             list of tags [str] that series match all of, excluding any tag not in tag_names.
             If None, no filtering by tag names.
-        exclude_tag_names: list, default None 
+        exclude_tag_names: list, default None
             A list of tags that returned series match none of.
-            If passed, tag_names must also be passed to limit number 
+            If passed, tag_names must also be passed to limit number
             of matching series (as per FRED web service)
             https://fred.stlouisfed.org/docs/api/fred/series_search.html
             If None, no tag names are excluded.
@@ -551,44 +547,44 @@ class Series(Releases):
             {'id': 'CMRMTSPL', ........
         """
         self._viable_api_key()
-        fused_search_text = self._join_strings_by(search_words, '+')
+        fused_search_text = self._join_strings_by(search_words, "+")
         url_prefix_params = {
-                "a_url_prefix": "series/search?search_text=",
-                "a_str_id": fused_search_text,
-                }
+            "a_url_prefix": "series/search?search_text=",
+            "a_str_id": fused_search_text,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&search_type=": search_type,
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&order_by=": order_by,
-                "&sort_order=": sort_order,
-                "&filter_variable=": filter_variable,
-                "&filter_value=": filter_value,
-                "&tag_names=": tag_names,
-                "&exclude_tag_names=": exclude_tag_names,
-                }
+            "&search_type=": search_type,
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&order_by=": order_by,
+            "&sort_order=": sort_order,
+            "&filter_variable=": filter_variable,
+            "&filter_value=": filter_value,
+            "&tag_names=": tag_names,
+            "&exclude_tag_names=": exclude_tag_names,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack["search_for_series"] = self._fetch_data(url)
         return self.series_stack["search_for_series"]
 
     def get_tags_for_series_search(
-            self, 
-            search_words: list,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            tag_names: list = None,
-            tag_group_id: str = None,
-            tag_search_words: list = None,
-            limit: int = None,
-            offset: int = None,
-            order_by: str = None,
-            sort_order: str = None,
-            ) -> dict:
+        self,
+        search_words: list,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        tag_names: list = None,
+        tag_group_id: str = None,
+        tag_search_words: list = None,
+        limit: int = None,
+        offset: int = None,
+        order_by: str = None,
+        sort_order: str = None,
+    ) -> dict:
         """
-        Get the FRED tags for a series search. 
+        Get the FRED tags for a series search.
 
         Parameters
         ----------
@@ -597,25 +593,25 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
+            If fred.realtime_end = None, FRED web service will use today's date.
         tag_names: list, default None
-            list of tags [str] that series match all of, excluding 
+            list of tags [str] that series match all of, excluding
             any tag not in tag_names.
             If None, no filtering by tag names.
         tag_group_id: str, default None
             A tag group id to filter tags by type with.
-            can be one of 'freq' for frequency, 'gen' for general or concept, 
-            'geo' for geography, 'geot' for geography type, 'rls' for release, 
+            can be one of 'freq' for frequency, 'gen' for general or concept,
+            'geo' for geography, 'geot' for geography type, 'rls' for release,
             'seas' for seasonal adjustment, 'src' for source
             If None, no filtering by tag group is done.
-        tag_search_words: list, default None 
+        tag_search_words: list, default None
             The words to find matching tags with.
             If None, no filtering by search words is done.
-        limit: int, default None 
+        limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
             If None, FRED will use limit = 1_001.
@@ -627,7 +623,7 @@ class Series(Releases):
             can be one of "series_count", "popularity", "created", "name", "group_id"
             If None, "series_count" is used.
         sort_order: str, default None
-            Return rows in ascending or descending order for 
+            Return rows in ascending or descending order for
             attribute values specified by order_by.
             Can be "asc" or "desc".
             If None, "asc" is used.
@@ -649,7 +645,7 @@ class Series(Releases):
 
         Examples
         --------
-        >>> fred.get_tags_for_series_search(('SAHM',), limit = 5) 
+        >>> fred.get_tags_for_series_search(('SAHM',), limit = 5)
         {'realtime_start': '1776-07-04',
         'realtime_end': '9999-12-31',
         'order_by': 'series_count',
@@ -665,7 +661,7 @@ class Series(Releases):
             'popularity': 47,
             'series_count': 2},
             {'name': 'claudia sahm', .......
-        
+
         >>> fred.get_tags_for_series_search(['trade', 'manufacturing',], limit = 3)
         {'realtime_start': '1776-07-04',
         'realtime_end': '9999-12-31',
@@ -684,72 +680,72 @@ class Series(Releases):
             {'name': 'nation', ......
         """
         self._viable_api_key()
-        series_search_text = self._join_strings_by(search_words, '+')
+        series_search_text = self._join_strings_by(search_words, "+")
         url_prefix_params = {
-                "a_url_prefix": "series/search/tags?series_search_text=",
-                "a_str_id": series_search_text,
-                }
+            "a_url_prefix": "series/search/tags?series_search_text=",
+            "a_str_id": series_search_text,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&tag_names=": tag_names,
-                "&tag_group_id=": tag_group_id,
-                "&tag_search_text=": tag_search_words,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&order_by=": order_by,
-                "&sort_order=": sort_order,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&tag_names=": tag_names,
+            "&tag_group_id=": tag_group_id,
+            "&tag_search_text=": tag_search_words,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&order_by=": order_by,
+            "&sort_order=": sort_order,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack["get_tags_for_series_search"] = self._fetch_data(url)
         return self.series_stack["get_tags_for_series_search"]
 
     def get_related_tags_for_series_search(
-            self, 
-            search_words: list,
-            tag_names: list,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            exclude_tag_names: list = None,
-            tag_group_id: str = None,
-            tag_search_words: list = None,
-            limit: int = None,
-            offset: int = None,
-            order_by: str = None,
-            sort_order: str = None,
-            ) -> dict:
+        self,
+        search_words: list,
+        tag_names: list,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        exclude_tag_names: list = None,
+        tag_group_id: str = None,
+        tag_search_words: list = None,
+        limit: int = None,
+        offset: int = None,
+        order_by: str = None,
+        sort_order: str = None,
+    ) -> dict:
         """
-        Get the related FRED tags for a series search. 
+        Get the related FRED tags for a series search.
 
         Parameters
         ----------
         search_words: list
             list of words to match against economic data series.
         tag_names: list
-            list of tags [str] that series match all of, excluding 
+            list of tags [str] that series match all of, excluding
             any tag not in tag_names.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
-        exclude_tag_names: list, default None 
+            If fred.realtime_end = None, FRED web service will use today's date.
+        exclude_tag_names: list, default None
             A list of tags that returned series match none of.
             If None, no tag names are excluded.
         tag_group_id: str, default None
             A tag group id to filter tags by type with.
-            can be one of 'freq' for frequency, 'gen' for general or concept, 
-            'geo' for geography, 'geot' for geography type, 'rls' for release, 
+            can be one of 'freq' for frequency, 'gen' for general or concept,
+            'geo' for geography, 'geot' for geography type, 'rls' for release,
             'seas' for seasonal adjustment, 'src' for source
             If None, no filtering by tag group is done.
-        tag_search_words: list, default None 
+        tag_search_words: list, default None
             The words to find matching tags with.
             If None, no filtering by search words is done.
-        limit: int, default None 
+        limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
             If None, FRED will use limit = 1_001.
@@ -761,7 +757,7 @@ class Series(Releases):
             can be one of "series_count", "popularity", "created", "name", "group_id"
             If None, "series_count" is used.
         sort_order: str, default None
-            Return rows in ascending or descending order for 
+            Return rows in ascending or descending order for
             attribute values specified by order_by.
             Can be "asc" or "desc".
             If None, "asc" is used.
@@ -773,7 +769,7 @@ class Series(Releases):
 
         See Also
         --------
-        fred.get_tags_for_series_search: Get the FRED tags for a series search. 
+        fred.get_tags_for_series_search: Get the FRED tags for a series search.
         fred.search_for_series: Search for data series using keywords.
 
         Notes
@@ -818,43 +814,41 @@ class Series(Releases):
             {'name': 'nsa', ........
         """
         self._viable_api_key()
-        series_search_text = self._join_strings_by(search_words, '+')
-        fused_tag_names = "&tag_names=" + self._join_strings_by(tag_names, ';')
+        series_search_text = self._join_strings_by(search_words, "+")
+        fused_tag_names = "&tag_names=" + self._join_strings_by(tag_names, ";")
         url_prefix_params = {
-                "a_url_prefix": "series/search/related_tags?series_search_text=",
-                "a_str_id": series_search_text,
-                }
+            "a_url_prefix": "series/search/related_tags?series_search_text=",
+            "a_str_id": series_search_text,
+        }
         url_prefix0 = self._append_id_to_url(**url_prefix_params)
         url_prefix1 = self._append_id_to_url(url_prefix0, fused_tag_names)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&exclude_tag_names=": exclude_tag_names,
-                "&tag_group_id=": tag_group_id,
-
-                # this needs to be examined 
-                "&tag_search_text=": tag_search_words,
-
-                "&limit=": limit,
-                "&offset=": offset,
-                "&order_by=": order_by,
-                "&sort_order=": sort_order,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&exclude_tag_names=": exclude_tag_names,
+            "&tag_group_id=": tag_group_id,
+            # this needs to be examined
+            "&tag_search_text=": tag_search_words,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&order_by=": order_by,
+            "&sort_order=": sort_order,
+        }
         url = self._add_optional_params(url_prefix1, optional_args)
         self.series_stack["get_related_tags_for_series_search"] = self._fetch_data(url)
         return self.series_stack["get_related_tags_for_series_search"]
 
     def get_tags_for_a_series(
-            self,
-            series_id: str,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            order_by: str = None,
-            sort_order: str = None,
-            ) -> dict:
+        self,
+        series_id: str,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        order_by: str = None,
+        sort_order: str = None,
+    ) -> dict:
         """
-        Get the FRED tags for a series. A FRED tag is an attribute 
-        assigned to a series, such as 'monetary aggregates', 
+        Get the FRED tags for a series. A FRED tag is an attribute
+        assigned to a series, such as 'monetary aggregates',
         'weekly', 'oecd', 'slovenia', 'food', 'gdp'.
 
         Parameters
@@ -864,17 +858,17 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
+            If fred.realtime_end = None, FRED web service will use today's date.
         order_by: str, default "source_count"
             order results by values of the specified attribute
             can be one of "series_count", "popularity", "created", "name", "group_id"
             If None, "series_count" is used.
         sort_order: str, default None
-            Return rows in ascending or descending order for 
+            Return rows in ascending or descending order for
             attribute values specified by order_by.
             Can be "asc" or "desc".
             If None, "asc" is used.
@@ -882,7 +876,7 @@ class Series(Releases):
         Returns
         -------
         dict
-            name, series_count, date of creation, notes, group_id 
+            name, series_count, date of creation, notes, group_id
             for each tag that's assigned to the series.
 
         Notes
@@ -911,32 +905,32 @@ class Series(Releases):
         """
         self._viable_api_key()
         url_prefix_params = {
-                "a_url_prefix": "series/tags?series_id=",
-                "a_str_id": series_id
-                }
+            "a_url_prefix": "series/tags?series_id=",
+            "a_str_id": series_id,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&order_by=": order_by,
-                "&sort_order=": sort_order,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&order_by=": order_by,
+            "&sort_order=": sort_order,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack["get_tags_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_tags_for_a_series"]
 
     def get_series_updates(
-            self,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            limit: int = None,
-            offset: int = None,
-            filter_value: str = None,
-            start_time: str = None,
-            end_time: str = None,
-            ) -> dict:
+        self,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        limit: int = None,
+        offset: int = None,
+        filter_value: str = None,
+        start_time: str = None,
+        end_time: str = None,
+    ) -> dict:
         """
-        Get economic data series sorted by when observations were updated on the FRED server. 
+        Get economic data series sorted by when observations were updated on the FRED server.
         Results are limited to series updated within the last two weeks.
 
         Parameters
@@ -944,12 +938,12 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use today's date. 
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use today's date. 
-        limit: int, default None 
+            If fred.realtime_end = None, FRED web service will use today's date.
+        limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
             If None, FRED will use limit = 1_001.
@@ -957,15 +951,15 @@ class Series(Releases):
             Non-negative integer.
             If None, offset of 0 is used.
         filter_value: str, default None
-            Limit results by geography. 
+            Limit results by geography.
             Can be one of:
-                "macro": national 
-                "regional": state, county, metropolitan area 
+                "macro": national
+                "regional": state, county, metropolitan area
                 "all": no filtering results by geography
             If None, no filtering by geographic type of series.
         start_time: str, default None
             The start time for limiting results for a time range.
-            Expected format is "YYYYMMDDHhmm", 24-hour (11:59PM = 23:59). 
+            Expected format is "YYYYMMDDHhmm", 24-hour (11:59PM = 23:59).
             If start_time is passed, end_time is required.
             If None, end_time must also be None.
         end_time: str, default None
@@ -1018,7 +1012,7 @@ class Series(Releases):
             'popularity': 2,
             'notes': 'For more information, please see http://www.federalreserve.gov/releases/cp/about.htm.'},
             {'id': 'AB14AAVOL', .......
-        
+
         >>> params = {'limit': 3,
                     'filter_value': 'regional',
                     'offset': 2,
@@ -1068,31 +1062,31 @@ class Series(Releases):
                 raise ValueError(e)
         url_prefix = "series/updates?"
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&filter_value=": filter_value,
-                "&start_time=": start_time,
-                "&end_time=": end_time,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&filter_value=": filter_value,
+            "&start_time=": start_time,
+            "&end_time=": end_time,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
-        self.series_stack['get_series_updates'] = self._fetch_data(url) 
-        return self.series_stack['get_series_updates']
+        self.series_stack["get_series_updates"] = self._fetch_data(url)
+        return self.series_stack["get_series_updates"]
 
     def get_series_vintagedates(
-            self,
-            series_id: str,
-            realtime_start: str = None,
-            realtime_end: str = None,
-            limit: int = None,
-            offset: int = None,
-            sort_order: str = None,
-            ) -> dict:
+        self,
+        series_id: str,
+        realtime_start: str = None,
+        realtime_end: str = None,
+        limit: int = None,
+        offset: int = None,
+        sort_order: str = None,
+    ) -> dict:
         """
-        Get the dates in history when a series' data values were 
-        revised or new data values were released. Vintage dates are 
-        the release dates for a series, excluding release dates when 
+        Get the dates in history when a series' data values were
+        revised or new data values were released. Vintage dates are
+        the release dates for a series, excluding release dates when
         the data for the series did not change.
 
         Parameters
@@ -1102,12 +1096,12 @@ class Series(Releases):
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
-            If fred.realtime_start = None, FRED web service will use "1776-07-04". 
+            If fred.realtime_start = None, FRED web service will use "1776-07-04".
         realtime_end: str, default None
             The end of the real-time period formatted as "YYYY-MM-DD".
             If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
-            If fred.realtime_end = None, FRED web service will use "9999-12-31". 
-        limit: int, default None 
+            If fred.realtime_end = None, FRED web service will use "9999-12-31".
+        limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 10_001).
             If None, FRED will use limit = 10_001.
@@ -1123,7 +1117,7 @@ class Series(Releases):
         -------
         dict
             The vintage dates for the series.
-            
+
         Notes
         -----
         FRED web service endpoint: fred/series/vintagedates
@@ -1147,18 +1141,17 @@ class Series(Releases):
         """
         self._viable_api_key()
         url_prefix_params = {
-                "a_url_prefix": "series/vintagedates?series_id=",
-                "a_str_id": series_id
-                }
+            "a_url_prefix": "series/vintagedates?series_id=",
+            "a_str_id": series_id,
+        }
         url_prefix = self._append_id_to_url(**url_prefix_params)
         optional_args = {
-                "&realtime_start=": realtime_start,
-                "&realtime_end=": realtime_end,
-                "&limit=": limit,
-                "&offset=": offset,
-                "&sort_order=": sort_order,
-                }
+            "&realtime_start=": realtime_start,
+            "&realtime_end=": realtime_end,
+            "&limit=": limit,
+            "&offset=": offset,
+            "&sort_order=": sort_order,
+        }
         url = self._add_optional_params(url_prefix, optional_args)
         self.series_stack["get_series_vintagedates"] = self._fetch_data(url)
         return self.series_stack["get_series_vintagedates"]
-

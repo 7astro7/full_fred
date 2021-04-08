@@ -36,11 +36,11 @@ In [3]: fred.set_api_key_file('example_key.txt')
 Out[3]: True
 ```
 If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately *if* api_key_file is set using 
-the surefire ```fred.set_api_key_file```.  
+the surefire ```fred.set_api_key_file()```.  
 
 2. FRED_API_KEY Environment Variable
 
-```full_fred``` will automatically detect your api key if it's assigned to an environment variable named ```FRED_API_KEY```
+```full_fred``` will automatically detect your api key if it's assigned to an environment variable named ```FRED_API_KEY```.
 To check that your FRED_API_KEY environment variable is detected, you can use 
 
 ```python
@@ -53,7 +53,7 @@ FRED_API_KEY environment variable or the first line of fred.api_key_file.
 
 ### Fetching data
 
-A pd.DataFrame stores observations along with metadata about the pd.DataFrame when fetching series' observations.
+A pd.DataFrame stores observations along with metadata about the pd.DataFrame when fetching series observations
 
 ```python
 fred.get_series_df('GDPPOT')
@@ -107,7 +107,7 @@ realtime_start      realtime_end        date               value
 ```
 
 To find a specific category_id or to search FRED categories from
-most general to most specific you can start with 0, the root category. 
+most general to most specific start with the root category 0. 
 A search along the lines of the following can help to pinpoint different 
 category_ids:
 
@@ -209,12 +209,12 @@ Out[4]:
 ### full_fred realtime period defaults
 By default ```fred.realtime_start``` is set to earliest available, '1776-07-04', and
 ```fred.realtime_end``` end is set to latest available, '9999-12-31'.
-To use the defaults set by FRED web service instead of ```full_fred```'s, 
-you can set ```fred.realtime_start``` and ```fred.realtime_end``` to None:
+To use the defaults set by FRED web service set ```fred.realtime_start``` and ```fred.realtime_end``` to None:
 ```python
 fred.realtime_start = None
 fred.realtime_end = None
 ```
+Any arguments given for ```realtime_start``` and ```realtime_end``` are used instead of your defaults.
 
 ## Contributing
 The ```full_fred``` project welcomes feature requests, bug submissions, contributions of all kinds.
