@@ -18,7 +18,7 @@ is stored in a dictionary, accessible and fungible.
 expand: search_for_series -> get_tags_for_series_search -> get_related_tags_for_series_search
 
 ### API Key 
-Queries to FRED web service require an API key. FRED has [free API keys available with an account](https://research.stlouisfed.org/useraccount/apikey).
+Queries to FRED web service require an API key. FRED has [free API keys available with an account (also free)](https://research.stlouisfed.org/useraccount/apikey).
 
 You can tell ```full_fred``` about an api key in 2 secure ways:
 1. fred.api_key_file can be set by passing it to the constructor
@@ -34,8 +34,6 @@ Out[6]: 'example_key.txt'
 
 ```full_fred``` will automatically detect your api key if it's assigned to an environment variable named ```FRED_API_KEY```
 
-```full_fred``` does not store your api key in an attribute for the sake of security. To send queries to FRED's databases, ```full_fred``` uses the value of 
-FRED_API_KEY environment variable or the first line of fred.api_key_file.
 
 If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately. 
 To check that your FRED_API_KEY environment variable is detected, you can use 
@@ -45,11 +43,8 @@ In [7]: fred.env_api_key_found()
 Out[7]: True
 ```
 
-```python
-from full_fred import Fred
-fred = Fred()
-fred.get_all_sources()
-```
+```full_fred``` does not store your api key in an attribute for the sake of security: to send queries to FRED's databases, ```full_fred``` uses the value of 
+FRED_API_KEY environment variable or the first line of fred.api_key_file.
 
 ```python
 fred.get_series_df('GDPPOT')
@@ -179,10 +174,10 @@ Out[4]:
 ```
 
 ### full_fred realtime period defaults
-By default ```fred.realtime start``` is set to earliest available '1776-07-04' and
-```fred.realtime``` end is set to latest available '9999-12-31'.
+By default ```fred.realtime_start``` is set to earliest available, '1776-07-04', and
+```fred.realtime_end``` end is set to latest available, '9999-12-31'.
 To use the defaults set by FRED web service instead of ```full_fred```'s, 
-you can set realtime_start attribute and realtime_end attribute to None
+you can set ```fred.realtime_start``` and ```fred.realtime_end``` to None:
 ```python
 fred.realtime_start = None
 fred.realtime_end = None
@@ -190,7 +185,9 @@ fred.realtime_end = None
 
 ## Contributing
 The ```full_fred``` project welcomes feature requests, bug submissions, contributions of all kinds.
-```full_fred``` aims to be responsive in integrating patches and listening to your feedback.
+```full_fred``` aims to be responsive in integrating patches and listening to your feedback to be a community-driven API.
+This project is also new and while ```full_fred``` is still young there's great opportunity to contribute elements that may have disproportionate
+impact in the long run.
 
 ## License
 GPLv3
