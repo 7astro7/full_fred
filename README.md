@@ -1,7 +1,5 @@
 
-# Under construction
-
-## full_fred
+# full_fred
 `full_fred` is a Python interface to 
 [FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/) that
 prioritizes user preference, flexibility, and speed. `full_fred`'s API translates to Python
@@ -10,27 +8,41 @@ each query for Categories, Releases, Series, Sources, and Tags
 found within FRED's web service has a method associated with it in `full_fred`.
 `full_fred` minimizes redundant queries for the sake of users and FRED's servers. 
 After a request for data is made to FRED web service the retrieved data 
-is saved in a dictionary, accessible and fungible. 
+is stored in a dictionary, accessible and fungible. 
 
 ## Installation
     pip install full_fred
-
-FRED has [free API keys available immediately](https://research.stlouisfed.org/useraccount/apikey)
-
-## Testing
 
 ## API
 
 expand: search_for_series -> get_tags_for_series_search -> get_related_tags_for_series_search
 
-api key can be set in 2 secure ways:
-api key file
-environment variable
+### API Key 
+Queries to FRED web service require an API key. FRED has [free API keys available with an account](https://research.stlouisfed.org/useraccount/apikey).
 
-full_fred doesn't save api_key for the sake of security
+You can tell ```full_fred``` about an api key in 2 secure ways:
+1. fred.api_key_file can be set by passing it to the constructor
+```python
+In [4]: from full_fred.fred import Fred
+
+In [5]: fred = Fred('example_key.txt')
+
+In [6]: fred.get_api_key_file()
+Out[6]: 'example_key.txt'
+```
+2. FRED_API_KEY Environment Variable
+
+```full_fred``` will automatically detect your api key if it's assigned to an environment variable named ```FRED_API_KEY```
+
+```full_fred``` does not store your api key in an attribute for the sake of security. To send queries to FRED's databases, ```full_fred``` uses the value of 
+FRED_API_KEY environment variable or the first line of fred.api_key_file.
+
+If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately. 
+To check that your FRED_API_KEY environment variable is detected, you can use 
 
 ```python
-api_key_found()
+In [7]: fred.env_api_key_found()
+Out[7]: True
 ```
 
 ```python
@@ -108,24 +120,77 @@ fred.get_child_categories(0)
   {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
 ```
 
-full_fred realtime period defaults:
-realtime start is set to earliest available '1776-07-04'
-realtime end is set to latest available '9999-12-31'
-to use defaults set by FRED web service realtime period for each query, 
+```python
+In [1]: from full_fred.fred import Fred
+
+In [2]: fred = Fred()
+
+In [3]: fred.get_series_vintagedates('FYFSD', limit = 15)
+Out[3]: 
+{'realtime_start': '1776-07-04',
+ 'realtime_end': '9999-12-31',
+ 'order_by': 'vintage_date',
+ 'sort_order': 'asc',
+ 'count': 46,
+ 'offset': 0,
+ 'limit': 15,
+ 'vintage_dates': [
+    '1998-02-02',
+    '1998-10-26',
+    '1999-02-01',
+    '1999-10-25',
+    '2000-02-07',
+    '2000-10-20',
+    '2001-04-09',
+    '2001-10-24',
+    '2002-02-04',
+    '2002-10-23',
+    '2003-02-03',
+    '2003-10-15',
+    '2004-02-02',
+    '2004-10-12',
+    '2005-02-23']}
+
+In [4]: fred.series_stack['get_series_vintagedates']
+Out[4]: 
+{'realtime_start': '1776-07-04',
+ 'realtime_end': '9999-12-31',
+ 'order_by': 'vintage_date',
+ 'sort_order': 'asc',
+ 'count': 46,
+ 'offset': 0,
+ 'limit': 15,
+ 'vintage_dates': [
+    '1998-02-02',
+    '1998-10-26',
+    '1999-02-01',
+    '1999-10-25',
+    '2000-02-07',
+    '2000-10-20',
+    '2001-04-09',
+    '2001-10-24',
+    '2002-02-04',
+    '2002-10-23',
+    '2003-02-03',
+    '2003-10-15',
+    '2004-02-02',
+    '2004-10-12',
+    '2005-02-23']}
+```
+
+### full_fred realtime period defaults
+By default ```fred.realtime start``` is set to earliest available '1776-07-04' and
+```fred.realtime``` end is set to latest available '9999-12-31'.
+To use the defaults set by FRED web service instead of ```full_fred```'s, 
 you can set realtime_start attribute and realtime_end attribute to None
 ```python
 fred.realtime_start = None
 fred.realtime_end = None
 ```
 
-reference get_series_df example 
-more generally, note use of stacks 
-    - limited redundancy
-    - metadata included
-
 ## Contributing
-The full_fred project welcomes feature requests, bug submissions, contributions of all kinds.
-full_fred aims to be responsive in integrating patches, 
+The ```full_fred``` project welcomes feature requests, bug submissions, contributions of all kinds.
+```full_fred``` aims to be responsive in integrating patches and listening to your feedback.
 
 ## License
 GPLv3
