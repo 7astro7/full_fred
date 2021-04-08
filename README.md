@@ -30,12 +30,17 @@ In [5]: fred = Fred('example_key.txt')
 In [6]: fred.get_api_key_file()
 Out[6]: 'example_key.txt'
 ```
+As you may imagine this will set it too
+```python
+In [3]: fred.set_api_key_file('example_key.txt')
+Out[3]: True
+```
+If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately *if* api_key_file is set using 
+the surefire ```fred.set_api_key_file```.  
+
 2. FRED_API_KEY Environment Variable
 
 ```full_fred``` will automatically detect your api key if it's assigned to an environment variable named ```FRED_API_KEY```
-
-
-If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately. 
 To check that your FRED_API_KEY environment variable is detected, you can use 
 
 ```python
@@ -45,6 +50,10 @@ Out[7]: True
 
 ```full_fred``` does not store your api key in an attribute for the sake of security: to send queries to FRED's databases, ```full_fred``` uses the value of 
 FRED_API_KEY environment variable or the first line of fred.api_key_file.
+
+### Fetching data
+
+A pd.DataFrame stores observations along with metadata about the pd.DataFrame when fetching series' observations.
 
 ```python
 fred.get_series_df('GDPPOT')
@@ -62,7 +71,10 @@ fred.get_series_df('GDPPOT')
 331     2021-04-03   2021-04-03  2031-10-01            23615.28
 
 [332 rows x 4 columns]
+```
+The fetched data is stored in fred.series_stack 
 
+```python
 fred.series_stack['get_series_df']
 {'realtime_start': '2021-04-03',
  'realtime_end': '2021-04-03',
@@ -100,7 +112,8 @@ A search along the lines of the following can help to pinpoint different
 category_ids:
 
 ```python
-fred.get_child_categories(0)
+In [4]: fred.get_child_categories(0)
+Out[4]: 
 {'categories': [{'id': 32991,
    'name': 'Money, Banking, & Finance',
    'parent_id': 0},
@@ -111,9 +124,29 @@ fred.get_child_categories(0)
   {'id': 1, 'name': 'Production & Business Activity', 'parent_id': 0},
   {'id': 32455, 'name': 'Prices', 'parent_id': 0},
   {'id': 32263, 'name': 'International Data', 'parent_id': 0},
+  {'id': 32213, 'name': 'Greenbook Projections', 'parent_id': 0},
+  {'id': 3008, 'name': 'U.S. Regional Data', 'parent_id': 0},
+  {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
+
+In [5]: fred.category_stack['get_child_categories']
+Out[5]: 
+{'categories': [{'id': 32991,
+   'name': 'Money, Banking, & Finance',
+   'parent_id': 0},
+  {'id': 10,
+   'name': 'Population, Employment, & Labor Markets',
+   'parent_id': 0},
+  {'id': 32992, 'name': 'National Accounts', 'parent_id': 0},
+  {'id': 1, 'name': 'Production & Business Activity', 'parent_id': 0},
+  {'id': 32455, 'name': 'Prices', 'parent_id': 0},
+  {'id': 32263, 'name': 'International Data', 'parent_id': 0},
+  {'id': 32213, 'name': 'Greenbook Projections', 'parent_id': 0},
   {'id': 3008, 'name': 'U.S. Regional Data', 'parent_id': 0},
   {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
 ```
+
+The [whole gamut of requests on FRED web service](https://fred.stlouisfed.org/docs/api/fred/) is implemented. The example below 
+is one among many other methods in the API
 
 ```python
 In [1]: from full_fred.fred import Fred
