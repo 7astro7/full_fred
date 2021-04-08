@@ -26,12 +26,12 @@ class Releases(Categories):
         ----------
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date.
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -115,12 +115,12 @@ class Releases(Categories):
         ----------
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use first day of current year.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use "9999-12-31".
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -201,12 +201,12 @@ class Releases(Categories):
             The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date.
 
         Returns 
         -------
@@ -272,12 +272,12 @@ class Releases(Categories):
             The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use "1776-07-04".
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use "9999-12-31".
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 10_001).
@@ -366,12 +366,12 @@ class Releases(Categories):
             The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date.
         limit: int, default None
             The maximum number of results to return.
             Values can be in range(1, 1_001).
@@ -484,12 +484,12 @@ class Releases(Categories):
             The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date.
 
         Returns 
         -------
@@ -555,12 +555,12 @@ class Releases(Categories):
             The ID of the release.
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date.
         tag_names: list, default None
             list of tags [str] to include in returned data, excluding any tag not in tag_names;
             If None, no filtering by tag names is done.
@@ -667,12 +667,12 @@ class Releases(Categories):
             list of tags [str] to include in returned data, excluding any tag not in tag_names;
         realtime_start: str, default None
             The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
+            If None, fred.realtime_start is used, "1776-07-04" (earliest available) by default.
+            If fred.realtime_start = None, FRED web service will use today's date.
         realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
+            The end of the real-time period formatted as "YYYY-MM-DD".
+            If None, fred.realtime_end is used, "9999-12-31" (latest available) by default.
+            If fred.realtime_end = None, FRED web service will use today's date.
         exclude_tag_names: list, default None
             list of tag names that series match none of.
             If None, no filtering by excluding tag names is done.
@@ -774,14 +774,6 @@ class Releases(Categories):
         element_id: int, default None
             The release table element id to retrieve
             If None, root (most general) element_id for the release is used.
-        realtime_start: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_start is used.
-            If default isn't set by user, "1776-07-04" (earliest available) is used.
-        realtime_end: str, default None
-            The start of the real-time period formatted as "YYYY-MM-DD".
-            If None, default realtime_end is used.
-            If default isn't set by user, "9999-12-31" (latest available) is used.
         include_observation_values: bool, default None
             Indicates that observations need to be returned.
             Observation value and date are only returned for a series
