@@ -13,7 +13,6 @@ class Tags(Sources):
         super().__init__()
         self.tag_stack = dict()
 
-    # sort order checked
     def get_all_tags(
             self,
             realtime_start: str = None,
@@ -117,7 +116,6 @@ class Tags(Sources):
         self.tag_stack["get_all_tags"] = self._fetch_data(url) 
         return self.tag_stack["get_all_tags"] 
 
-    # sort order checked
     def get_related_tags_for_a_tag(
             self,
             tag_names: list,
@@ -232,7 +230,6 @@ class Tags(Sources):
         self.tag_stack["get_related_tags_for_a_tag"] = self._fetch_data(url)
         return self.tag_stack["get_related_tags_for_a_tag"]
 
-    # sort order checked
     def get_series_matching_tags(
             self, 
             tag_names: list,

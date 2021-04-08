@@ -120,7 +120,7 @@ class Sources(Series):
         Returns
         -------
         dict
-            Metadata of requested FRED source
+            Metadata of requested FRED source.
 
         See Also
         --------
@@ -156,7 +156,6 @@ class Sources(Series):
         self.source_stack["get_a_source"] = self._fetch_data(url)
         return self.source_stack["get_a_source"]
 
-    # param docstrings are checked
     def get_releases_for_a_source(
             self,
             source_id: int,

@@ -9,7 +9,6 @@ class Categories(FredBase):
         super().__init__()
         self.category_stack = dict() 
 
-    # param docstrings are checked
     def get_a_category(
             self, 
             category_id: int = None,
@@ -60,7 +59,6 @@ class Categories(FredBase):
         self.category_stack["get_a_category"] = self._fetch_data(url)
         return self.category_stack["get_a_category"] 
 
-    # param docstrings are checked
     def get_child_categories(
             self, 
             category_id: int,
@@ -128,7 +126,6 @@ class Categories(FredBase):
         self.category_stack["get_child_categories"] = self._fetch_data(url)
         return self.category_stack["get_child_categories"] 
 
-    # param docstrings are checked
     def get_related_categories(
             self, 
             category_id: int,
@@ -194,7 +191,6 @@ class Categories(FredBase):
         self.category_stack["get_related_categories"] = self._fetch_data(url)
         return self.category_stack["get_related_categories"] 
 
-    # param docstrings are checked
     def get_series_in_a_category(
             self, 
             category_id: int,
@@ -325,8 +321,6 @@ class Categories(FredBase):
         self.category_stack["get_series_in_a_category"] = self._fetch_data(url)
         return self.category_stack["get_series_in_a_category"]
 
-    # param docstrings are checked
-    # rename to get_tags_in_a_category?
     def get_tags_for_a_category(
             self, 
             category_id: int,
@@ -439,7 +433,6 @@ class Categories(FredBase):
         self.category_stack["get_tags_for_a_category"] = self._fetch_data(url)
         return self.category_stack["get_tags_for_a_category"]
 
-    # param docstrings are checked
     def get_related_tags_for_a_category(
             self, 
             category_id: int,

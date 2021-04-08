@@ -16,7 +16,6 @@ class Series(Releases):
         super().__init__()
         self.series_stack = dict() 
 
-    # rt checked
     def get_a_series(
             self, 
             series_id: str, 
@@ -25,12 +24,6 @@ class Series(Releases):
             ):
         """
         Get the metadata of a FRED series. 
-        FRED accepts upper case series_id: maybe integrate something to capitalize automatically
-        default realtime start and realtime end: first to latest available
-        if series_id attribute is not set, FredSeries.series_id will be set to 
-        the series_id passed in this method
-        explain that not merely the requested data is retrieved and stored but rather
-        a FredSeries object is instantiated 
 
         Parameters
         ----------
@@ -53,7 +46,7 @@ class Series(Releases):
 
         See Also
         --------
-        get_series_df: get a pd.DataFrame of a series' observations / data values
+        fred.get_series_df: Get observations of a series in pd.DataFrame form.
 
         Notes
         -----
@@ -96,7 +89,6 @@ class Series(Releases):
         self.series_stack["get_a_series"] = self._fetch_data(url)
         return self.series_stack["get_a_series"]
 
-    # rt checked
     def get_categories_of_series(
             self,
             series_id: str, 
@@ -122,11 +114,11 @@ class Series(Releases):
         Returns
         -------
         dict
-            ID, name, ID of parent category for each category FRED uses to classify series_id
+            ID, name, ID of parent category for each category FRED uses to classify series_id.
 
         See Also
         --------
-        get_series: get metadata for a series
+        fred.get_a_series: Get metadata of a series.
 
         Notes
         -----
@@ -155,7 +147,6 @@ class Series(Releases):
         self.series_stack["get_categories_of_series"] = self._fetch_data(url)
         return self.series_stack["get_categories_of_series"]
 
-    # rt checked
     def get_series_df(
             self, 
             series_id: str,
@@ -275,7 +266,7 @@ class Series(Releases):
 
         See Also
         --------
-        FRED's unit transformation: https://alfred.stlouisfed.org/help#growth_formulas
+        Details of FRED's unit transformation: https://alfred.stlouisfed.org/help#growth_formulas
 
         Notes
         -----
@@ -353,7 +344,6 @@ class Series(Releases):
         self.series_stack["get_series_df"]["df"] = df
         return self.series_stack["get_series_df"]["df"]
 
-    # rt checked
     def get_release_for_a_series(
             self,
             series_id: str,
@@ -380,9 +370,6 @@ class Series(Releases):
         -------
         dict
             ID, name, url, other metadata of release for given realtime period.
-
-        See Also
-        --------
 
         Notes
         -----
@@ -417,7 +404,6 @@ class Series(Releases):
         self.series_stack["get_release_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_release_for_a_series"]
 
-    # rt checked
     def search_for_series(
             self, 
             search_words: list,
@@ -501,6 +487,7 @@ class Series(Releases):
 
         See Also
         --------
+        fred.get_series_df: Get observations of a series in pd.DataFrame form.
 
         Notes
         -----
@@ -587,7 +574,6 @@ class Series(Releases):
         self.series_stack["search_for_series"] = self._fetch_data(url)
         return self.series_stack["search_for_series"]
 
-    # rt checked
     def get_tags_for_series_search(
             self, 
             search_words: list,
@@ -654,7 +640,7 @@ class Series(Releases):
 
         See Also
         --------
-        search_for_series
+        fred.search_for_series: Search for data series using keywords.
 
         Notes
         -----
@@ -719,7 +705,6 @@ class Series(Releases):
         self.series_stack["get_tags_for_series_search"] = self._fetch_data(url)
         return self.series_stack["get_tags_for_series_search"]
 
-    # rt checked
     def get_related_tags_for_series_search(
             self, 
             search_words: list,
@@ -784,11 +769,12 @@ class Series(Releases):
         Returns
         -------
         dict
+            Metadata for each related tag.
 
         See Also
         --------
-        get_tags_for_series_search:
-        search_for_series
+        fred.get_tags_for_series_search: Get the FRED tags for a series search. 
+        fred.search_for_series: Search for data series using keywords.
 
         Notes
         -----
@@ -858,7 +844,6 @@ class Series(Releases):
         self.series_stack["get_related_tags_for_series_search"] = self._fetch_data(url)
         return self.series_stack["get_related_tags_for_series_search"]
 
-    # rt checked
     def get_tags_for_a_series(
             self,
             series_id: str,
@@ -900,9 +885,6 @@ class Series(Releases):
             name, series_count, date of creation, notes, group_id 
             for each tag that's assigned to the series.
 
-        See Also
-        --------
-
         Notes
         -----
         FRED web service endpoint:/series/tags
@@ -943,7 +925,6 @@ class Series(Releases):
         self.series_stack["get_tags_for_a_series"] = self._fetch_data(url)
         return self.series_stack["get_tags_for_a_series"]
 
-    # rt checked
     def get_series_updates(
             self,
             realtime_start: str = None,
@@ -999,9 +980,6 @@ class Series(Releases):
             FRED series sorted by when each was last updated.
             Metadata for each series includes series_id, title,
             units of measurement, time of last update, etc.
-
-        See Also
-        --------
 
         Notes
         -----
@@ -1102,7 +1080,6 @@ class Series(Releases):
         self.series_stack['get_series_updates'] = self._fetch_data(url) 
         return self.series_stack['get_series_updates']
 
-    # param docstrings are checked
     def get_series_vintagedates(
             self,
             series_id: str,
@@ -1147,10 +1124,6 @@ class Series(Releases):
         dict
             The vintage dates for the series.
             
-
-        See Also
-        --------
-
         Notes
         -----
         FRED web service endpoint: fred/series/vintagedates
