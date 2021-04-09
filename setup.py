@@ -1,23 +1,24 @@
-from setuptools import setup
-from full_fred.constants import VERSION
+from setuptools import setup, find_packages
+#from full_fred.constants import VERSION
 import os
 
-with open("README.md", encoding="utf-8") as readme:
+with open('README.md', encoding='utf-8') as readme:
     readme = readme.read()
+
+with open('full_fred/constants.py') as f:
+    version = f.read().strip().split('=')[1].strip().replace('"', '')
 
 setup(
     name="full_fred",
-    packages=[
-        "full_fred",
-    ],
-    version=VERSION,
+    packages=find_packages(),
+    version=version,
+    description="Full interface to Federal Reserve Economic Data (FRED)",
     author="Zachary A. Kraehling",
     author_email="zaknyy@protonmail.com",
-    description="Full interface to Federal Reserve Economic Data (FRED)",
     long_description=readme,
     long_description_content_type="text/markdown",
     license="GNU General Public License v3 (GPLv3)",
-    install_requires=[],
+    install_requires=['requests', 'pandas'],
     python_requires=">=3.8",
     url="https://github.com/7astro7/full_fred",
     project_urls={
