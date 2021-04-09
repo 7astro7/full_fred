@@ -11,7 +11,7 @@ After a request for data is made to FRED web service the retrieved data
 is stored in a dictionary, accessible and fungible. 
 
 ## Installation
-    pip install full_fred
+    pip install full-fred
 
 ## API
 
@@ -30,7 +30,7 @@ In [5]: fred = Fred('example_key.txt')
 In [6]: fred.get_api_key_file()
 Out[6]: 'example_key.txt'
 ```
-As you may imagine this will set it too
+This will set it too
 ```python
 In [3]: fred.set_api_key_file('example_key.txt')
 Out[3]: True
