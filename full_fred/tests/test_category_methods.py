@@ -24,7 +24,6 @@ def get_a_category_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_a_category(
     get_a_category_method_works: bool,
 ):
@@ -45,7 +44,6 @@ def get_child_categories_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_child_categories(
     get_child_categories_method_works: bool,
 ):
@@ -66,7 +64,6 @@ def get_related_categories_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_related_categories(
     get_related_categories_method_works: bool,
 ):
@@ -99,7 +96,6 @@ def get_series_in_a_category_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_series_in_a_category(
     get_series_in_a_category_method_works: bool,
 ):
@@ -127,7 +123,6 @@ def get_tags_for_a_category_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_tags_for_a_category(
     get_tags_for_a_category_method_works: bool,
 ):
@@ -159,7 +154,6 @@ def get_related_tags_for_a_category_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_related_tags_for_a_category(
     get_related_tags_for_a_category_method_works: bool,
 ):

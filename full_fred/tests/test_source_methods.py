@@ -31,7 +31,6 @@ def get_all_sources_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_all_sources(
     get_all_sources_method_works: bool,
 ):
@@ -53,7 +52,6 @@ def get_a_source_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_a_source(
     get_a_source_method_works: bool,
 ):
@@ -80,7 +78,6 @@ def get_releases_for_a_source_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_releases_for_a_source(
     get_releases_for_a_source_method_works: bool,
 ):

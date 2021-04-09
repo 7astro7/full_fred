@@ -36,7 +36,6 @@ def get_all_tags_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_all_tags(
     get_all_tags_method_works: bool,
 ):
@@ -69,7 +68,6 @@ def get_related_tags_for_a_tag_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_related_tags_for_a_tag(
     get_related_tags_for_a_tag_method_works: bool,
 ):
@@ -105,7 +103,6 @@ def get_series_matching_tags_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skip("passed v3")
 def test_get_series_matching_tags(
     get_series_matching_tags_method_works: bool,
 ):
