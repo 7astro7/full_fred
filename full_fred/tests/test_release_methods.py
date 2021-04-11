@@ -1,11 +1,12 @@
 import pytest
 from full_fred.fred import Fred
 from .fred_test_utils import (
-        returned_ok,
-        api_key_found_in_env,
-        )
+    returned_ok,
+    api_key_found_in_env,
+)
 
 ENV_API_KEY = api_key_found_in_env()
+
 
 @pytest.fixture
 def fred():
@@ -35,7 +36,8 @@ def get_all_releases_method_works(
     returned_ok_params["expected"] = params
     return returned_ok(**returned_ok_params)
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_all_releases(
     get_all_releases_method_works: bool,
 ):
@@ -65,7 +67,7 @@ def get_release_dates_all_releases_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_release_dates_all_releases(
     get_release_dates_all_releases_method_works: bool,
 ):
@@ -89,7 +91,7 @@ def get_a_release_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_a_release(
     get_a_release_method_works: bool,
 ):
@@ -118,7 +120,7 @@ def get_release_dates_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_release_dates(
     get_release_dates_method_works: bool,
 ):
@@ -151,7 +153,7 @@ def get_series_on_a_release_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_on_a_release(
     get_series_on_a_release_method_works: bool,
 ):
@@ -175,7 +177,7 @@ def get_sources_for_a_release_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_sources_for_a_release(
     get_sources_for_a_release_method_works: bool,
 ):
@@ -205,7 +207,7 @@ def get_tags_for_a_release_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_tags_for_a_release(
     get_tags_for_a_release_method_works: bool,
 ):
@@ -238,7 +240,7 @@ def get_related_tags_for_release_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_related_tags_for_release(
     get_related_tags_for_release_method_works: bool,
 ):
@@ -265,7 +267,7 @@ def get_release_tables_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_release_tables(
     get_release_tables_method_works: bool,
 ):

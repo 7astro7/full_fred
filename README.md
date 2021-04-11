@@ -33,13 +33,13 @@ This will set it too
 In [3]: fred.set_api_key_file('example_key.txt')
 Out[3]: True
 ```
-If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately *if* api_key_file is set using 
+If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately if api_key_file is set using 
 the surefire ```fred.set_api_key_file()```  
 
 2. FRED_API_KEY Environment Variable
 
 ```full_fred``` will automatically detect your api key if it's assigned to an environment variable named ```FRED_API_KEY```.
-To check that your FRED_API_KEY environment variable is detected, you can use 
+To check that FRED_API_KEY environment variable is detected, you can use 
 
 ```python
 In [7]: fred.env_api_key_found()
@@ -70,7 +70,7 @@ fred.get_series_df('GDPPOT')
 
 [332 rows x 4 columns]
 ```
-The fetched data is stored in fred.series_stack 
+The fetched data is stored in fred.series_stack (see __Accessing fetched data__ section for more on retrieving queried data)
 
 ```python
 fred.series_stack['get_series_df']
@@ -145,7 +145,7 @@ Out[5]:
 ```
 
 The [whole gamut of requests on FRED web service](https://fred.stlouisfed.org/docs/api/fred/) is implemented. The example below 
-is one among many other methods in the API
+is one among many other methods in the API, listed in the next section
 
 ```python
 In [1]: from full_fred.fred import Fred
@@ -276,7 +276,7 @@ To use FRED web service defaults set ```fred.realtime_start``` and ```fred.realt
 fred.realtime_start = None
 fred.realtime_end = None
 ```
-Any arguments given for ```realtime_start``` and ```realtime_end``` are used
+Any arguments given for ```realtime_start``` and ```realtime_end``` are used over defaults
 
 ## Contributing
 The ```full_fred``` project welcomes feature requests, bug reports, bug fixes, documentation improvements, contributions of all kinds.

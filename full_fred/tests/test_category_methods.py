@@ -1,11 +1,12 @@
 import pytest
 from full_fred.fred import Fred
 from .fred_test_utils import (
-        returned_ok, 
-        api_key_found_in_env,
-        )
+    returned_ok,
+    api_key_found_in_env,
+)
 
 ENV_API_KEY = api_key_found_in_env()
+
 
 @pytest.fixture
 def fred() -> Fred:
@@ -27,7 +28,8 @@ def get_a_category_method_works(
     returned_ok_params["check_union"] = ("categories",)
     return returned_ok(**returned_ok_params)
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_a_category(
     get_a_category_method_works: bool,
 ):
@@ -48,7 +50,7 @@ def get_child_categories_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_child_categories(
     get_child_categories_method_works: bool,
 ):
@@ -69,7 +71,7 @@ def get_related_categories_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_related_categories(
     get_related_categories_method_works: bool,
 ):
@@ -102,7 +104,7 @@ def get_series_in_a_category_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_in_a_category(
     get_series_in_a_category_method_works: bool,
 ):
@@ -130,7 +132,7 @@ def get_tags_for_a_category_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_tags_for_a_category(
     get_tags_for_a_category_method_works: bool,
 ):
@@ -162,7 +164,7 @@ def get_related_tags_for_a_category_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_related_tags_for_a_category(
     get_related_tags_for_a_category_method_works: bool,
 ):

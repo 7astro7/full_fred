@@ -2,12 +2,13 @@ import pytest
 from full_fred.fred import Fred
 from pandas import DataFrame
 from .fred_test_utils import (
-        returned_ok, 
-        make_time_string, 
-        api_key_found_in_env,
-        )
+    returned_ok,
+    make_time_string,
+    api_key_found_in_env,
+)
 
 ENV_API_KEY = api_key_found_in_env()
+
 
 @pytest.fixture
 def fred():
@@ -38,7 +39,8 @@ def get_a_series_method_works(
     )
     return returned_ok(**returned_ok_params)
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series(
     get_a_series_method_works: bool,
 ):
@@ -63,7 +65,7 @@ def get_categories_of_series_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_categories_of_series(
     get_categories_of_series_method_works: bool,
 ):
@@ -113,7 +115,7 @@ def get_series_df_method_works(
     return False
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_df(
     get_series_df_method_works: bool,
 ):
@@ -137,7 +139,7 @@ def get_release_for_a_series_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_release_for_a_series(
     get_release_for_a_series_method_works: bool,
 ):
@@ -173,7 +175,7 @@ def search_for_series_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_search_for_series(
     search_for_series_method_works: bool,
 ):
@@ -206,7 +208,7 @@ def get_tags_for_series_search_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_tags_for_series_search(
     get_tags_for_series_search_method_works: bool,
 ):
@@ -246,7 +248,7 @@ def get_related_tags_for_series_search_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_related_tags_for_series_search(
     get_related_tags_for_series_search_method_works: bool,
 ):
@@ -272,14 +274,14 @@ def get_tags_for_a_series_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_tags_for_a_series(
     get_tags_for_a_series_method_works: bool,
 ):
     assert get_tags_for_a_series_method_works == True
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_updates_raises_type_error(
     fred: Fred,
 ):
@@ -291,7 +293,7 @@ def test_get_series_updates_raises_type_error(
         fred.get_series_updates(start_time="202103210851")
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_updates_raises_value_error(
     fred: Fred,
 ):
@@ -333,7 +335,7 @@ def get_series_updates_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_updates(
     get_series_updates_method_works: bool,
 ):
@@ -359,7 +361,7 @@ def get_series_vintagedates_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_vintagedates(
     get_series_vintagedates_method_works: bool,
 ):

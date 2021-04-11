@@ -1,9 +1,9 @@
 import pytest
 from full_fred.fred import Fred
 from .fred_test_utils import (
-        returned_ok,
-        api_key_found_in_env,
-        )
+    returned_ok,
+    api_key_found_in_env,
+)
 
 ENV_API_KEY = api_key_found_in_env()
 
@@ -35,7 +35,8 @@ def get_all_sources_method_works(
     returned_ok_params["expected"] = params
     return returned_ok(**returned_ok_params)
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_all_sources(
     get_all_sources_method_works: bool,
 ):
@@ -57,7 +58,7 @@ def get_a_source_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_a_source(
     get_a_source_method_works: bool,
 ):
@@ -84,7 +85,7 @@ def get_releases_for_a_source_method_works(
     return returned_ok(**returned_ok_params)
 
 
-@pytest.mark.skipif(not ENV_API_KEY, reason = "Tests need api key")
+@pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_releases_for_a_source(
     get_releases_for_a_source_method_works: bool,
 ):

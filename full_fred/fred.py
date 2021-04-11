@@ -37,10 +37,10 @@ class Fred(Tags):
         Setting Realtime Defaults
         -------------------------
         fred.realtime_start is set to earliest available '1776-07-04'.
-        fred.realtime_end is set to latest available '9999-12-31'.  
+        fred.realtime_end is set to latest available '9999-12-31'.
 
-        All queries with realtime_start as a parameter will use whatever fred.realtime_start is set to if no realtime_start argument is given. If 
-        fred.realtime_start is set to None, FRED web service will determine the default value. In most cases where realtime_start isn't specified FRED 
+        All queries with realtime_start as a parameter will use whatever fred.realtime_start is set to if no realtime_start argument is given. If
+        fred.realtime_start is set to None, FRED web service will determine the default value. In most cases where realtime_start isn't specified FRED
         web service will use today's date. Same with fred.realtime_end.
         """
         super().__init__()
