@@ -13,10 +13,17 @@ is stored in a dictionary, accessible and fungible
 ## Installation
     pip install full-fred
 
+## Testing
+```full_fred``` requires ```pytest```. Tests can be run with ```FRED_API_KEY``` environment variable set and:
+
+```python
+pytest
+```
+
 ## Usage
 
 ### API Key 
-Queries to FRED web service require an API key. FRED has [free API keys available with an account (also free)](https://research.stlouisfed.org/useraccount/apikey).
+Queries to FRED web service require an API key. FRED has [free API keys available with an account (also free)](https://research.stlouisfed.org/useraccount/apikey)
 
 You can tell ```full_fred``` about an api key in 2 secure ways:
 1. fred.api_key_file can be set by passing it to the constructor
@@ -215,7 +222,7 @@ There are 5 stacks:
 ```fred.source_stack```
 ```fred.tag_stack```
 
-After a method is called the returned data is stored using the method name for its key.
+After a method is called the returned data is stored using the method name for its key
 
 Methods that store data in category stack:
 ```python
