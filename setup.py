@@ -1,5 +1,6 @@
+#!/usr/bin/env python3
+
 from setuptools import setup, find_packages
-#from full_fred.constants import VERSION
 import os
 
 with open('README.md', encoding='utf-8') as readme:
@@ -7,6 +8,11 @@ with open('README.md', encoding='utf-8') as readme:
 
 with open('full_fred/constants.py') as f:
     version = f.read().strip().split('=')[1].strip().replace('"', '')
+
+INSTALL_REQUIRES = [
+        'pandas', 
+        'requests',
+]
 
 setup(
     name="full_fred",
@@ -17,9 +23,7 @@ setup(
     author_email="zaknyy@protonmail.com",
     long_description=readme,
     long_description_content_type="text/markdown",
-    license="GNU General Public License v3 (GPLv3)",
-    install_requires=['requests', 'pandas'],
-    python_requires=">=3.8",
+    install_requires=INSTALL_REQUIRES,
     url="https://github.com/7astro7/full_fred",
     project_urls={
         "Tracker": "https://github.com/7astro7/full_fred/issues",
@@ -33,10 +37,10 @@ setup(
         "Intended Audience :: Science/Research",
         "Intended Audience :: Developers",
         "Intended Audience :: Financial and Insurance Industry",
-        "Operating System :: Unix",
+        "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Internet :: WWW/HTTP",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3",
     ],
-    keywords="economics api econ fred FRED",
+    keywords=["economics", "API", "econ", "fred", "financial", "FRED",],
 )

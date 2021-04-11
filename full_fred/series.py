@@ -1,5 +1,5 @@
 from .releases import Releases
-from pandas import DataFrame
+import pandas as pd
 from datetime import datetime
 
 
@@ -158,7 +158,7 @@ class Series(Releases):
         aggregation_method: str = None,
         output_type: int = None,
         vintage_dates: list = None,
-    ) -> DataFrame:
+    ) -> pd.DataFrame:
         """
         Get the observations, the data values, for an economic data
         series in a pd.DataFrame.
@@ -332,7 +332,7 @@ class Series(Releases):
         self.series_stack["get_series_df"] = df_and_metadata
         self.series_stack["get_series_df"]["series_id"] = series_id
         try:
-            df = DataFrame(df_and_metadata["observations"])
+            df = pd.DataFrame(df_and_metadata["observations"])
         except KeyError:
             e = "No key 'observations' found, cannot make DataFrame"
             print(e)

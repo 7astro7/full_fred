@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import os
 
 
 def returned_ok(
@@ -49,3 +50,9 @@ def make_time_string(
     if not start:
         time_string = datetime.now() - timedelta(days=5)  # end_time
     return time_string.strftime(format="%Y%m%d%H%M")
+
+def api_key_found_in_env() -> bool:
+    if "FRED_API_KEY" not in os.environ.keys():
+        return False
+    return True
+

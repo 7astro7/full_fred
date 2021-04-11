@@ -8,14 +8,12 @@ each query for Categories, Releases, Series, Sources, and Tags
 found within FRED's web service has a method associated with it in `full_fred`.
 `full_fred` minimizes redundant queries for the sake of users and FRED's servers. 
 After a request for data is made to FRED web service the retrieved data 
-is stored in a dictionary, accessible and fungible. 
+is stored in a dictionary, accessible and fungible
 
 ## Installation
     pip install full-fred
 
-## API
-
-expand: search_for_series -> get_tags_for_series_search -> get_related_tags_for_series_search
+## Usage
 
 ### API Key 
 Queries to FRED web service require an API key. FRED has [free API keys available with an account (also free)](https://research.stlouisfed.org/useraccount/apikey).
@@ -36,7 +34,7 @@ In [3]: fred.set_api_key_file('example_key.txt')
 Out[3]: True
 ```
 If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately *if* api_key_file is set using 
-the surefire ```fred.set_api_key_file()```.  
+the surefire ```fred.set_api_key_file()```  
 
 2. FRED_API_KEY Environment Variable
 
@@ -49,11 +47,11 @@ Out[7]: True
 ```
 
 ```full_fred``` does not store your api key in an attribute for the sake of security: to send queries to FRED's databases, ```full_fred``` uses the value of 
-FRED_API_KEY environment variable or the first line of fred.api_key_file.
+FRED_API_KEY environment variable or the first line of fred.api_key_file
 
 ### Fetching data
 
-A pd.DataFrame stores observations along with metadata about the pd.DataFrame when fetching series observations
+A pandas DataFrame stores observations when a request for data values is made
 
 ```python
 fred.get_series_df('GDPPOT')
@@ -105,6 +103,7 @@ realtime_start      realtime_end        date               value
  
  [332 rows x 4 columns]}
 ```
+
 
 To find a specific category_id or to search FRED categories from
 most general to most specific start with the root category 0. 
@@ -206,21 +205,84 @@ Out[4]:
     '2005-02-23']}
 ```
 
+### Accessing fetched data
+
+There are 5 stacks: 
+
+```fred.category_stack```
+```fred.release_stack```
+```fred.series_stack```
+```fred.source_stack```
+```fred.tag_stack```
+
+After a method is called the returned data is stored using the method name for its key.
+
+Methods that store data in category stack:
+```python
+fred.category_stack["get_a_category"]
+fred.category_stack["get_child_categories"]
+fred.category_stack["get_related_categories"]
+fred.category_stack["get_series_in_a_category"]
+fred.category_stack["get_tags_for_a_category"]
+fred.category_stack["get_related_tags_for_a_category"]
+```
+
+Methods that store data in release stack:
+```python
+fred.release_stack["get_a_release"]
+fred.release_stack["get_tags_for_a_release"]
+fred.release_stack["get_series_on_a_release"]
+fred.release_stack["get_sources_for_a_release"]
+fred.release_stack["get_related_tags_for_release"]
+fred.release_stack["get_release_dates_all_releases"]
+fred.release_stack["get_release_tables"]
+fred.release_stack["get_release_dates"]
+fred.release_stack["get_all_releases"]
+```
+
+Methods that store data in series stack:
+```python
+fred.series_stack["get_a_series"]
+fred.series_stack["get_categories_of_series"]
+fred.series_stack["get_series_df"]
+fred.series_stack["get_release_for_a_series"]
+fred.series_stack["search_for_series"]
+fred.series_stack["get_tags_for_series_search"]
+fred.series_stack["get_related_tags_for_series_search"]
+fred.series_stack["get_tags_for_a_series"]
+fred.series_stack["get_series_updates"]
+fred.series_stack["get_series_vintagedates"]
+```
+
+Methods that store data in source stack:
+```python
+fred.source_stack["get_all_sources"]
+fred.source_stack["get_releases_for_a_source"]
+fred.source_stack["get_a_source"]
+```
+
+Methods that store data in tag stack:
+```python
+fred.tag_stack["get_all_tags"]
+fred.tag_stack["get_related_tags_for_a_tag"]
+fred.tag_stack["get_series_matching_tags"]
+```
+
 ### full_fred realtime period defaults
 By default ```fred.realtime_start``` is set to earliest available, '1776-07-04', and
-```fred.realtime_end``` end is set to latest available, '9999-12-31'.
-To use the defaults set by FRED web service set ```fred.realtime_start``` and ```fred.realtime_end``` to None:
+```fred.realtime_end``` is set to latest available, '9999-12-31'.
+To use FRED web service defaults set ```fred.realtime_start``` and ```fred.realtime_end``` to None:
 ```python
 fred.realtime_start = None
 fred.realtime_end = None
 ```
-Any arguments given for ```realtime_start``` and ```realtime_end``` are used instead of your defaults.
+Any arguments given for ```realtime_start``` and ```realtime_end``` are used
 
 ## Contributing
-The ```full_fred``` project welcomes feature requests, bug submissions, contributions of all kinds.
+The ```full_fred``` project welcomes feature requests, bug reports, bug fixes, documentation improvements, contributions of all kinds.
 ```full_fred``` aims to be responsive in integrating patches and listening to your feedback to be a community-driven API.
 This project is also new and while ```full_fred``` is still young there's great opportunity to contribute elements that may have disproportionate
-impact in the long run.
+impact in the long run
 
 ## License
 GPLv3
