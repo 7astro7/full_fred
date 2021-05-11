@@ -275,15 +275,13 @@ fred.tag_stack["get_related_tags_for_a_tag"]
 fred.tag_stack["get_series_matching_tags"]
 ```
 
-### full_fred realtime period defaults
-By default ```fred.realtime_start``` is set to earliest available, '1776-07-04', and
-```fred.realtime_end``` is set to latest available, '9999-12-31'.
-To use FRED web service defaults set ```fred.realtime_start``` and ```fred.realtime_end``` to None:
-```python
-fred.realtime_start = None
-fred.realtime_end = None
+### full_fred realtime period and observation start/end defaults
+By default ```fred.realtime_start``` and ```fred.realtime_end``` are set to None. 
+realtime_start and realtime_end arguments override ```fred.realtime_start``` and ```fred.realtime_end```.
+
+```fred.observation_start``` and ```fred.observation_end``` are also None by default. 
+observation_start and observation_end arguments override ```fred.observation_start``` and ```fred.observation_end```.
 ```
-Any arguments given for ```realtime_start``` and ```realtime_end``` are used over defaults
 
 ## Contributing
 The ```full_fred``` project welcomes feature requests, bug reports, bug fixes, documentation improvements, contributions of all kinds.
