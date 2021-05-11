@@ -5,6 +5,8 @@ class Fred(Tags):
     def __init__(
         self,
         api_key_file: str = None,
+        observation_start: str = None,
+        observation_end: str = None,
     ):
         """
         API Key
@@ -34,14 +36,19 @@ class Fred(Tags):
         data for values. For example, after calling fred.get_tags(), fred.tag_stack["get_tags"] will return the data FRED web service responded with,
         until a new get_tags method invocation is made or you pop "get_tags".
 
-        Setting Realtime Defaults
+        Setting Realtime, Observation Start/End Defaults
         -------------------------
-        fred.realtime_start is set to earliest available '1776-07-04'.
-        fred.realtime_end is set to latest available '9999-12-31'.
+        fred.realtime_start: if set, will be used when realtime_start argument is not given. 
+        fred.realtime_end: if set, will be used when realtime_end argument is not given. 
+        fred.observation_start: if set, will be used when observation_start argument is not given. 
+        fred.observation_end: if set, will be used when observation_end argument is not given. 
 
         All queries with realtime_start as a parameter will use whatever fred.realtime_start is set to if no realtime_start argument is given. If
         fred.realtime_start is set to None, FRED web service will determine the default value. In most cases where realtime_start isn't specified FRED
         web service will use today's date. Same with fred.realtime_end.
+        All queries that include observation_start as a parameter will use whatever fred.observation_start is set to if no observation_start argument is given. If
+        fred.observation_start is set to None, FRED web service will determine the default value. In cases where observation_start isn't specified FRED
+        web service will use '1776-07-04', and '9999-12-31' for fred.observation_end.
         """
         super().__init__()
         if api_key_file is not None:
