@@ -281,7 +281,6 @@ realtime_start and realtime_end arguments override ```fred.realtime_start``` and
 
 ```fred.observation_start``` and ```fred.observation_end``` are also None by default. 
 observation_start and observation_end arguments override ```fred.observation_start``` and ```fred.observation_end```.
-```
 
 ## Contributing
 The ```full_fred``` project welcomes feature requests, bug reports, bug fixes, documentation improvements, contributions of all kinds.
