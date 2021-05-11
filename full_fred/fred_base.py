@@ -12,8 +12,10 @@ class FredBase:
         FredBase defines methods common to Categories, Releases,
         Series, Releases, Sources, Tags classes.
         """
-        self.realtime_start = "1776-07-04"
-        self.realtime_end = "9999-12-31"
+        self.realtime_start = None
+        self.realtime_end = None
+        self.observation_start = None
+        self.observation_end = None
         self.__url_base = "https://api.stlouisfed.org/fred/"
         if api_key_file is not None:
             self.set_api_key_file(api_key_file)
@@ -100,7 +102,21 @@ class FredBase:
         https://fred.stlouisfed.org/docs/api/fred/related_tags.html
         """
         new_url_string = og_url_string
+
+        # use user-set attribute value if set and argument for it 
+        # isn't passed in optional_params
+        attribute_map = {
+                "&observation_start=": self.observation_start, 
+                "&observation_end=": self.observation_end, 
+                "&realtime_start=": self.realtime_start, 
+                "&realtime_end=": self.realtime_end, 
+                }
+
         for k in optional_params.keys():
+            if k in attribute_map.keys():
+                if optional_params[k] is None:
+                    if attribute_map[k] is not None:
+                        optional_params[k] = attribute_map[k]
             if optional_params[k] is not None:
                 if k == "&include_release_dates_with_no_data=":
                     try:
@@ -126,22 +142,6 @@ class FredBase:
                     new_url_string += a_parameter_string
                 except TypeError:
                     print(k + " " + optional_params[k] + " cannot be cast to str")
-            elif "realtime_start" in k or "realtime_end" in k:
-                # either no realtime_start arg or no realtime_end arg
-                # passed: use attribute
-                default_realtime_param = self.realtime_start
-                if "realtime_end" in k:
-                    default_realtime_param = self.realtime_end
-
-                # if user has set it to None, don't do anything
-                if default_realtime_param is not None:
-                    try:
-                        a_parameter_string = k + default_realtime_param
-                        new_url_string += a_parameter_string
-                    except TypeError:
-                        e = "%s attribute value " % default_realtime_param
-                        e += " cannot be added to request URL"
-                        print(e)
         return new_url_string
 
     def _viable_api_key(self) -> str:
