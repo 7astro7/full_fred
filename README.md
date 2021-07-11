@@ -1,4 +1,6 @@
 
+[![Build Status](https://travis-ci.com/7astro7/full_fred.svg?branch=master)](https://travis-ci.com/7astro7/full_fred)
+
 # full_fred
 `full_fred` is a Python interface to 
 [FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/) that
