@@ -335,9 +335,12 @@ class Series(Releases):
         self.series_stack["get_series_df"]["series_id"] = series_id
         try:
             df = pd.DataFrame(df_and_metadata["observations"])
-        except KeyError:
-            e = "No key 'observations' found, cannot make DataFrame"
-            print(e)
+        except KeyError as e:
+            if 'error_code' in self.series_stack["get_series_df"].keys():
+                error_message = self.series_stack["get_series_df"]["error_message"]
+                print(f"Error Message: {error_message}")
+            else:
+                print(e)
         self.series_stack["get_series_df"].pop("observations")
         self.series_stack["get_series_df"]["df"] = df
         return self.series_stack["get_series_df"]["df"]
