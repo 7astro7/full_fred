@@ -1,0 +1,2 @@
+include versioneer.py
+include full_fred/_version.py
