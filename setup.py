@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
-import os
+import versioneer
 
 with open('README.md', encoding='utf-8') as readme:
     readme = readme.read()
 
-with open('full_fred/constants.py') as f:
-    version = f.read().strip().split('=')[1].strip().replace('"', '')
+version = versioneer.get_version()
+cmdclass = versioneer.get_cmdclass()
 
 INSTALL_REQUIRES = [
-        'pandas', 
-        'requests',
+    'pandas',
+    'requests',
+    'versioneer',
 ]
 
 setup(
     name="full_fred",
     packages=find_packages(),
     version=version,
+    cmdclass=cmdclass,
     description="Full interface to Federal Reserve Economic Data (FRED)",
     author="Zachary A. Kraehling",
     author_email="zaknyy@protonmail.com",
