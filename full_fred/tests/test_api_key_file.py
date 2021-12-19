@@ -1,7 +1,9 @@
-from full_fred.fred import Fred
-import pytest
 import os
+
+import pytest
+
 from .fred_test_utils import returned_ok
+from full_fred.fred import Fred
 
 key_file = "example_key.txt"
 test_key_file = True if key_file in os.listdir() else False

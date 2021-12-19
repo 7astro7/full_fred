@@ -1,9 +1,8 @@
 import pytest
+
+from .fred_test_utils import api_key_found_in_env
+from .fred_test_utils import returned_ok
 from full_fred.fred import Fred
-from .fred_test_utils import (
-    returned_ok,
-    api_key_found_in_env,
-)
 
 ENV_API_KEY = api_key_found_in_env()
 
@@ -45,7 +44,7 @@ def get_all_tags_method_works(
 def test_get_all_tags(
     get_all_tags_method_works: bool,
 ):
-    assert get_all_tags_method_works == True
+    assert get_all_tags_method_works is True
 
 
 @pytest.fixture
@@ -78,7 +77,7 @@ def get_related_tags_for_a_tag_method_works(
 def test_get_related_tags_for_a_tag(
     get_related_tags_for_a_tag_method_works: bool,
 ):
-    assert get_related_tags_for_a_tag_method_works == True
+    assert get_related_tags_for_a_tag_method_works is True
 
 
 @pytest.fixture
@@ -114,4 +113,4 @@ def get_series_matching_tags_method_works(
 def test_get_series_matching_tags(
     get_series_matching_tags_method_works: bool,
 ):
-    assert get_series_matching_tags_method_works == True
+    assert get_series_matching_tags_method_works is True

@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
 import os
+from datetime import datetime
+from datetime import timedelta
 
 
 def returned_ok(
@@ -27,7 +28,7 @@ def returned_ok(
         return False
     if expected is not None:
         for expected_key in expected.keys():
-            if not expected_key in observed.keys():
+            if expected_key not in observed.keys():
                 return False
             if expected[expected_key] != observed[expected_key]:
                 return False

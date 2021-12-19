@@ -2,7 +2,6 @@ from .fred_base import FredBase
 
 
 class Categories(FredBase):
-
     def __init__(self):
         """"""
         super().__init__()

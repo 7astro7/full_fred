@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
+from setuptools import find_packages
+from setuptools import setup
 
-from setuptools import setup, find_packages
 import versioneer
 
-with open('README.md', encoding='utf-8') as readme:
+with open("README.md", encoding="utf-8") as readme:
     readme = readme.read()
 
 version = versioneer.get_version()
 cmdclass = versioneer.get_cmdclass()
 
-INSTALL_REQUIRES = [
-    'pandas',
-    'requests',
-    'versioneer',
+install_requires = [
+    "pandas",
+    "requests",
 ]
+
+extras = {
+    "tests": ["pytest", "pytest-cov"],
+    "lint": ["black", "pre-commit", "flake8"],
+    "dev": ["versioneer"],
+}
+
+extras["dev"] += extras["tests"] + extras["lint"]
+
 
 setup(
     name="full_fred",
@@ -25,7 +34,8 @@ setup(
     author_email="zaknyy@protonmail.com",
     long_description=readme,
     long_description_content_type="text/markdown",
-    install_requires=INSTALL_REQUIRES,
+    install_requires=install_requires,
+    extra_requires=extras,
     url="https://github.com/7astro7/full_fred",
     project_urls={
         "Tracker": "https://github.com/7astro7/full_fred/issues",
@@ -44,5 +54,12 @@ setup(
         "Topic :: Internet :: WWW/HTTP",
         "Programming Language :: Python :: 3",
     ],
-    keywords=["economics", "API", "econ", "fred", "financial", "FRED",],
+    keywords=[
+        "economics",
+        "API",
+        "econ",
+        "fred",
+        "financial",
+        "FRED",
+    ],
 )

@@ -38,10 +38,10 @@ class Fred(Tags):
 
         Setting Realtime, Observation Start/End Defaults
         -------------------------
-        fred.realtime_start: if set, will be used when realtime_start argument is not given. 
-        fred.realtime_end: if set, will be used when realtime_end argument is not given. 
-        fred.observation_start: if set, will be used when observation_start argument is not given. 
-        fred.observation_end: if set, will be used when observation_end argument is not given. 
+        fred.realtime_start: if set, will be used when realtime_start argument is not given.
+        fred.realtime_end: if set, will be used when realtime_end argument is not given.
+        fred.observation_start: if set, will be used when observation_start argument is not given.
+        fred.observation_end: if set, will be used when observation_end argument is not given.
 
         All queries with realtime_start as a parameter will use whatever fred.realtime_start is set to if no realtime_start argument is given. If
         fred.realtime_start is set to None, FRED web service will determine the default value. In most cases where realtime_start isn't specified FRED
