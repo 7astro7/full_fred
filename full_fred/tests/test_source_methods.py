@@ -1,9 +1,8 @@
 import pytest
+
+from .fred_test_utils import api_key_found_in_env
+from .fred_test_utils import returned_ok
 from full_fred.fred import Fred
-from .fred_test_utils import (
-    returned_ok,
-    api_key_found_in_env,
-)
 
 ENV_API_KEY = api_key_found_in_env()
 
@@ -40,7 +39,7 @@ def get_all_sources_method_works(
 def test_get_all_sources(
     get_all_sources_method_works: bool,
 ):
-    assert get_all_sources_method_works == True
+    assert get_all_sources_method_works is True
 
 
 @pytest.fixture
@@ -62,7 +61,7 @@ def get_a_source_method_works(
 def test_get_a_source(
     get_a_source_method_works: bool,
 ):
-    assert get_a_source_method_works == True
+    assert get_a_source_method_works is True
 
 
 @pytest.fixture
@@ -89,4 +88,4 @@ def get_releases_for_a_source_method_works(
 def test_get_releases_for_a_source(
     get_releases_for_a_source_method_works: bool,
 ):
-    assert get_releases_for_a_source_method_works == True
+    assert get_releases_for_a_source_method_works is True

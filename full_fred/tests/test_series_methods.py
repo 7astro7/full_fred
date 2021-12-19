@@ -1,11 +1,10 @@
 import pytest
-from full_fred.fred import Fred
 from pandas import DataFrame
-from .fred_test_utils import (
-    returned_ok,
-    make_time_string,
-    api_key_found_in_env,
-)
+
+from .fred_test_utils import api_key_found_in_env
+from .fred_test_utils import make_time_string
+from .fred_test_utils import returned_ok
+from full_fred.fred import Fred
 
 ENV_API_KEY = api_key_found_in_env()
 
@@ -44,7 +43,7 @@ def get_a_series_method_works(
 def test_get_series(
     get_a_series_method_works: bool,
 ):
-    assert get_a_series_method_works == True
+    assert get_a_series_method_works is True
 
 
 @pytest.fixture
@@ -69,7 +68,7 @@ def get_categories_of_series_method_works(
 def test_get_categories_of_series(
     get_categories_of_series_method_works: bool,
 ):
-    assert get_categories_of_series_method_works == True
+    assert get_categories_of_series_method_works is True
 
 
 @pytest.fixture
@@ -89,7 +88,7 @@ def get_series_df_method_works(
     }
     fred.get_series_df(**params)
     returned_ok_params["observed"] = fred.series_stack["get_series_df"]
-    if not "observation_start" in returned_ok_params["observed"].keys():
+    if "observation_start" not in returned_ok_params["observed"].keys():
         return False
 
     # 1600-01-01 was returned for 1776-07-04
@@ -119,12 +118,14 @@ def get_series_df_method_works(
 def test_get_series_df(
     get_series_df_method_works: bool,
 ):
-    assert get_series_df_method_works == True
+    assert get_series_df_method_works is True
+
 
 @pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_df_raises(fred: Fred):
     with pytest.raises(KeyError):
-        fred.get_series_df('GOLDPMGBD229NLBM')
+        fred.get_series_df("GOLDPMGBD229NLBM")
+
 
 @pytest.fixture
 def get_release_for_a_series_method_works(
@@ -147,7 +148,7 @@ def get_release_for_a_series_method_works(
 def test_get_release_for_a_series(
     get_release_for_a_series_method_works: bool,
 ):
-    assert get_release_for_a_series_method_works == True
+    assert get_release_for_a_series_method_works is True
 
 
 @pytest.fixture
@@ -183,7 +184,7 @@ def search_for_series_method_works(
 def test_search_for_series(
     search_for_series_method_works: bool,
 ):
-    assert search_for_series_method_works == True
+    assert search_for_series_method_works is True
 
 
 @pytest.fixture
@@ -216,7 +217,7 @@ def get_tags_for_series_search_method_works(
 def test_get_tags_for_series_search(
     get_tags_for_series_search_method_works: bool,
 ):
-    assert get_tags_for_series_search_method_works == True
+    assert get_tags_for_series_search_method_works is True
 
 
 @pytest.fixture
@@ -256,7 +257,7 @@ def get_related_tags_for_series_search_method_works(
 def test_get_related_tags_for_series_search(
     get_related_tags_for_series_search_method_works: bool,
 ):
-    assert get_related_tags_for_series_search_method_works == True
+    assert get_related_tags_for_series_search_method_works is True
 
 
 @pytest.fixture
@@ -282,7 +283,7 @@ def get_tags_for_a_series_method_works(
 def test_get_tags_for_a_series(
     get_tags_for_a_series_method_works: bool,
 ):
-    assert get_tags_for_a_series_method_works == True
+    assert get_tags_for_a_series_method_works is True
 
 
 @pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
@@ -343,7 +344,7 @@ def get_series_updates_method_works(
 def test_get_series_updates(
     get_series_updates_method_works: bool,
 ):
-    assert get_series_updates_method_works == True
+    assert get_series_updates_method_works is True
 
 
 @pytest.fixture
@@ -369,4 +370,4 @@ def get_series_vintagedates_method_works(
 def test_get_series_vintagedates(
     get_series_vintagedates_method_works: bool,
 ):
-    assert get_series_vintagedates_method_works == True
+    assert get_series_vintagedates_method_works is True

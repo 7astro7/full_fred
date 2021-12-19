@@ -2,14 +2,14 @@
 [![Build Status](https://travis-ci.com/7astro7/full_fred.svg?branch=master)](https://travis-ci.com/7astro7/full_fred)
 
 # full_fred
-`full_fred` is a Python interface to 
+`full_fred` is a Python interface to
 [FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/) that
 prioritizes user preference, flexibility, and speed. `full_fred`'s API translates to Python
 [every type of request FRED supports](https://fred.stlouisfed.org/docs/api/fred/):
-each query for Categories, Releases, Series, Sources, and Tags 
+each query for Categories, Releases, Series, Sources, and Tags
 found within FRED's web service has a method associated with it in `full_fred`.
-`full_fred` minimizes redundant queries for the sake of users and FRED's servers. 
-After a request for data is made to FRED web service the retrieved data 
+`full_fred` minimizes redundant queries for the sake of users and FRED's servers.
+After a request for data is made to FRED web service the retrieved data
 is stored in a dictionary, accessible and fungible
 
 ## Installation
@@ -24,7 +24,7 @@ pytest
 
 ## Usage
 
-### API Key 
+### API Key
 Queries to FRED web service require an API key. FRED has [free API keys available with an account (also free)](https://research.stlouisfed.org/useraccount/apikey)
 
 You can tell ```full_fred``` about an api key in 2 secure ways:
@@ -42,20 +42,20 @@ This will set it too
 In [3]: fred.set_api_key_file('example_key.txt')
 Out[3]: True
 ```
-If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately if api_key_file is set using 
-the surefire ```fred.set_api_key_file()```  
+If the file assigned to ```api_key_file``` can't be found, ```full_fred``` will say so immediately if api_key_file is set using
+the surefire ```fred.set_api_key_file()```
 
 2. FRED_API_KEY Environment Variable
 
 ```full_fred``` will automatically detect your api key if it's assigned to an environment variable named ```FRED_API_KEY```.
-To check that FRED_API_KEY environment variable is detected, you can use 
+To check that FRED_API_KEY environment variable is detected, you can use
 
 ```python
 In [7]: fred.env_api_key_found()
 Out[7]: True
 ```
 
-```full_fred``` does not store your api key in an attribute for the sake of security: to send queries to FRED's databases, ```full_fred``` uses the value of 
+```full_fred``` does not store your api key in an attribute for the sake of security: to send queries to FRED's databases, ```full_fred``` uses the value of
 FRED_API_KEY environment variable or the first line of fred.api_key_file
 
 ### Fetching data
@@ -96,7 +96,7 @@ fred.series_stack['get_series_df']
  'offset': 0,
  'limit': 100000,
  'series_id': 'GDPPOT',
- 'df':     
+ 'df':
 realtime_start      realtime_end        date               value
  0       2021-04-03   2021-04-03  1949-01-01         2103.179936
  1       2021-04-03   2021-04-03  1949-04-01  2130.7327210000003
@@ -109,19 +109,19 @@ realtime_start      realtime_end        date               value
  329     2021-04-03   2021-04-03  2031-04-01            23417.38
  330     2021-04-03   2021-04-03  2031-07-01            23516.38
  331     2021-04-03   2021-04-03  2031-10-01            23615.28
- 
+
  [332 rows x 4 columns]}
 ```
 
 
 To find a specific category_id or to search FRED categories from
-most general to most specific start with the root category 0. 
-A search along the lines of the following can help to pinpoint different 
+most general to most specific start with the root category 0.
+A search along the lines of the following can help to pinpoint different
 category_ids:
 
 ```python
 In [4]: fred.get_child_categories(0)
-Out[4]: 
+Out[4]:
 {'categories': [{'id': 32991,
    'name': 'Money, Banking, & Finance',
    'parent_id': 0},
@@ -137,7 +137,7 @@ Out[4]:
   {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
 
 In [5]: fred.category_stack['get_child_categories']
-Out[5]: 
+Out[5]:
 {'categories': [{'id': 32991,
    'name': 'Money, Banking, & Finance',
    'parent_id': 0},
@@ -153,7 +153,7 @@ Out[5]:
   {'id': 33060, 'name': 'Academic Data', 'parent_id': 0}]}
 ```
 
-The [whole gamut of requests on FRED web service](https://fred.stlouisfed.org/docs/api/fred/) is implemented. The example below 
+The [whole gamut of requests on FRED web service](https://fred.stlouisfed.org/docs/api/fred/) is implemented. The example below
 is one among many other methods in the API, listed in the next section
 
 ```python
@@ -162,7 +162,7 @@ In [1]: from full_fred.fred import Fred
 In [2]: fred = Fred()
 
 In [3]: fred.get_series_vintagedates('FYFSD', limit = 15)
-Out[3]: 
+Out[3]:
 {'realtime_start': '1776-07-04',
  'realtime_end': '9999-12-31',
  'order_by': 'vintage_date',
@@ -188,7 +188,7 @@ Out[3]:
     '2005-02-23']}
 
 In [4]: fred.series_stack['get_series_vintagedates']
-Out[4]: 
+Out[4]:
 {'realtime_start': '1776-07-04',
  'realtime_end': '9999-12-31',
  'order_by': 'vintage_date',
@@ -216,7 +216,7 @@ Out[4]:
 
 ### Accessing fetched data
 
-There are 5 stacks: 
+There are 5 stacks:
 
 ```fred.category_stack```
 ```fred.release_stack```
@@ -278,10 +278,10 @@ fred.tag_stack["get_series_matching_tags"]
 ```
 
 ### full_fred realtime period and observation start/end defaults
-By default ```fred.realtime_start``` and ```fred.realtime_end``` are set to None. 
+By default ```fred.realtime_start``` and ```fred.realtime_end``` are set to None.
 realtime_start and realtime_end arguments override ```fred.realtime_start``` and ```fred.realtime_end```.
 
-```fred.observation_start``` and ```fred.observation_end``` are also None by default. 
+```fred.observation_start``` and ```fred.observation_end``` are also None by default.
 observation_start and observation_end arguments override ```fred.observation_start``` and ```fred.observation_end```.
 
 ## Contributing
