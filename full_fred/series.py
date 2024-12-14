@@ -336,7 +336,7 @@ class Series(Releases):
         try:
             df = pd.DataFrame(df_and_metadata["observations"])
         except KeyError as e:
-            if 'error_code' in self.series_stack["get_series_df"].keys():
+            if "error_code" in self.series_stack["get_series_df"].keys():
                 error_message = self.series_stack["get_series_df"]["error_message"]
                 print(f"Error Message: {error_message}")
             else:

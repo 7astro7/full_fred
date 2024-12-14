@@ -121,10 +121,12 @@ def test_get_series_df(
 ):
     assert get_series_df_method_works == True
 
+
 @pytest.mark.skipif(not ENV_API_KEY, reason="Tests need api key")
 def test_get_series_df_raises(fred: Fred):
     with pytest.raises(KeyError):
-        fred.get_series_df('GOLDPMGBD229NLBM')
+        fred.get_series_df("GOLDPMGBD229NLBM")
+
 
 @pytest.fixture
 def get_release_for_a_series_method_works(

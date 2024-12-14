@@ -103,14 +103,14 @@ class FredBase:
         """
         new_url_string = og_url_string
 
-        # use user-set attribute value if set and argument for it 
+        # use user-set attribute value if set and argument for it
         # isn't passed in optional_params
         attribute_map = {
-                "&observation_start=": self.observation_start, 
-                "&observation_end=": self.observation_end, 
-                "&realtime_start=": self.realtime_start, 
-                "&realtime_end=": self.realtime_end, 
-                }
+            "&observation_start=": self.observation_start,
+            "&observation_end=": self.observation_end,
+            "&realtime_start=": self.realtime_start,
+            "&realtime_end=": self.realtime_end,
+        }
 
         for k in optional_params.keys():
             if k in attribute_map.keys():
