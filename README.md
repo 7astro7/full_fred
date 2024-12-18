@@ -1,5 +1,11 @@
 
-[![Build Status](https://travis-ci.com/7astro7/full_fred.svg?branch=master)](https://travis-ci.com/7astro7/full_fred)
+[![PyPI](https://img.shields.io/pypi/v/full_fred)](https://pypi.org/project/full_fred/)
+![PyPI Downloads](https://img.shields.io/pypi/dm/full_fred)
+![GitHub issues](https://img.shields.io/github/issues/7astro7/full_fred)
+![Unit Tests](https://github.com/7astro7/full_fred/actions/workflows/unittests.yml/badge.svg)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+
+
 
 # full_fred
 `full_fred` is a Python interface to 
@@ -291,4 +297,4 @@ This project is also new and while ```full_fred``` is still young there's great 
 impact in the long run
 
 ## License
-GPLv3
+Apache v2.0
