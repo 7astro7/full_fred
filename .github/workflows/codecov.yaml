@@ -32,7 +32,7 @@ jobs:
       - name: Export API key
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: echo "FRED_API_KEY=$FRED_API_KEY" >> $GITHUBB_ENV
+        run: echo "FRED_API_KEY=$FRED_API_KEY" >> $GITHUB_ENV
 
       - name: Run Unit Tests
         run: pytest full_fred/tests
