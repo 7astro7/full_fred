@@ -27,10 +27,17 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov requests pandas 
+          pip install pytest pytest-cov requests pandas
+      
+      - name: Export API key
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: echo "FRED_API_KEY=$FRED_API_KEY" >> $GITHUBB_ENV
 
       - name: Run Unit Tests
         run: pytest full_fred/tests
+        env: 
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
 
       - name: Generate Coverage Report
         run: pytest --cov=full_fred --cov-report=xml:coverage.xml --cov-fail-under=80
