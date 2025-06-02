@@ -1,6 +1,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/full_fred)](https://pypi.org/project/full_fred/)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/full_fred)
+[![codecov](https://codecov.io/gh/7astro7/full_fred/graph/badge.svg?token=MTM8I9JRZF)](https://codecov.io/gh/7astro7/full_fred)
 ![GitHub issues](https://img.shields.io/github/issues/7astro7/full_fred)
 ![Unit Tests](https://github.com/7astro7/full_fred/actions/workflows/unittest.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
