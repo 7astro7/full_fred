@@ -209,9 +209,11 @@ class FredBase:
         """
         try:
             response = requests.get(a_url)
+            return response.json()
         except RequestException:
             return
-        return response.json()
+        except ValueError:
+            return
 
     def _append_id_to_url(
         self,

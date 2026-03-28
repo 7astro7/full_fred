@@ -9,11 +9,11 @@
 
 
 # full_fred
-`full_fred` is a Python interface to 
+`full_fred` is a Python interface to
 [FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/) that
 prioritizes user preference, flexibility, and speed. `full_fred`'s API translates to Python
 [every type of request FRED supports](https://fred.stlouisfed.org/docs/api/fred/):
-each query for Categories, Releases, Series, Sources, and Tags 
+each query for Categories, Releases, Series, Sources, Tags, and Maps (GeoFRED)
 found within FRED's web service has a method associated with it in `full_fred`.
 `full_fred` minimizes redundant queries for the sake of users and FRED's servers. 
 After a request for data is made to FRED web service the retrieved data 
@@ -223,13 +223,14 @@ Out[4]:
 
 ### Accessing fetched data
 
-There are 5 stacks: 
+There are 6 stacks:
 
 ```fred.category_stack```
 ```fred.release_stack```
 ```fred.series_stack```
 ```fred.source_stack```
 ```fred.tag_stack```
+```fred.maps_stack```
 
 After a method is called the returned data is stored using the method name for its key
 
@@ -282,6 +283,14 @@ Methods that store data in tag stack:
 fred.tag_stack["get_all_tags"]
 fred.tag_stack["get_related_tags_for_a_tag"]
 fred.tag_stack["get_series_matching_tags"]
+```
+
+Methods that store data in maps stack:
+```python
+fred.maps_stack["get_geo_series_group"]
+fred.maps_stack["get_geo_series"]
+fred.maps_stack["get_regional_data"]
+fred.maps_stack["get_shape_files"]
 ```
 
 ### full_fred realtime period and observation start/end defaults

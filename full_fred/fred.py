@@ -1,7 +1,7 @@
-from .tags import Tags
+from .maps import Maps
 
 
-class Fred(Tags):
+class Fred(Maps):
     def __init__(
         self,
         api_key_file: str = None,
