@@ -303,8 +303,6 @@ observation_start and observation_end arguments override ```fred.observation_sta
 ## Contributing
 The ```full_fred``` project welcomes feature requests, bug reports, bug fixes, documentation improvements, contributions of all kinds.
 ```full_fred``` aims to be responsive in integrating patches and listening to your feedback to be a community-driven API.
-This project is also new and while ```full_fred``` is still young there's great opportunity to contribute elements that may have disproportionate
-impact in the long run
 
 ## License
 Apache v2.0
